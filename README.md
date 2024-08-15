@@ -1,1 +1,1 @@
-我擅长Scratch,会Python,喜欢Minecraft。
+It`s about me.
