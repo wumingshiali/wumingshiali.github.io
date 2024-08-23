@@ -8,14 +8,17 @@
     <link rel="icon" href="https://wumingshiali.github.io/zdn/me.png">
 </head>
 <body style="background-color: #F5F5F5;">  
-    
     <script>
-        function dl() {
-           var element = document.body;
-           element.classList.toggle("dark");
+      function toggleTheme() {
+        var themeStyle = document.getElementById('theme-style');
+     
+        if (themeStyle.getAttribute('href') === 'day.css') {
+          themeStyle.setAttribute('href', 'night.css');
+        } else {
+          themeStyle.setAttribute('href', 'day.css');
         }
+      }
     </script>
-    <center><button class="button is-white" onclick=dl()</button></center>
     <center><img alt="" src="https://wumingshiali.github.io/zdn/me.png" width="75" height="75"></center>
     <center><h3 class="title is-3">我</h3></center>
     <div class="box">
