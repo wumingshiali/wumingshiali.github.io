@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <html>
@@ -23,13 +24,29 @@
 
         }
     </script>
-    <nav class="navbar" role="navigation" aria-label="dropdown navigation">
+    <div class="dropdown is-active">
+       <div class="dropdown-trigger">
+           <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                 <span>Dropdown button</span>
+                    <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+            </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+                <p>BGM</p>
+                <audio controls scr="wumingshiali.github.io/zdn/bj.flac"  loop="loop" autoplay="autoplay"></audio>
+            </div>
+        </div>
+    </div>
+    <!--<nav class="navbar" role="navigation" aria-label="dropdown navigation">
          <div class="navbar-dropdown">
 
             <p>BGM</p>
             <audio controls scr="wumingshiali.github.io/zdn/bj.flac"  loop="loop" autoplay="autoplay"></audio>
          </div>
-    </nav>
+    </nav>//-->
     <!--<div class="dropdown">
        <div class="dropdown-trigger">
            <button class="button"     aria-haspopup="true"       aria-controls="dropdown-menu3">
