@@ -24,9 +24,14 @@
             alert("不赞助就关不掉！😭😭😭")
 
         }
-        function zf(e)
+        function zf(e){
             var color = new colorBall()
-            color.fly(event.clientX,event.clientY)
+            color.fly(event.clientX,event.clientY)}
+        function tzf(e) {
+            var color = new colorBall()
+           color.fly(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+	          e.stopPropagation()
+	          e.preventDefault()
     </script>
     <!--<div class="dropdown">
         <div class="dropdown-trigger">
