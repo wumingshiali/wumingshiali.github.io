@@ -1,4 +1,4 @@
-CN|EN(not write)  
+[CN](./README.md)|EN
 # A minimalist personal homepage framework
 > Visual modernization encompasses many things.
 ## Thank you
