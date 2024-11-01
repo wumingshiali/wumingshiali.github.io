@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>-->
-    <div class="main" ontouchstart="tzf(event)" onclick="pzf(event)">
+    <div class="main" onclick="pzf(event)">
     <center><img alt="" src="./zdn/me.png" width="75" height="75"></center>
     <center><h3 class="title is-3">我</h3></center>
     <div class="box">
@@ -88,12 +88,6 @@
         function pzf(e) {
             var color = new colorBall()
             color.fly(event.clientX,event.clientY)
-		}
-        function tzf(e) {
-        	var color = new colorBall()
-        	color.fly(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
-	    	e.stopPropagation()
-	    	e.preventDefault()
 		}
     </script>
 </body>
