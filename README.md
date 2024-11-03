@@ -3,3 +3,4 @@
 > 视觉现代化，包含许多东西。
 ## 感谢
 [click-colorful](https://github.com/ColdDay/click-colorful)
+[![Star History Chart](https://api.star-history.com/svg?repos=wumingshiali/wumingshiali.github.io&type=Date)](https://star-history.com/#wumingshiali/wumingshiali.github.io&Date)
