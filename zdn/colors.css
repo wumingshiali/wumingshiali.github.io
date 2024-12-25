@@ -1,18 +1,29 @@
 .colors-1{
   background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .colors-2{
   background: radial-gradient(circle at 100% 10%, #ffdf42, #ffd233, #ffc523, #ffb811, #ffaa00, #ff9c00, #ff8d00, #ff7d00, #ff6c00, #ff5900, #ff4306, #ff2212);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .colors-3{
   background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .colors-4{
   background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .colors-5{
   background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .colors-6{
   background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  -webkit-text-fill-color: transparent;
 }
