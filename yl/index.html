@@ -11,9 +11,18 @@
     <meta name="keywords" content="无名氏,无名氏个人主页,编程,40code,40code社区,githubio,github.io,免费做一个个人主页,wumingshiali,wumingshiali个人主页,ccw无名氏,40code无名氏,github,githubpages,github pages,友链">
     <noscript>请打开js</noscript>
 </head>
-<body style="background-color: #F5F5F5;">
-    <center><h2 class="title is-2">友链</h2></center>
-    <center><button class="button is-link " onclick=window.location.href='https://name317.github.io/' id="317">317</button></center>
-    <center><button class="button is-link " onclick=window.location.href='https://name317.github.io/1387teamweb/youl/' id="317s">317社</button></center>
-    <center>请E-mail cat@wums.us.kg 添加</p></center>
+<body style="background-color: #F5F5F5;" class="has-text-centered">
+    <h2 class="title is-2 colors-1 mb-4">友链</h2>
+    <button class="button is-link is-rounded is-primary mb-3" onclick=window.location.href='https://name317.github.io/' id="317">317</button>
+    <button class="button is-link is-rounded is-info mb-3" onclick=window.location.href='https://name317.github.io/1387teamweb/youl/' id="317s">317社</button>
+    <p class="colors-2 mt-5">请E-mail cat@wums.us.kg 添加</p>
 </body>
+<script src='../zdn/click.js'></script>
+<script>
+    function pzf(e) {
+        var color = new colorBall();
+        color.fly(event.clientX, event.clientY);
+    }
+    document.body.addEventListener('click', pzf);
+</script>
+</html>

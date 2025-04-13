@@ -7,18 +7,23 @@
     <link rel="stylesheet" href="../zdn/bulma.css">
     <link rel="icon" href="../zdn/lric.png">
 </head>
-<body style="background-color: #FFFF80;">  
-    <center><img alt="" src="../zdn/lric.png" width="75" height="75"></center>
-    <center><h3 class="title is-3">落日工作室</h3></center>
-    <center><button class="button is-link" onclick=window.location.href='https://www.40code.com/#page=studio&id=691' id="lrs40">落日工作室（40code）</button></center>
-    <center><button class="button is-link" onclick=window.location.href='../luoristuido/ee.html' id="ee">Emoji Encrypt</button>
+<body style="background-color: #FFFF80;" class="has-text-centered">
+    <img alt="" src="../zdn/lric.png" width="75" height="75" class="mb-4">
+    <h3 class="title is-3 colors-2 mb-4">落日工作室</h3>
+    <button class="button is-link is-rounded is-primary mb-3" onclick=window.location.href='https://www.40code.com/#page=studio&id=691' id="lrs40">落日工作室（40code）</button>
+    <button class="button is-link is-rounded is-info mb-3" onclick=window.location.href='../luoristuido/ee.html' id="ee">Emoji Encrypt</button>
     <div class="box">
-    <p>  </p><h4 class="subtitle is-4">落日工作室成员</h4>
-    
-    <p>    </p><img alt="" src="../zdn/lrcy.png">
-    <p>    </p><button class="button is-link" onclick=window.location.href='https://name317.github.io/' id="317">三幺七</button><button class="button is-link" onclick=window.location.href='../luoristuido/np404.html' id="ak47">AK47小星星之P1</button><button class="button is-link" onclick=window.location.href='../luoristuido/np404.html' id="317x">三幺七小号</button><button class="button is-link" onclick=window.location.href='../luoristuido/np404.html' id="kphc">看破红橙</button>
-    <p>    人数目标：20人，目前：6人 😭</p><progress class="progress is-primary" value="6" max="20"></progress>
-    <p>    成员很少，欢迎加入</p>
+        <h4 class="subtitle is-4 colors-3 mb-4">落日工作室成员</h4>
+        <progress class="progress is-primary mt-4" value="6" max="20"></progress>
+        <p class="colors-4 mt-4">成员很少，欢迎加入</p>
     </div>
 </body>
 </html>
+<script src='../zdn/click.js'></script>
+<script>
+    function pzf(e) {
+        var color = new colorBall();
+        color.fly(event.clientX, event.clientY);
+    }
+    document.body.addEventListener('click', pzf);
+</script>

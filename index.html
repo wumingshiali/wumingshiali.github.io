@@ -44,9 +44,13 @@
     <center><img alt="" src="./zdn/me.png" width="75" height="75"></center>
     <center><h3 class="title is-3 colors-2">我</h3></center>
     <div class="box">
-    <center><p colors-3>我的真名是“周文嘉”</p></center>
-    <center><p colors-4>E-mail:ZWj1154142014@hotmail.com</p></center>
-    <center><button class="button is-link" onclick=window.location.href='https://www.40code.com/#page=user&id=2594' id="40code"><p colors-1>40code</p>(最活跃的)</button></center> <center><button class="button is-link" onclick=window.location.href='https://codingclip.com/user/1736' id="cclip">别针社区</button><center><button class="button is-link" onclick=window.location.href='https://www.ccw.site/student/64bf4a59314bb1118e103029' id="ccw">共创世界ccw</button><center><button class="button is-link" onclick=window.location.href='https://www.luogu.com.cn/user/1567229' id="luogu">洛谷</button><center><center><button class="button is-link" onclick=window.location.href='https://github.com/wumingshiali' id="gh">Github</button><center>
+    <center><p class="colors-3">我的真名是“周文嘉”</p></center>
+    <center><p class="colors-4">E-mail:ZWj1154142014@hotmail.com</p></center>
+    <center><button class="button is-link is-rounded is-primary" onclick=window.location.href='https://www.40code.com/#page=user&id=2594' id="40code"><p class="colors-1">40code</p>(最活跃的)</button></center>
+    <center><button class="button is-link is-rounded is-info" onclick=window.location.href='https://codingclip.com/user/1736' id="cclip">别针社区</button></center>
+    <center><button class="button is-link is-rounded is-success" onclick=window.location.href='https://www.ccw.site/student/64bf4a59314bb1118e103029' id="ccw">共创世界ccw</button></center>
+    <center><button class="button is-link is-rounded is-warning" onclick=window.location.href='https://www.luogu.com.cn/user/1567229' id="luogu">洛谷</button></center>
+    <center><button class="button is-link is-rounded is-danger" onclick=window.location.href='https://github.com/wumingshiali' id="gh">Github</button></center>
     <center><p>我擅长scratch</p><img alt="" src="./zdn/Scratch_logo.svg" width="100" height="35"><p>会Python</p><img alt="" src="./zdn/py.svg" width="50" height="50"><p>在学C++</p><img alt="" src="./zdn/cpp.webp" width="50" height="50"><p>喜欢Minecraft</p><img alt="" src="./zdn/mclogo.png" width="160" height="36"><p>因为喜欢Minecraft，所以尝试开发Minecraft Java Edition Fabric Mod</p><img alt="" src="./zdn/fabric.png" width="50" height="50"></center>
     <center><p>我住在广东省深圳市宝安区松岗街道中海西岸华府</p></center>
     <center><img alt="" src="./zdn/home.jpg" width="150" height="150"></center>
@@ -74,8 +78,8 @@
 	<img src="./zdn/ghl.png" width="80" height="80" alt="github">
     </a></center>
     <center><p>访问数</p><img alt="" src="https://saobby.pythonanywhere.com/api/webcounter?id=ldTLVliNAtcAEmdA">
-    <a herf="#">回到顶部</a>
-    <footer>Copyright 2024 WuMingshiali</footer>
+    <a href="#">回到顶部</a>
+    <footer>Copyright 2025 WuMingshiali</footer>
     </div>
     <script src='./zdn/click.js'></script>
     <script>
@@ -86,6 +90,47 @@
             var color = new colorBall()
             color.fly(event.clientX,event.clientY)
 		}
+
+        // 回到顶部的动画函数
+        function scrollToTop() {
+            // 获取当前页面滚动的距离
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+            // 动画持续时间（单位：毫秒）
+            const duration = 500; 
+            const start = performance.now();
+
+            // 缓动函数 (ease-out 效果)
+            const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+            // 动画主函数
+            function animateScroll(time) {
+                const elapsed = time - start; // 已经过去的时间
+                const progress = Math.min(elapsed / duration, 1); // 进度比例 [0, 1]
+                const easing = easeOutCubic(progress); // 应用缓动函数
+
+                // 计算新的滚动位置
+                const newScrollTop = scrollTop * (1 - easing);
+
+                // 设置滚动位置
+                document.documentElement.scrollTop = newScrollTop;
+                document.body.scrollTop = newScrollTop;
+
+                // 如果动画未完成，继续下一帧
+                if (progress < 1) {
+                    requestAnimationFrame(animateScroll);
+                }
+            }
+
+            // 启动动画
+            requestAnimationFrame(animateScroll);
+        }
+
+        // 给回到顶部的链接绑定点击事件
+        document.querySelector('a[href="#"]').addEventListener('click', function(e) {
+            e.preventDefault(); // 阻止默认行为
+            scrollToTop(); // 调用滚动函数
+        });
     </script>
 </body>
 </html>
