@@ -1,0 +1,21 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "@unocss/preset-icons": "^66.5.12",
+    "@unocss/preset-mini": "^66.5.12",
+    "@unocss/preset-uno": "^66.5.12",
+    "unocss": "^66.5.12",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.3",
+    "motion-v": "^1.7.6",
+    "vue": "^3.3.4",
+    "@motionone/dom": "^4.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}

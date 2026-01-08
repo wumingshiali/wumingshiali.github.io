@@ -1,0 +1,90 @@
+:root {
+  /* 基本排版 */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* 主题变量（暗色模式默认） */
+  --color-bg: #000000;
+  --color-surface: #0f0f16;
+  --color-text: rgba(255, 255, 255, 0.92);
+  --color-muted: rgba(255, 255, 255, 0.7);
+  --color-primary: #8b5cf6; /* 现代紫色 */
+  --color-primary-700: #6d28d9;
+  --radius-md: 8px;
+
+  color-scheme: light dark;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--color-primary-700);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.25s, box-shadow 0.18s;
+}
+button:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 20px rgba(109,40,217,0.12);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* 动画：循环文本淡入/上移切换 */
+.cycle-item {
+  display: inline-block;
+  min-width: 3ch;
+  will-change: transform, opacity;
+  transition: opacity 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* 保持界面为深色背景；不强制覆盖系统浅色偏好。
+   如需支持浅色模式，可将以下块恢复并调整颜色。 */
