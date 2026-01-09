@@ -36,13 +36,16 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
+  /* 将基础字体调小一点，使整个站点的文字更小 */
+  font-size: 14px;
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--color-bg);
 }
 
 h1 {
-  font-size: 3.2em;
+  /* 缩小主标题尺寸，配合 body 的基础字体 */
+  font-size: 2.2em;
   line-height: 1.1;
 }
 
@@ -50,7 +53,7 @@ button {
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: 500;
   font-family: inherit;
   background-color: var(--color-surface);

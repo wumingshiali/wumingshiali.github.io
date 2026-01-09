@@ -47,11 +47,25 @@ watch(ptrCodingLang, async () => {
 
 
 <template>
-  <h1 class="text-[3.2em] leading-[1.1] text-brand-1">你好，我是无名氏(Wumingshiali)，我是
-    <span class="cycle-item" ref="aboutEl">{{ aboutMe[ptrAboutMe % aboutMe.length] }}</span>
-    的开发者
-  </h1>
-  <h2 class="text-2xl mt-4 text-brand-2">我会的编程语言有：
-    <span class="cycle-item" ref="codingEl">{{ codingLang[ptrCodingLang % codingLang.length] }}</span>
-  </h2>
+  <div class="app-left">
+    <h1 class="text-[2.2em] leading-[1.1] text-brand-1">你好，我是无名氏(Wumingshiali)，我是
+      <span class="cycle-item" ref="aboutEl">{{ aboutMe[ptrAboutMe % aboutMe.length] }}</span>
+      的开发者
+    </h1>
+    <h2 class="text-xl mt-4 text-brand-2">我会的编程语言有：
+      <span class="cycle-item" ref="codingEl">{{ codingLang[ptrCodingLang % codingLang.length] }}</span>
+    </h2>
+  </div>
 </template>
+
+<style scoped>
+.app-left {
+  text-align: left;
+}
+.app-right {
+  text-align: right;
+}
+.app-center {
+  text-align: center;
+}
+</style>
