@@ -7,10 +7,19 @@ export default defineConfig({
   presets: [
     presetAttributify(),
     presetWebFonts({
-        provider: 'google',
-        fonts: {
-            sans: ["Noto Sans","Noto Sans Simplified Chinese"],
-            mono: 'Fira Code',
+      provider: 'google',
+      fonts: {
+        sans: 'Noto Sans SC',
+      },
+    }),
+    presetWebFonts({
+      provider: 'none',
+      fonts: {
+        mono: {
+          name: 'Maple Mono',
+          provider: 'custom',
+          url: 'https://fontsapi.zeoseven.com/442/main/result.css',
+        },
       },
     }) as Preset,
     presetMini() as Preset,
@@ -25,8 +34,8 @@ export default defineConfig({
       }
     },
     fontFamily: {
-      sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      mono: ['ui-monospace', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+      sans: ['Noto Sans SC', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      mono: ['Maple Mono', 'ui-monospace', 'Consolas', 'monospace'],
     }
   }
 })
