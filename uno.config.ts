@@ -1,7 +1,7 @@
 // uno.config.ts 配置动画预设
-import { defineConfig, presetAttributify, type Preset } from 'unocss'
+import { defineConfig, presetAttributify } from 'unocss'
 import presetWebFonts from '@unocss/preset-web-fonts'
-import presetMini from '@unocss/preset-mini'
+import presetUno from '@unocss/preset-uno'
 
 export default defineConfig({
   presets: [
@@ -15,15 +15,16 @@ export default defineConfig({
     presetWebFonts({
       provider: 'none',
       fonts: {
+        // @ts-ignore
         mono: {
           name: 'Maple Mono',
           provider: 'custom',
           url: 'https://fontsapi.zeoseven.com/442/main/result.css',
         },
       },
-    }) as Preset,
-    presetMini() as Preset,
-  ],
+    }),
+    presetUno(),
+  ] as any,
   theme: {
     // 现代紫色品牌色
     colors: {

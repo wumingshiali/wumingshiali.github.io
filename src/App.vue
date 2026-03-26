@@ -49,36 +49,17 @@ watch(ptrCodingLang, async () => {
 <template>
   <div class="app-left">
     <div id="baseInfo"></div>
-      <h1 class="text-[2.2em] leading-[1.1] text-brand-1 glow">你好，我是无名氏(Wumingshiali)，我是
+      <h1 class="text-[2.2em] leading-[1.1] text-brand-1 glow-1">你好，我是无名氏(Wumingshiali)，我是
         <span class="cycle-item" ref="aboutEl">{{ aboutMe[ptrAboutMe % aboutMe.length] }}</span>
         的开发者
       </h1>
-      <h2 class="text-xl mt-4 text-brand-2">我会的编程语言有：
+      <h2 class="text-xl mt-4 text-brand-2 glow-2">我会的编程语言有：
         <span class="cycle-item" ref="codingEl">{{ codingLang[ptrCodingLang % codingLang.length] }}</span>
       </h2>
       <div id="myTags">
-        <h3 class="text-[1em] mt-4 text-brand-2">
+        <h3 class="text-[1.2em] mt-4 text-brand-2 glow-2">
           我是:哈基米,人,男性
         </h3>
       </div>
     </div>
 </template>
-
-<style scoped>
-.app-left {
-  text-align: left;
-}
-.app-right {
-  text-align: right;
-}
-.app-center {
-  text-align: center;
-}
-.glow {
-  color: #7c3aed;
-  text-shadow:
-    0 0 6px rgba(124, 58, 237, 0.8),
-    0 0 12px rgba(124, 58, 237, 0.6),
-    0 0 18px rgba(124, 58, 237, 0.4);
-}
-</style>

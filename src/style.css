@@ -96,3 +96,34 @@ button:focus-visible {
 
 /* 保持界面为深色背景；不强制覆盖系统浅色偏好。
    如需支持浅色模式，可将以下块恢复并调整颜色。 */
+   
+.app-left {
+  text-align: left;
+}
+.app-right {
+  text-align: right;
+}
+.app-center {
+  text-align: center;
+}
+.glow-1 {
+  color: #8b5cf6;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.2),
+    0 0 20px rgba(255, 255, 255, 0.3),
+    0 0 30px rgba(255, 255, 255, 0.2);
+}
+.glow-2 {
+  color: #8b5cf6;
+  text-shadow:
+    0 0 7px rgba(255, 255, 255, 0.175),
+    0 0 14px rgba(255, 255, 255, 0.3),
+    0 0 21px rgba(255, 255, 255, 0.2);
+}
+.glow-3 {
+  color: #8b5cf6;
+  text-shadow:
+    0 0 5px rgba(255, 255, 255, 0.2),
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 0 15px rgba(255, 255, 255, 0.2);
+}
