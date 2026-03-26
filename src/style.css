@@ -49,7 +49,7 @@ h1 {
   line-height: 1.1;
 }
 
-h2, h3, h4, h5, h6 {
+h2, h3, h4, h5, h6, span {
   font-family: inherit;
   color: inherit;
 }
