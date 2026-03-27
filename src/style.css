@@ -1,8 +1,16 @@
+@import url("https://fontsapi.zeoseven.com/66/main/result.css");
+@font-face{
+  font-family:"ZSFT-443";
+  src:url("https://fontsapi.zeoseven.com/443/main.woff2") format("woff2");
+  font-style:normal;
+  font-weight:100 900;
+  font-display:swap;
+}
 :root {
   /* 基本排版 */
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "ZSFT-443", "寒蝉团圆体 Round", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: normal;
 
   /* 主题变量（暗色模式默认） */
   --color-bg: #000000;
@@ -21,6 +29,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: common-ligatures discretionary-ligatures;
 }
 
 a {

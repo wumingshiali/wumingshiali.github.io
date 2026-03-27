@@ -61,8 +61,10 @@ watch(ptrCodingLang, async () => {
           我是:哈基米,人,男性
         </h3>
       </div>
-      <div id="meImg">
-        <span class="text-[1em] mt-4 text-brand-2 glow-3 font-sans">这是我</span>
+      <div id="meImg" class="flex items-center gap-2">
+        <span class="text-[1.2em] text-brand-2 glow-2">
+          这是我
+        </span>
         <img src="./assets/meTheBabyCat.webp" alt="这是哈基米（我）:D" width="80" height="80" loading="lazy" decoding="async" style="object-fit: contain;" class="glow-3">
       </div>
     </div>
