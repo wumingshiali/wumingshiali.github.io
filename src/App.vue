@@ -5,11 +5,13 @@ import { animate } from 'motion-v'
 
 const aboutMe = ref(["活力", "热情", "专业", "创新"])
 const codingLang = ref(["Vue", "Python", "JavaScript", "Rust", "C++", "HTML"])
+const helloFromDifferentLang = ref(["你好", "Hello", "Hola", "Bonjour", "Ciao"])
 const ptrAboutMe = ref(0)
 const ptrCodingLang = ref(0)
-
+const ptrHelloFromDifferentLang = ref(0)
 const aboutEl = ref(null)
 const codingEl = ref(null)
+const helloEl = ref(null)
 
 let interval = null
 
@@ -17,6 +19,7 @@ onMounted(() => {
   interval = setInterval(() => {
     ptrAboutMe.value++
     ptrCodingLang.value++
+    ptrHelloFromDifferentLang.value++
   }, 1250)
 })
 
@@ -42,14 +45,14 @@ watch(ptrCodingLang, async () => {
     animate(el, { opacity: [0, 1], y: [8, 0] }, { duration: 0.36 })
   }
 }, { flush: 'post' })
-
+  
 </script>
 
 
 <template>
   <div class="app-left">
     <div id="baseInfo"></div>
-      <h1 class="text-[2.2em] leading-[1.1] text-brand-1 glow-1">你好，我是无名氏(Wumingshiali)，我是
+      <h1 class="text-[2.2em] leading-[1.1] text-brand-1 glow-1">{{ helloFromDifferentLang[ptrHelloFromDifferentLang % helloFromDifferentLang.length] }}，我是无名氏(Wumingshiali)，我是
         <span class="cycle-item" ref="aboutEl">{{ aboutMe[ptrAboutMe % aboutMe.length] }}</span>
         的开发者
       </h1>
