@@ -16,7 +16,6 @@
   },
   "scripts": {
     "dev": "vite",
-    "convert-images": "node scripts/convert-images.js",
     "build": "vite build",
     "preview": "vite preview"
   }

@@ -1,13 +1,14 @@
 @font-face {
-  font-family: "ZSFT-443";
-  src: url("https://fontsapi.zeoseven.com/443/main.woff2") format("woff2");
+  font-family: 'ZSFT-443';
+  src: url('https://fontsapi.zeoseven.com/443/main.woff2') format('woff2');
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
 }
+
 :root {
   /* 基本排版 */
-  font-family: "ZSFT-443", "寒蝉团圆体 Round", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'ZSFT-443', '寒蝉团圆体 Round', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: normal;
 
@@ -16,7 +17,7 @@
   --color-surface: #0f0f16;
   --color-text: rgba(255, 255, 255, 0.92);
   --color-muted: rgba(255, 255, 255, 0.7);
-  --color-primary: #8b5cf6; /* 现代紫色 */
+  --color-primary: #8b5cf6;
   --color-primary-700: #6d28d9;
   --radius-md: 8px;
 
@@ -36,6 +37,7 @@ a {
   color: var(--color-primary);
   text-decoration: inherit;
 }
+
 a:hover {
   color: var(--color-primary-700);
 }
@@ -44,7 +46,6 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  /* 将基础字体调小一点，使整个站点的文字更小 */
   font-size: 14px;
   min-width: 320px;
   min-height: 100vh;
@@ -52,12 +53,16 @@ body {
 }
 
 h1 {
-  /* 缩小主标题尺寸，配合 body 的基础字体 */
   font-size: 2.2em;
   line-height: 1.1;
 }
 
-h2, h3, h4, h5, h6, span {
+h2,
+h3,
+h4,
+h5,
+h6,
+span {
   font-family: inherit;
   color: inherit;
 }
@@ -74,10 +79,12 @@ button {
   cursor: pointer;
   transition: border-color 0.25s, box-shadow 0.18s;
 }
+
 button:hover {
   border-color: var(--color-primary);
-  box-shadow: 0 6px 20px rgba(109,40,217,0.12);
+  box-shadow: 0 6px 20px rgba(109, 40, 217, 0.12);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -99,21 +106,22 @@ button:focus-visible {
   display: inline-block;
   min-width: 3ch;
   will-change: transform, opacity;
-  transition: opacity 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1);
+  transition: opacity 360ms cubic-bezier(0.2, 0.9, 0.2, 1), transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
-/* 保持界面为深色背景；不强制覆盖系统浅色偏好。
-   如需支持浅色模式，可将以下块恢复并调整颜色。 */
-   
+/* 保持界面为深色背景 */
 .app-left {
   text-align: left;
 }
+
 .app-right {
   text-align: right;
 }
+
 .app-center {
   text-align: center;
 }
+
 .glow-1 {
   color: #8b5cf6;
   text-shadow:
@@ -121,6 +129,7 @@ button:focus-visible {
     0 0 20px rgba(255, 255, 255, 0.3),
     0 0 30px rgba(255, 255, 255, 0.2);
 }
+
 .glow-2 {
   color: #8b5cf6;
   text-shadow:
@@ -128,6 +137,7 @@ button:focus-visible {
     0 0 14px rgba(255, 255, 255, 0.3),
     0 0 21px rgba(255, 255, 255, 0.2);
 }
+
 .glow-3 {
   color: #8b5cf6;
   text-shadow:

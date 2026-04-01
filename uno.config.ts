@@ -8,13 +8,12 @@ export default defineConfig({
     presetUno(),
   ],
   theme: {
-    // 现代紫色品牌色
     colors: {
       brand: {
         1: '#8b5cf6',
         2: '#7c3aed',
-        3: '#5b21b6'
-      }
-    }
-  }
+        3: '#5b21b6',
+      },
+    },
+  },
 })
