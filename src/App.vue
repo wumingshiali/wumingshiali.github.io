@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { animate } from 'motion-v'
+import ItemCard from './components/ItemCard.vue'
 
 // 定义数据和状态
 const aboutMe = ref(['活力', '热情', '专业', '创新'])
@@ -88,5 +89,23 @@ watch(ptrHelloFromDifferentLang, async () => {
         class="glow-3"
       >
     </div>
+    <div id="gameIPlay" class="text-[1.2em] leading-[1.1] text-brand-2 glow-2">
+      <h4>我玩:</h4>
+      <div class="cards-row text-[1.2em] text-brand-2 glow-2">
+        <ItemCard name="Minecraft" desc="我的圣剑！！！"/>
+        <ItemCard name="都市天际线" desc="Very good的城市建造游戏"/>
+        <ItemCard name="欧卡" desc="人生啊能不能放过这一次"/>
+        <ItemCard name="终末地" desc="工业？游戏（存疑）"/>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.cards-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+}
+</style>
