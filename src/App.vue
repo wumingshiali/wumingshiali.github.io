@@ -76,10 +76,10 @@ watch(ptrHelloFromDifferentLang, async () => {
     </div>
     <div id="meImg" class="flex items-center gap-2">
       <span class="text-[1.2em] text-brand-2 glow-2">
-        这是我
+        这是我:
       </span>
       <img
-        src="./assets/meTheBabyCat.webp"
+        src="https://cdn.jsdmirror.com/gh/wumingshiali/wumingshiali.github.io/2546968202bbc212f53c56245937b03b5cafd481/src/assets/meTheBabyCat.webp"
         alt="这是哈基米（我）:D"
         width="80"
         height="80"
