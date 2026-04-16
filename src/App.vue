@@ -79,7 +79,7 @@ watch(ptrHelloFromDifferentLang, async () => {
         这是我:
       </span>
       <img
-        src="https://cdn.jsdmirror.com/gh/wumingshiali/wumingshiali.github.io/2546968202bbc212f53c56245937b03b5cafd481/src/assets/meTheBabyCat.webp"
+        src="./assets/meTheBabyCat.webp"
         alt="这是哈基米（我）:D"
         width="80"
         height="80"
