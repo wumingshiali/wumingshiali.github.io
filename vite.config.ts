@@ -85,7 +85,7 @@ export default defineConfig({
       filter: /\.(js|css|html|svg|json)$/,
       exclude: /\.map$/,
       skipLarger: true
-    }),
+    })]
   build: {
     // 目标浏览器
     target: 'esnext',
