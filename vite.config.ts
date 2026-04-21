@@ -36,7 +36,7 @@ function imageOptimizePlugin() {
           } else if (ext === 'gif') {
             optimized = await image.gif({ colors: 128, effort: 10 }).toBuffer()
           } else if (ext === 'webp') {
-            optimized = await image.webp({ quality: 75, effort: 6 }).toBuffer()
+            optimized = await image.webp({ quality: 100, effort: 6 }).toBuffer()
           } else {
             optimized = await image.jpeg({ mozjpeg: true, quality: 80 }).toBuffer()
           }
