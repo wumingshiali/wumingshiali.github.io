@@ -5,6 +5,7 @@ import sharp from 'sharp'
 import { visualizer } from 'rollup-plugin-visualizer'
 import gzipPlugin from 'rollup-plugin-gzip'
 import brotli from 'rollup-plugin-brotli'
+import importToCDN from 'vite-plugin-cdn-import'
 
 // 使用 sharp 优化图片（含 webp 转换）
 function imageOptimizePlugin() {
@@ -85,6 +86,29 @@ export default defineConfig({
       filter: /\.(js|css|html|svg|json)$/,
       exclude: /\.map$/,
       skipLarger: true
+    }),
+    importToCDN({
+      modules: [
+        {
+          name: 'vue',
+          var: 'Vue',
+          path: `https://unpkg.com/vue@3.4.21/dist/vue.global.prod.js`,
+          css: []
+        },
+        {
+          name: 'axios',
+          var: 'axios',
+          path: `https://unpkg.com/axios@1.6.7/dist/axios.min.js`,
+          css: []
+        },
+        {
+          name: 'element-plus',
+          var: 'ElementPlus',
+          path: `https://unpkg.com/element-plus@2.7.0/dist/index.full.min.js`,
+          css: ['https://unpkg.com/element-plus@2.7.0/dist/index.css']
+        }
+      ],
+      prodUrl: 'https://unpkg.com/{name}@{version}/{path}' // 默认占位符替换规则
     })
   ],
   build: {
