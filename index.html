@@ -35,7 +35,14 @@
       }
     }
     </script>
-    <script>if(!window.Vue){document.body.innerHTML='<h1>依赖加载失败</h1>';}</script>
+    <script type="module">
+  // 监听模块加载失败（原生 ESM 唯一可靠方式）
+  window.addEventListener('error', (e) => {
+    if (e.target?.tagName === 'SCRIPT' && e.target?.src?.includes('s4.zstatic.net')) {
+      document.body.innerHTML = '<h1 style="color:#f56c6c">依赖加载失败，请检查网络</h1>';
+    }
+  }, true); // 捕获阶段，确保能监听到 module 脚本错误
+</script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
