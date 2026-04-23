@@ -44,6 +44,11 @@
     }
     </script>
     <script type="module">
+      if (typeof window !== 'undefined' && typeof process === 'undefined') {
+        window.process = { env: { NODE_ENV: 'production' } }
+      }
+    </script>
+    <script type="module">
   // 监听模块加载失败（原生 ESM 唯一可靠方式）
   window.addEventListener('error', (e) => {
     if (e.target?.tagName === 'SCRIPT' && e.target?.src?.includes('s4.zstatic.net')) {
