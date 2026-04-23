@@ -64,6 +64,9 @@ function imageOptimizePlugin() {
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production')
+  },
   plugins: [
     vue(), 
     Unocss(), 
