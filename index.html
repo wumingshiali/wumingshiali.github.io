@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="zh-Hans">
   <head>
+    <script>
+      if (typeof window !== 'undefined' && typeof process === 'undefined') {
+        window.process = { env: { NODE_ENV: 'production' } }
+      }
+    </script>
     <link rel="preconnect" href="https://fontsapi.zeoseven.com" crossorigin>
     <link rel="preconnect" href="https://s4.zstatic.net" crossorigin>
     <link href="https://fontsapi.zeoseven.com/66/main/result.css" onload="this.rel='stylesheet'" rel="preload" as="style" crossorigin>
@@ -42,11 +47,6 @@
         "@vueuse/shared": "https://s4.zstatic.net/npm/@vueuse/shared@14.2.1/dist/index.js"
       }
     }
-    </script>
-    <script type="module">
-      if (typeof window !== 'undefined' && typeof process === 'undefined') {
-        window.process = { env: { NODE_ENV: 'production' } }
-      }
     </script>
     <script type="module">
   // 监听模块加载失败（原生 ESM 唯一可靠方式）
