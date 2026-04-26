@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="zh-Hans">
-  <head>
-    <!-- 🛡️ 1. 全局 process polyfill - 普通 script，同步执行，必须最前！ -->
-    <script>
+    <head>
+        <!-- 🛡️ 1. 全局 process polyfill - 普通 script，同步执行，必须最前！ -->
+        <!--<script>
       if (typeof window !== 'undefined' && typeof process === 'undefined') {
         window.process = { env: { NODE_ENV: 'production' } }
       }
-    </script>
+    </script>-->
 
-    <!-- 🗺️ 2. ImportMap - 必须在任何 module 之前解析 -->
-    <script type="importmap">
+        <!-- 🗺️ 2. ImportMap - 必须在任何 module 之前解析 -->
+        <!--<script type="importmap">
     {
       "imports": {
         "vue": "https://s4.zstatic.net/ajax/libs/vue/3.5.22/vue.esm-browser.prod.min.js",
@@ -22,54 +22,68 @@
         "@vueuse/shared": "https://s4.zstatic.net/npm/@vueuse/shared@14.2.1/dist/index.js"
       }
     }
-    </script>
+    </script>-->
 
-    <!-- 🚫 3. 防止 HTML 被缓存（关键！） -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <!-- 🚫 3. 防止 HTML 被缓存（关键！） -->
+        <!--<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Expires" content="0">-->
 
-    <!-- 🔹 4. 原有 head 内容保持不变（含 SRI + modulepreload） -->
-    <link rel="preconnect" href="https://fontsapi.zeoseven.com" crossorigin>
-    <link rel="preconnect" href="https://s4.zstatic.net" crossorigin>
-    <link href="https://fontsapi.zeoseven.com/66/main/result.css" onload="this.rel='stylesheet'" rel="preload" as="style" crossorigin>
-    <noscript><link rel="stylesheet" href="https://fontsapi.zeoseven.com/66/main/result.css"></noscript>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="./head.webp">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ukncat - 个人主页</title>
-    
-    <!-- DNS 预解析 -->
-    <link rel="dns-prefetch" href="https://fontsapi.zeoseven.com">
-    <link rel="dns-prefetch" href="https://umi.meali.top">
-    <link rel="dns-prefetch" href="https://s4.zstatic.net">
-    
-    <!-- 预加载关键资源 - ✅ 保留所有 modulepreload + integrity (SRI) -->
-    <link rel="preload" href="./head.webp" as="image" type="image/webp">
-    <meta name="theme-color" content="#000000">
-    
-    <link rel="modulepreload" href="https://s4.zstatic.net/ajax/libs/vue/3.5.22/vue.esm-browser.prod.min.js" integrity="sha256-XqL7XId8Y/S3Vq0DtO8oyzXmQxABW7yCfCN8Qp/Xwh0=" crossorigin="anonymous">
+        <!-- 🔹 4. 原有 head 内容保持不变（含 SRI + modulepreload） -->
+        <link
+            rel="preconnect"
+            href="https://fontsapi.zeoseven.com"
+            crossorigin
+        />
+        <!--<link rel="preconnect" href="https://s4.zstatic.net" crossorigin>-->
+        <link
+            href="https://fontsapi.zeoseven.com/66/main/result.css"
+            onload="this.rel = 'stylesheet'"
+            rel="preload"
+            as="style"
+            crossorigin
+        />
+        <noscript
+            ><link
+                rel="stylesheet"
+                href="https://fontsapi.zeoseven.com/66/main/result.css"
+        /></noscript>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="./head.webp" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ukncat - 个人主页</title>
+
+        <!-- DNS 预解析 -->
+        <link rel="dns-prefetch" href="https://fontsapi.zeoseven.com" />
+        <link rel="dns-prefetch" href="https://umi.meali.top" />
+        <!--<link rel="dns-prefetch" href="https://s4.zstatic.net">-->
+
+        <!-- 预加载关键资源 - ✅ 保留所有 modulepreload + integrity (SRI) -->
+        <link rel="preload" href="./head.webp" as="image" type="image/webp" />
+        <meta name="theme-color" content="#000000" />
+
+        <!--<link rel="modulepreload" href="https://s4.zstatic.net/ajax/libs/vue/3.5.22/vue.esm-browser.prod.min.js" integrity="sha256-XqL7XId8Y/S3Vq0DtO8oyzXmQxABW7yCfCN8Qp/Xwh0=" crossorigin="anonymous">
     <link rel="modulepreload" href="https://s4.zstatic.net/npm/motion-v@1.7.6/dist/es/index.mjs" integrity="sha256-7ps4QMKBfgUdAIB5J/6CFzexeMd4UDsq68HQ+bapGzk=" crossorigin="anonymous">
     <link rel="modulepreload" href="https://s4.zstatic.net/npm/motion-dom@12.38.0/dist/es/index.mjs" integrity="sha256-BXJcL9sos7GUARXf3RC6XAEyHTvg1l3Batzi+a9l7Zs=" crossorigin="anonymous">
     <link rel="modulepreload" href="https://s4.zstatic.net/npm/motion-utils@12.36.0/dist/es/index.mjs" integrity="sha256-Li7KDS6ADJvoue6/M2wMQ9XvL8tFaK7fH3A3WYNQ6+c=" crossorigin="anonymous">
     <link rel="modulepreload" href="https://s4.zstatic.net/npm/framer-motion@12.38.0/dist/es/index.mjs" integrity="sha256-itRtqvqXku2xkI0+bHDakCfrTivgS0ncEy9/I4bkx9w=" crossorigin="anonymous">
     <link rel="modulepreload" href="https://s4.zstatic.net/npm/@vueuse/core@14.2.1/dist/index.js" integrity="sha256-GO7d+slgt55PCsebsBhOzGcgnNaZKtz+pxvVArnGJZs=" crossorigin="anonymous">
     <link rel="modulepreload" href="https://s4.zstatic.net/npm/hey-listen@1.0.8/dist/hey-listen.es.js" integrity="sha256-PGuHjduU/75eZWFBPifNJnHv4LA8D5gobqjLgYIw7yk=" crossorigin="anonymous">
-    <link rel="modulepreload" href="https://s4.zstatic.net/npm/@vueuse/shared@14.2.1/dist/index.js" integrity="sha256-Xv8xAHP2A4xrUE/eZMuCOslArG7O5qMQQ9NxbDqq7Tg=" crossorigin="anonymous">
-  </head>
-  <body>
-    <div id="app"></div>
-    
-    <!-- 错误监听（可选保留） -->
-    <script type="module">
+    <link rel="modulepreload" href="https://s4.zstatic.net/npm/@vueuse/shared@14.2.1/dist/index.js" integrity="sha256-Xv8xAHP2A4xrUE/eZMuCOslArG7O5qMQQ9NxbDqq7Tg=" crossorigin="anonymous">-->
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <!-- 错误监听（可选保留） -->
+        <!--<script type="module">
       window.addEventListener('error', (e) => {
         if (e.target?.tagName === 'SCRIPT' && e.target?.src?.includes('s4.zstatic.net')) {
           document.body.innerHTML = '<h1 style="color:#f56c6c">依赖加载失败，请检查网络</h1>';
         }
       }, true);
-    </script>
-    
-    <!-- ✅ 5. main.js - 不加时间戳，依赖服务器缓存头 -->
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    </script>-->
+
+        <!-- ✅ 5. main.js - 不加时间戳，依赖服务器缓存头 -->
+        <script type="module" src="/src/main.js"></script>
+    </body>
 </html>
