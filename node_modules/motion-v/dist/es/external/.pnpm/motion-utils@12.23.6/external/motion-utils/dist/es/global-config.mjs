@@ -1,4 +1,0 @@
-const MotionGlobalConfig = {};
-export {
-  MotionGlobalConfig
-};
