@@ -16,6 +16,7 @@ node_modules/
 *.log
 *.tmp
 *.swp
+dist/
 
 # Environment
 .env
