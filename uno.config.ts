@@ -16,4 +16,11 @@ export default defineConfig({
       },
     },
   },
+  // 提高开发编译速度
+  content: {
+    pipeline: {
+      // 排除不需要扫描的文件
+      exclude: ['node_modules', 'dist', '.git'],
+    },
+  },
 })

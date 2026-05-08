@@ -23,49 +23,41 @@ function imageOptimizePlugin() {
         assetsToOptimize.push({ fileName, source: asset.source });
       }
 
-      // 优化并生成 webp
-      for (const { fileName, source } of assetsToOptimize) {
-        try {
-          const image = sharp(source);
-          const ext = fileName.split(".").pop()?.toLowerCase();
+      // 并行优化图片（提高编译速度）
+      await Promise.all(
+        assetsToOptimize.map(async ({ fileName, source }) => {
+          try {
+            const ext = fileName.split(".").pop()?.toLowerCase();
+            let optimized;
+            const img = sharp(source);
 
-          // 优化原格式 - 降低质量以减小体积
-          let optimized;
-          if (ext === "png") {
-            optimized = await image
-              .png({ palette: true, compressionLevel: 9 })
-              .toBuffer();
-          } else if (ext === "gif") {
-            optimized = await image.gif({ colors: 128, effort: 10 }).toBuffer();
-          } else if (ext === "webp") {
-            optimized = await image
-              .webp({ quality: 100, effort: 6 })
-              .toBuffer();
-          } else {
-            optimized = await image
-              .jpeg({ mozjpeg: true, quality: 80 })
-              .toBuffer();
+            if (ext === "png") {
+              optimized = await img.png({ palette: true, compressionLevel: 9 }).toBuffer();
+            } else if (ext === "gif") {
+              optimized = await img.gif({ colors: 128, effort: 10 }).toBuffer();
+            } else if (ext === "webp") {
+              optimized = await img.webp({ quality: 100, effort: 6 }).toBuffer();
+            } else {
+              optimized = await img.jpeg({ mozjpeg: true, quality: 80 }).toBuffer();
+            }
+
+            bundle[fileName].source = optimized;
+
+            // 为 PNG/JPG/GIF 额外生成 webp 版本
+            if (ext && ["png", "jpg", "jpeg", "gif"].includes(ext)) {
+              const webpFileName = fileName.replace(/\.[^.]+$/, ".webp");
+              const webpBuffer = await sharp(source).webp({ quality: 75, effort: 6 }).toBuffer();
+              bundle[webpFileName] = {
+                type: "asset",
+                fileName: webpFileName,
+                source: webpBuffer,
+              };
+            }
+          } catch (e) {
+            console.warn(`Failed to optimize ${fileName}:`, e);
           }
-
-          // 更新原文件
-          bundle[fileName].source = optimized;
-
-          // 为 PNG/JPG/GIF 额外生成 webp 版本
-          if (ext && ["png", "jpg", "jpeg", "gif"].includes(ext)) {
-            const webpFileName = fileName.replace(/\.[^.]+$/, ".webp");
-            const webpBuffer = await sharp(source)
-              .webp({ quality: 75, effort: 6 })
-              .toBuffer();
-            bundle[webpFileName] = {
-              type: "asset",
-              fileName: webpFileName,
-              source: webpBuffer,
-            };
-          }
-        } catch (e) {
-          console.warn(`Failed to optimize ${fileName}:`, e);
-        }
-      }
+        }),
+      );
     },
   };
 }
@@ -77,13 +69,17 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    Unocss(),
+    Unocss({
+      // 禁用开发时的缓存清除，提高编译速度
+      devTools: false,
+    }),
     imageOptimizePlugin(),
-    // 打包分析（可选，生产环境可关闭）
+    // 仅在需要时启用打包分析
     visualizer({
       open: false,
       filename: "dist/stats.html",
       gzipSize: true,
+      template: "treemap", // 更快的模板
     }),
     // Gzip 压缩
     gzipPlugin({
@@ -101,18 +97,14 @@ export default defineConfig({
   build: {
     // 目标浏览器
     target: "esnext",
-    // 最小化
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ["console.log"],
-      },
+    // 使用 esbuild 而不是 terser，编译速度提升 3-5x
+    minify: "esbuild",
+    minifyOptions: {
+      drop: ["console", "debugger"],
+      legalComments: "none",
     },
     // 代码分割 - 使用 CDN 后不再需要分割 vendor chunk
     rollupOptions: {
-      // external: ['vue', 'motion-v'],
       output: {
         // 资源文件命名添加 hash
         entryFileNames: "assets/[name].[hash].js",
@@ -122,15 +114,17 @@ export default defineConfig({
     },
     // 分块大小限制
     chunkSizeWarningLimit: 500,
-    //  sourcemap 在生产环境关闭
+    // sourcemap 在生产环境关闭
     sourcemap: false,
   },
   // CSS 优化
   css: {
     devSourcemap: false,
   },
-  // 预加载优化 - 标记为外部依赖，不预打包
+  // 预加载优化 - 预打包依赖加速冷启动
   optimizeDeps: {
-    // exclude: ['vue', 'motion-v']
+    exclude: [],
   },
+  // 缓存配置
+  cacheDir: "node_modules/.vite",
 });
