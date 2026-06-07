@@ -94,8 +94,15 @@ watch(ptrHelloFromDifferentLang, async () => {
       <div class="cards-row text-[1.2em] text-brand-2 glow-2">
         <ItemCard name="Minecraft" desc="我的圣剑！！！"/>
         <ItemCard name="都市天际线" desc="Very good的城市建造游戏"/>
-        <ItemCard name="欧卡" desc="人生啊能不能放过这一次"/>
         <ItemCard name="终末地" desc="工业？游戏（存疑）"/>
+      </div>
+    </div>
+    <div id="gameTypeILove" class="text-[1.2em] leading-[1.1] text-brand-2 glow-2">
+      <h4>我喜欢的游戏类型:</h4>
+      <div class="cards-row text-[1.2em] text-brand-2 glow-2">
+        <ItemCard name="沙盒" desc="我要拉电线！我要建城市！我要玩机霸动力！"/>
+        <ItemCard name="RTS" desc="诶不是这里怎么堵车了"/>
+        <ItemCard name="PvP" desc="只要不跟我玩远程，我谁都打得过！饿啊！"/>
       </div>
     </div>
   </div>
