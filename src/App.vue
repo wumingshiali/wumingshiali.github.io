@@ -61,7 +61,7 @@ watch(ptrHelloFromDifferentLang, async () => {
   <div class="app-left">
     <div id="baseInfo"></div>
     <h1 class="text-[2.2em] leading-[1.1] text-brand-1 glow-1">
-      <span ref="helloEl">{{ helloFromDifferentLang[ptrHelloFromDifferentLang % helloFromDifferentLang.length] }}</span>，我是虚空之猫 (Ukncat)，我是
+      <span ref="helloEl">{{ helloFromDifferentLang[ptrHelloFromDifferentLang % helloFromDifferentLang.length] }}</span>，我是虚空之猫 (VoidCat)，我是
       <span class="cycle-item" ref="aboutEl">{{ aboutMe[ptrAboutMe % aboutMe.length] }}</span>
       的开发者
     </h1>
