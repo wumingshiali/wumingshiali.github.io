@@ -1,4 +1,6 @@
 <script setup>
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+
 defineProps({
   name: {
     type: String,
@@ -16,25 +18,19 @@ defineProps({
 </script>
 
 <template>
-  <div class="item-card" :class="{ 'has-img': !!img }">
+  <Card
+    class="item-card w-[200px] shrink-0 overflow-hidden relative rounded-xl shadow-none border-white/15 bg-black/60"
+    :class="{ 'has-img': !!img }"
+  >
     <img v-if="img" :src="img" :alt="name" class="item-card-img" />
-    <div class="item-card-content">
-      <span class="item-card-name">{{ name }}</span>
-      <span v-if="desc" class="item-card-desc">{{ desc }}</span>
-    </div>
-  </div>
+    <CardHeader :class="img ? 'item-card-overlay' : 'item-card-content'">
+      <CardTitle class="item-card-name">{{ name }}</CardTitle>
+      <CardDescription v-if="desc" class="item-card-desc">{{ desc }}</CardDescription>
+    </CardHeader>
+  </Card>
 </template>
 
 <style scoped>
-.item-card {
-  position: relative;
-  width: 200px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
 .item-card.has-img {
   aspect-ratio: 1 / 1;
 }
@@ -48,33 +44,34 @@ defineProps({
   object-position: center;
 }
 
-.item-card-content {
+/* 有图：底部渐变遮罩 */
+.item-card-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  display: flex;
-  flex-direction: column;
+  padding: 12px;
   gap: 4px;
 }
 
-.item-card:not(.has-img) .item-card-content {
-  position: static;
-  background: none;
+/* 无图：静态布局 */
+.item-card-content {
   padding: 12px;
+  gap: 4px;
 }
 
 .item-card-name {
-  color: inherit;
   font-size: 1.1em;
   font-weight: 600;
+  color: inherit;
+  letter-spacing: normal;
+  line-height: inherit;
 }
 
 .item-card-desc {
-  color: inherit;
-  opacity: 0.75;
   font-size: 0.85em;
+  opacity: 0.75;
+  color: inherit;
 }
 </style>
