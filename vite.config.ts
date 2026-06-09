@@ -4,8 +4,8 @@ import Unocss from "unocss/vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import gzipPlugin from "rollup-plugin-gzip";
 import brotli from "rollup-plugin-brotli";
-// ✅ 正确导入
 import htmlMinifierTerser from "vite-plugin-html-minifier-terser";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ mode }) => {
   const isProd = mode === "production";
@@ -41,6 +41,12 @@ export default defineConfig(({ mode }) => {
           template: "treemap",
         }),
     ].filter(Boolean),
+
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./src", import.meta.url)),
+      },
+    },
 
     esbuild: {
       drop: isProd ? ["console", "debugger"] : [],

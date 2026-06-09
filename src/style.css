@@ -21,9 +21,20 @@
   --color-primary-700: #6d28d9;
   --radius-md: 8px;
 
-  color-scheme: light dark;
+  /* 覆盖 shadcn preset 注入的亮色默认值，强制暗色 */
+  --background: 0 0 0;
+  --foreground: 1 0 0;
+  --card: 0.05 0.02 285;
+  --card-foreground: 1 0 0;
+  --popover: 0.05 0.02 285;
+  --popover-foreground: 1 0 0;
+  --muted: 0.15 0.01 285;
+  --muted-foreground: 0.7 0.015 286;
+  --border: 1 0 0 / 15%;
+
+  color-scheme: dark;
   color: var(--color-text);
-  background-color: var(--color-bg);
+  background-color: var(--color-bg) !important;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -49,7 +60,7 @@ body {
   font-size: 14px;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg) !important;
 }
 
 h1 {
