@@ -1,90 +1,103 @@
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import Unocss from "unocss/vite";
-import { visualizer } from "rollup-plugin-visualizer";
-import gzipPlugin from "rollup-plugin-gzip";
-import brotli from "rollup-plugin-brotli";
-// ✅ 正确导入
-import htmlMinifierTerser from "vite-plugin-html-minifier-terser";
+import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue'
+import htmlMinifier from 'vite-plugin-html-minifier-terser'
+import { defineConfig } from 'vite'
 
 export default defineConfig(({ mode }) => {
-  const isProd = mode === "production";
+  const isProd = mode === 'production'
 
   return {
     plugins: [
       vue(),
-      Unocss({ devTools: false }),
-      // ✅ HTML 压缩（仅生产环境）
-      isProd && htmlMinifierTerser({
+      tailwindcss(),
+      isProd && htmlMinifier({
         collapseWhitespace: true,
         removeComments: true,
         removeRedundantAttributes: true,
+        removeEmptyAttributes: true,
+        removeAttributeQuotes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
         useShortDoctype: true,
         minifyCSS: true,
         minifyJS: true,
+        collapseBooleanAttributes: true,
+        sortAttributes: true,
+        sortClassName: true,
+        ignoreCustomFragments: [/<%[\s\S]*?%>/, /\{\{[\s\S]*?\}\}/],
       }),
-      gzipPlugin({
-        filter: /\.(js|css|html|svg|json)$/,
-        suppressErrors: true,
-      }),
-      brotli({
-        filter: /\.(js|css|html|svg|json)$/,
-        exclude: /\.map$/,
-        skipLarger: true,
-      }),
-      isProd &&
-        visualizer({
-          open: false,
-          filename: "dist/stats.html",
-          gzipSize: true,
-          brotliSize: true,
-          template: "treemap",
-        }),
     ].filter(Boolean),
 
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
+
     esbuild: {
-      drop: isProd ? ["console", "debugger"] : [],
-      legalComments: "none",
+      drop: isProd ? ['console', 'debugger'] : [],
+      legalComments: 'none',
     },
 
     build: {
-      target: "esnext",
-      minify: "terser",
-      sourcemap: false,
-      chunkSizeWarningLimit: 1000,
+      target: 'esnext',
+      minify: 'terser',
       terserOptions: {
         compress: {
           drop_console: true,
           drop_debugger: true,
-          passes: 2,
+          passes: 3,
+          unsafe: true,
+          unsafe_arrows: true,
+          unsafe_comps: true,
+          unsafe_Function: true,
+          unsafe_math: true,
+          unsafe_symbols: true,
+          unsafe_methods: true,
+          unsafe_proto: true,
+          unsafe_regexp: true,
+          unsafe_undefined: true,
+          booleans: true,
+          collapse_vars: true,
+          comparisons: true,
+          evaluate: true,
+          inline: true,
+          loops: true,
+          negate_iife: true,
+          properties: true,
+          reduce_funcs: true,
+          reduce_vars: true,
+          sequences: true,
+          side_effects: true,
+          switches: true,
+          typeofs: true,
         },
         format: {
           comments: false,
+          beautify: false,
+        },
+        mangle: {
+          toplevel: true,
+          properties: {
+            regex: /^_/,
+          },
         },
       },
+      cssMinify: true,
+      sourcemap: false,
       rollupOptions: {
         output: {
-          entryFileNames: "assets/[name].[hash].js",
-          chunkFileNames: "assets/[name].[hash].js",
-          assetFileNames: "assets/[name].[hash].[ext]",
+          indent: false,
+          compact: true,
+          entryFileNames: 'assets/[name].[hash].js',
+          chunkFileNames: 'assets/[name].[hash].js',
+          assetFileNames: 'assets/[name].[hash].[ext]',
           manualChunks(id) {
-            if (id.includes("node_modules")) {
-              if (
-                id.includes("/vue/") ||
-                id.includes("/vue-router/") ||
-                id.includes("/pinia/")
-              ) {
-                return "vue-vendor";
-              }
-              return "vendor";
-            }
+            if (id.includes('node_modules')) return 'vendor'
           },
         },
       },
     },
-
-    css: {
-      devSourcemap: false,
-    },
-  };
-});
+  }
+})
