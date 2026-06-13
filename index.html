@@ -2,9 +2,14 @@
 <html lang="zh-Hans" class="dark">
   <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/webp" href="/avatar.webp">
+    <link rel="preload" as="image" href="/avatar.webp" type="image/webp" fetchpriority="high">
+    <link rel="preconnect" href="https://fontsapi.zeoseven.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fontsapi.zeoseven.com">
+    <link rel="preload" as="style" href="https://fontsapi.zeoseven.com/66/main/result.css" onload="this.rel='stylesheet'" crossorigin>
+    <noscript><link rel="stylesheet" href="https://fontsapi.zeoseven.com/66/main/result.css" crossorigin></noscript>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my-vue-app</title>
+    <title>VoidCat - 个人主页</title>
   </head>
   <body>
     <div id="app"></div>

@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import htmlMinifier from 'vite-plugin-html-minifier-terser'
+import { compression } from 'vite-plugin-compression2'
 import { defineConfig } from 'vite'
 
 export default defineConfig(({ mode }) => {
@@ -27,12 +28,22 @@ export default defineConfig(({ mode }) => {
         sortClassName: true,
         ignoreCustomFragments: [/<%[\s\S]*?%>/, /\{\{[\s\S]*?\}\}/],
       }),
+      isProd && compression({
+        algorithms: ['gzip', 'brotliCompress'],
+        threshold: 1024,
+        exclude: [/\.(br|gz|webp|woff2?)$/i],
+        deleteOriginalAssets: false,
+      }),
     ].filter(Boolean),
 
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+    },
+
+    optimizeDeps: {
+      include: ['vue', 'reka-ui', '@vueuse/core', 'clsx', 'tailwind-merge', 'class-variance-authority'],
     },
 
     esbuild: {
@@ -43,6 +54,9 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'esnext',
       minify: 'terser',
+      cssCodeSplit: true,
+      reportCompressedSize: false,
+      chunkSizeWarningLimit: 1000,
       terserOptions: {
         compress: {
           drop_console: true,
@@ -94,7 +108,12 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
           manualChunks(id) {
-            if (id.includes('node_modules')) return 'vendor'
+            if (id.includes('node_modules')) {
+              if (id.includes('reka-ui')) return 'reka'
+              if (id.includes('@vueuse')) return 'vueuse'
+              if (id.includes('vue')) return 'vue'
+              return 'vendor'
+            }
           },
         },
       },

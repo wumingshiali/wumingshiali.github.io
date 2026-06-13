@@ -1,0 +1,13 @@
+# 带 hash 的静态资源永久缓存（immutable）
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 头像文件名固定，无 hash —— 缓存一天
+/avatar.webp
+  Cache-Control: public, max-age=86400
+
+# HTML 入口不缓存，保证每次拿到最新 hash
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
