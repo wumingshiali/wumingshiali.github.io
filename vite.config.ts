@@ -53,6 +53,9 @@ export default defineConfig(({ mode }) => {
         "tailwind-merge",
         "class-variance-authority",
       ],
+      esbuildOptions: {
+        target: "es2022",
+      },
     },
 
     esbuild: {

@@ -2,9 +2,9 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# 头像文件名固定，无 hash —— 缓存一天
+# 头像文件名固定，内容很少变化 —— 长期缓存
 /avatar.webp
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=31536000, immutable
 
 # HTML 入口不缓存，保证每次拿到最新 hash
 /
