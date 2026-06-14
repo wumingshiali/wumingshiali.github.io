@@ -6,41 +6,34 @@ const avatarSrc = "/avatar.webp";
 </script>
 
 <template>
-    <div id="app">
-        <div id="changeTips">
-            <Alert variant="destructive">
-                <AlertTitle>提示</AlertTitle>
-                <AlertDescription>
-                    你正在查看v3版本，正在开发，可能不稳定或者不好看，请见谅。
-                </AlertDescription>
-            </Alert>
-        </div>
-        <div
-            id="baseInf"
-            class="mt-6 flex flex-col items-center gap-5"
-        >
-            <div id="head">
-                <Avatar
-                    class="size-48 ring-2 ring-border/60 ring-offset-4 ring-offset-background shadow-lg shadow-black/30 transition-transform duration-300 hover:scale-[1.02]"
-                >
-                    <AvatarImage
-                        :src="avatarSrc"
-                        loading="eager"
-                        decoding="async"
-                        fetchpriority="high"
-                        width="192"
-                        height="192"
-                    />
-                    <AvatarFallback>VC</AvatarFallback>
-                </Avatar>
-            </div>
-            <div id="name" class="flex flex-col items-center gap-2">
-                <h1
-                    class="text-5xl font-medium tracking-tight sm:text-6xl"
-                >
-                    VoidCat
-                </h1>
-            </div>
-        </div>
+  <div id="app">
+    <div id="changeTips">
+      <Alert variant="destructive">
+        <AlertTitle>提示</AlertTitle>
+        <AlertDescription>
+          你正在查看v3版本，正在开发，可能不稳定或者不好看，请见谅。
+        </AlertDescription>
+      </Alert>
     </div>
+    <div id="baseInf" class="mt-6 flex flex-col items-center gap-5">
+      <div id="head">
+        <Avatar
+          class="size-48 ring-2 ring-border/60 ring-offset-4 ring-offset-background shadow-lg shadow-black/30 transition-transform duration-300 hover:scale-[1.02]"
+        >
+          <AvatarImage
+            :src="avatarSrc"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            width="192"
+            height="192"
+          />
+          <AvatarFallback>VC</AvatarFallback>
+        </Avatar>
+      </div>
+      <div id="name" class="flex flex-col items-center gap-2">
+        <h1 class="text-5xl font-medium tracking-tight sm:text-6xl">VoidCat</h1>
+      </div>
+    </div>
+  </div>
 </template>
