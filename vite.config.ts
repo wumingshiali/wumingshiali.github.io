@@ -53,7 +53,7 @@ export default defineConfig(({ mode }) => {
         "tailwind-merge",
         "class-variance-authority",
       ],
-      esbuildOptions: {
+      rolldownOptions: {
         target: "es2022",
       },
     },
@@ -114,8 +114,6 @@ export default defineConfig(({ mode }) => {
       sourcemap: false,
       rollupOptions: {
         output: {
-          indent: false,
-          compact: true,
           entryFileNames: "assets/[name].[hash].js",
           chunkFileNames: "assets/[name].[hash].js",
           assetFileNames: "assets/[name].[hash].[ext]",
