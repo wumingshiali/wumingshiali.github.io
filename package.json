@@ -30,5 +30,11 @@
     "vite-plugin-compression2": "^2.5.3",
     "vite-plugin-html-minifier-terser": "^3.8.0",
     "vue-tsc": "^3.3.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "vue-demi"
+    ]
   }
 }
