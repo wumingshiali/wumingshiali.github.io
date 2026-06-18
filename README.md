@@ -19,5 +19,5 @@ git remote set-head origin -a
 ---
 
 
-## 感谢
+## 感谢喵
 [click-colorful](https://github.com/ColdDay/click-colorful)
