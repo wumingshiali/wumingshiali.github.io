@@ -1,5 +1,5 @@
 {
-  "type": "module"，
+  "type": "module",
   "devDependencies": {
     "@types/node": "^25.0.3",
     "@unocss/preset-icons": "^66.5.12",
