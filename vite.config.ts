@@ -1,12 +1,17 @@
 import { fileURLToPath, URL } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
+import VueRouter from "unplugin-vue-router/vite";
 import htmlMinifier from "vite-plugin-html-minifier-terser";
 import { compression } from "vite-plugin-compression2";
 import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [
+    VueRouter({
+      routesFolder: "src/pages",
+      dts: "typed-router.d.ts",
+    }),
     vue(),
     tailwindcss(),
     htmlMinifier({
@@ -47,6 +52,8 @@ export default defineConfig({
       "clsx",
       "tailwind-merge",
       "class-variance-authority",
+      "@noble/ciphers/webcrypto.js",
+      "@noble/ciphers/aes.js",
     ],
     rolldownOptions: {
       target: "es2022",
