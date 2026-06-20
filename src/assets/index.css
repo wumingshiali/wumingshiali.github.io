@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn-vue/tailwind.css";
@@ -123,15 +126,30 @@
   #app {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 2rem 4.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    min-height: 100vh;
+    min-height: 100dvh;
+    box-sizing: border-box;
   }
   body {
     @apply bg-background text-foreground;
     @apply font-sans;
   }
+}
+
+/* 路由页面切换过渡动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }

@@ -1,12 +1,17 @@
 <script setup lang="ts">
+import { RouterLink, RouterView } from "vue-router";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Home, Mail } from "@lucide/vue";
 
-const avatarSrc = "/avatar.webp";
+// 导航项集中管理
+const navItems = [
+  { to: "/", label: "主页", icon: Home },
+  { to: "/contact", label: "联系", icon: Mail },
+] as const;
 </script>
 
 <template>
-  <div id="app">
+  <div class="flex flex-1 flex-col items-center gap-2">
     <div id="changeTips">
       <Alert variant="destructive">
         <AlertTitle>提示</AlertTitle>
@@ -15,25 +20,25 @@ const avatarSrc = "/avatar.webp";
         </AlertDescription>
       </Alert>
     </div>
-    <div id="baseInf" class="mt-6 flex flex-col items-center gap-5">
-      <div id="head">
-        <Avatar
-          class="size-48 ring-2 ring-border/60 ring-offset-4 ring-offset-background shadow-lg shadow-black/30 transition-transform duration-300 hover:scale-[1.02]"
-        >
-          <AvatarImage
-            :src="avatarSrc"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-            width="192"
-            height="192"
-          />
-          <AvatarFallback>VC</AvatarFallback>
-        </Avatar>
-      </div>
-      <div id="name" class="flex flex-col items-center gap-2">
-        <h1 class="text-5xl font-medium tracking-tight sm:text-6xl">VoidCat</h1>
-      </div>
-    </div>
+
+    <RouterView v-slot="{ Component }">
+      <Transition name="page" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
+
+    <nav
+      class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/60 p-1.5 backdrop-blur"
+    >
+      <RouterLink
+        v-for="item in navItems"
+        :key="item.to"
+        :to="item.to"
+        class="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground [&.router-link-active]:bg-primary [&.router-link-active]:text-primary-foreground"
+      >
+        <component :is="item.icon" class="size-4" />
+        {{ item.label }}
+      </RouterLink>
+    </nav>
   </div>
 </template>
