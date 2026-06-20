@@ -1,3 +1,6 @@
 node_modules
 dist
 tsconfig.tsbuildinfo
+
+# 加密生成的临时文件（可能含明文答案，禁止入库）
+scripts/*.generated.json
