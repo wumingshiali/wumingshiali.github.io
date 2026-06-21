@@ -107,9 +107,11 @@ export default defineConfig({
       },
       mangle: {
         toplevel: true,
-        properties: {
-          regex: /^_/,
-        },
+        // 禁用 properties.regex 混淆：reka-ui/Vue 内部使用下划线开头的属性，
+        // 混淆后会破坏 provide/inject，导致 Dialog 等组件在生产环境静默失效。
+        // properties: {
+        //   regex: /^_/,
+        // },
       },
     },
     cssMinify: true,
