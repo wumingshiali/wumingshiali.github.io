@@ -55,9 +55,6 @@ export default defineConfig({
       "@noble/ciphers/webcrypto.js",
       "@noble/ciphers/aes.js",
     ],
-    rolldownOptions: {
-      target: "es2022",
-    },
   },
 
   esbuild: {
