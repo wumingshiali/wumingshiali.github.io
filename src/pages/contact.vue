@@ -232,7 +232,7 @@ function resetDialog() {
               autocomplete="off"
               autofocus
               placeholder="请输入数字答案"
-              class="h-10 rounded-lg border border-input bg-background px-3 text-center text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              class="h-10 w-full min-w-0 rounded-lg border border-input bg-background px-3 text-center text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             <p v-if="errorMessage" class="text-center text-sm text-destructive">
               {{ errorMessage }}
