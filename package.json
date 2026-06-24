@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc -b",
     "test": "vitest run",
-    "test:unit": "vitest run tests/unit"
+    "test:unit": "vitest run tests/unit",
+    "test:component": "vitest run tests/component"
   },
   "dependencies": {
     "@lucide/vue": "^1.18.0",
