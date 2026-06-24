@@ -1,10 +1,11 @@
+/// <reference types="vitest" />
 import { fileURLToPath, URL } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import VueRouter from "unplugin-vue-router/vite";
 import htmlMinifier from "vite-plugin-html-minifier-terser";
 import { compression } from "vite-plugin-compression2";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [
@@ -128,5 +129,16 @@ export default defineConfig({
         },
       },
     },
+  },
+
+  // Vitest 配置：单源与构建共用。`tests/integration/**` 不在 include 中，
+  // 需通过 `pnpm test:build` 显式触发（依赖构建产物）。
+  test: {
+    environment: "happy-dom",
+    globals: true,
+    include: ["tests/unit/**/*.test.ts", "tests/component/**/*.test.ts"],
+    setupFiles: ["./tests/setup.ts"],
+    css: false,
+    clearMocks: true,
   },
 });
