@@ -131,12 +131,13 @@ export default defineConfig({
     },
   },
 
-  // Vitest 配置：单源与构建共用。`tests/integration/**` 不在 include 中，
-  // 需通过 `pnpm test:build` 显式触发（依赖构建产物）。
+  // Vitest 配置：单源与构建共用。
+  // include 覆盖全部 tests/，由 CLI 路径参数（test:unit / test:component /
+  // test:build）决定实际跑哪些子目录；不带参数时 `pnpm test` 跑全部。
   test: {
     environment: "happy-dom",
     globals: true,
-    include: ["tests/unit/**/*.test.ts", "tests/component/**/*.test.ts"],
+    include: ["tests/**/*.test.ts"],
     setupFiles: ["./tests/setup.ts"],
     css: false,
     clearMocks: true,
