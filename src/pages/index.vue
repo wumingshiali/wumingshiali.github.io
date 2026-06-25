@@ -23,6 +23,14 @@ const avatarSrc = "/avatar.webp";
     </div>
     <div id="name" class="flex flex-col items-center gap-2">
       <h1 class="text-5xl font-medium tracking-tight sm:text-6xl">VoidCat</h1>
+      <div class="flex flex-col items-center gap-1 text-center">
+        <p class="text-lg font-medium text-muted-foreground sm:text-xl">
+          开源即自由，自由即万物
+        </p>
+        <p class="text-sm italic text-muted-foreground/70 sm:text-base">
+          Open source is freedom. Freedom builds the world.
+        </p>
+      </div>
     </div>
   </div>
 </template>
