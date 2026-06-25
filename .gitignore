@@ -4,3 +4,10 @@ tsconfig.tsbuildinfo
 
 # 加密生成的临时文件（可能含明文答案，禁止入库）
 scripts/*.generated.json
+
+# wrangler 本地运行产物（pages dev / d1 local 等）
+.wrangler/
+
+# Playwright 报告与测试产物
+playwright-report/
+test-results/
