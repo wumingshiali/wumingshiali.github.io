@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hans" class="dark">
+<html lang="zh-Hans">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/webp" href="/avatar.webp" />
@@ -20,6 +20,19 @@
     /></noscript>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VoidCat - 个人主页</title>
+    <script>
+      // 首屏前同步设置主题，避免刷新闪烁（与 App.vue 的主题逻辑保持一致）
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var dark =
+            saved === "dark" ||
+            (saved !== "light" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -133,7 +133,7 @@ function resetDialog() {
     <Button
       v-if="revealState === 'locked'"
       size="lg"
-      class="w-full max-w-md"
+      class="w-full max-w-md border-border bg-card text-card-foreground hover:bg-card/80 dark:bg-card dark:text-card-foreground dark:hover:bg-card/80"
       @click="openDialog('全部')"
     >
       <UnlockKeyhole class="size-4" />
@@ -147,7 +147,7 @@ function resetDialog() {
         :key="item.name"
         variant="outline"
         size="lg"
-        class="h-auto flex-col items-start gap-1 py-4"
+        class="h-auto flex-col items-start gap-1 py-4 bg-card hover:bg-card/80 dark:bg-input/30 dark:hover:bg-input/50"
         @click="
           revealState === 'locked'
             ? openDialog(item.label)
@@ -181,7 +181,7 @@ function resetDialog() {
         :key="item.label"
         variant="outline"
         size="lg"
-        class="h-auto flex-col items-start gap-1 py-4"
+        class="h-auto flex-col items-start gap-1 py-4 bg-card hover:bg-card/80 dark:bg-input/30 dark:hover:bg-input/50"
         @click="copyText(item.label, item.value)"
       >
         <div class="flex w-full items-center justify-between">
@@ -205,7 +205,7 @@ function resetDialog() {
       as="a"
       :href="`mailto:${revealed.email}`"
       size="lg"
-      class="mt-2"
+      class="mt-2 border-border bg-card text-card-foreground hover:bg-card/80 dark:bg-card dark:text-card-foreground dark:hover:bg-card/80"
     >
       <Send class="size-4" />
       发封邮件
@@ -238,7 +238,7 @@ function resetDialog() {
               {{ errorMessage }}
             </p>
           </div>
-          <Button type="submit" :disabled="decrypting" class="w-full">
+          <Button type="submit" :disabled="decrypting" class="w-full border-border bg-card text-card-foreground hover:bg-card/80 dark:bg-card dark:text-card-foreground dark:hover:bg-card/80">
             <Loader2 v-if="decrypting" class="size-4 animate-spin" />
             <Send v-else class="size-4" />
             {{ decrypting ? "解密中…" : "提交" }}
