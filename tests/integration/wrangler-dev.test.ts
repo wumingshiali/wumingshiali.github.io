@@ -57,12 +57,11 @@ describe("wrangler pages dev 本地模拟部署", () => {
         `dist/ 不存在。请先执行 \`pnpm build\` 再跑 \`pnpm test:build\`。`,
       );
     }
-    // Windows 上 spawn pnpm 需 shell: true 让 pnpm.cmd 解析 PATH
+    // 直接调用本地 devDependency 的 wrangler（pnpm 安装后暴露在 PATH 中），
+    // 避免 `pnpm dlx` 每次从 npm registry 下载。Windows 上需 shell: true 解析 .cmd。
     proc = spawn(
-      "pnpm",
+      "wrangler",
       [
-        "dlx",
-        "wrangler",
         "pages",
         "dev",
         "./dist",
