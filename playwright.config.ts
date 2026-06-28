@@ -12,7 +12,8 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
   testDir: "tests/e2e",
-  timeout: 30_000,
+  // 60s 覆盖 webkit 冷启动 page 慢的场景；CI ubuntu + webkit 二进制首启可能 30s+ 不够
+  timeout: 60_000,
   expect: { timeout: 5_000 },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -26,10 +27,13 @@ export default defineConfig({
   },
 
   webServer: {
-    command: "pnpm preview --port 4173 --strictPort",
+    // --host 127.0.0.1 强制 IPv4 绑定：Windows 上 localhost 默认解析为 ::1（IPv6），
+    // 与 baseURL 的 127.0.0.1 不匹配会让 Playwright 60s 都拿不到 200。
+    // ubuntu CI 上虽多解析为 IPv4，显式指定让行为跨平台一致。
+    command: "pnpm preview --port 4173 --strictPort --host 127.0.0.1",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
+    timeout: 120_000,
   },
 
   projects: [

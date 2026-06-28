@@ -32,7 +32,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
+        # webkit 是 mobile-iphone-se project 的浏览器引擎（iPhone SE 模拟用），
+        # 不装的话该 project 5 个测试会全部因 "Executable doesn't exist" 红
+        run: pnpm exec playwright install --with-deps chromium webkit
 
       - name: Typecheck
         run: pnpm run typecheck

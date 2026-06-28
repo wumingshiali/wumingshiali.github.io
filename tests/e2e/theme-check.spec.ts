@@ -1,6 +1,7 @@
 import { test } from "@playwright/test";
 
-const BASE = "http://localhost:4321";
+// 与 playwright.config.ts 的 baseURL 保持一致；之前硬编码 4321 与当前 4173 不符
+const BASE = "http://127.0.0.1:4173";
 
 test("浅色模式实查", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("theme", "light"));
