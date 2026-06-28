@@ -3,12 +3,13 @@ import { ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Home, Mail, Sun, Moon } from "@lucide/vue";
+import { Home, Info, Mail, Sun, Moon } from "@lucide/vue";
 
 // 导航项集中管理
 const navItems = [
   { to: "/", label: "主页", icon: Home },
   { to: "/contact", label: "联系", icon: Mail },
+  { to: "/about", label: "关于", icon: Info },
 ] as const;
 
 // 主题：dark / light，默认跟随系统偏好，选择记忆到 localStorage
