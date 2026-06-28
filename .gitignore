@@ -11,3 +11,6 @@ scripts/*.generated.json
 # Playwright 报告与测试产物
 playwright-report/
 test-results/
+# theme-check.spec.ts 跑出的实查截图（不入库）
+theme-light.png
+theme-dark.png
