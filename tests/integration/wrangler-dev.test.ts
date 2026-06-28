@@ -59,6 +59,8 @@ describe("wrangler pages dev 本地模拟部署", () => {
     }
     // 直接调用本地 devDependency 的 wrangler（pnpm 安装后暴露在 PATH 中），
     // 避免 `pnpm dlx` 每次从 npm registry 下载。Windows 上需 shell: true 解析 .cmd。
+    // detached: true 让 wrangler（外加 Windows 下的 cmd / Linux 下的 sh）成为新进程组
+    // 领导，afterAll 用 process.kill(-pid, ...) 一次杀整组。
     proc = spawn(
       "wrangler",
       [
@@ -72,26 +74,27 @@ describe("wrangler pages dev 本地模拟部署", () => {
         "--log-level",
         "error",
       ],
-      { stdio: ["ignore", "pipe", "pipe"], env: process.env, shell: true },
+      {
+        stdio: ["ignore", "pipe", "pipe"],
+        env: process.env,
+        shell: true,
+        detached: true,
+      },
     );
   }, 30_000);
 
   afterAll(async () => {
-    if (proc) {
-      // shell: true spawn 出 cmd.exe，SIGTERM 只杀 cmd 不杀孙子 wrangler；
-      // 在 Windows 上用 taskkill /T /F 杀整棵进程树
-      if (process.platform === "win32" && proc.pid) {
-        spawn("taskkill", ["/pid", String(proc.pid), "/T", "/F"], {
-          stdio: "ignore",
-        });
-      } else {
-        proc.kill("SIGTERM");
-        await new Promise((r) => setTimeout(r, 500));
-        if (!proc.killed) proc.kill("SIGKILL");
+    if (proc && proc.pid) {
+      try {
+        // 负 pid 发送给整个进程组：shell + 孙子 wrangler 一起干掉，避免孙子变孤儿监听端口
+        process.kill(-proc.pid, "SIGKILL");
+      } catch {
+        // 进程组方案失败（极少数平台不支持），回退到直接杀 proc 自身
+        proc.kill("SIGKILL");
       }
       await once(proc, "exit").catch(() => undefined);
     }
-  }, 30_000);
+  }, 10_000);
 
   it("wrangler 启动后 127.0.0.1 端口可连通", async () => {
     // 最多 30s 等待 wrangler 启动（首次 dlx 会下载 wrangler 包）

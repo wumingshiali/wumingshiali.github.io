@@ -52,9 +52,13 @@ describe("dist/ 构建产物完整性", () => {
 
   it("hashed 资源都有兄弟 .br 或 .gz 预压缩副本", () => {
     const assets = listDir(ASSETS);
-    // 排除预压缩副本本身，避免把 .br/.gz 文件再当 hashed 文件检查
+    // 排除预压缩副本本身与已压缩格式（vite.config.ts 的 compression.exclude），
+    // webp / woff / woff2 本身已是压缩格式，重复压缩无收益，不应要求预压缩副本
     const hashed = assets.filter(
-      (f) => /\.[A-Za-z0-9_-]{6,}\./.test(f) && !/\.(br|gz)$/.test(f),
+      (f) =>
+        /\.[A-Za-z0-9_-]{6,}\./.test(f) &&
+        !/\.(br|gz)$/.test(f) &&
+        !/\.(webp|woff2?)$/i.test(f),
     );
     expect(hashed.length).toBeGreaterThan(0);
     for (const f of hashed) {
