@@ -9,7 +9,10 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("移动端响应式", () => {
-  test("联系页对话框输入框在 375px 视口下不溢出", async ({ page }) => {
+  // 断言依赖 375 视口宽度；desktop project 视口 1280+ 必然失败。
+  // 用 isMobile 限制只在 mobile-iphone-se project 跑。
+  test("联系页对话框输入框在 375px 视口下不溢出", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "仅在 mobile 视口运行（375px 断言）");
     await page.goto("/contact");
     await page.getByRole("button", { name: /解密所有/ }).click();
 

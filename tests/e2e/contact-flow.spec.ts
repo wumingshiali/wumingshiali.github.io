@@ -2,10 +2,21 @@
  * 完整联系页 E2E 流程（仅 desktop-chromium）。
  *
  * 路径：首页 → 联系 → 打开对话框 → 错答 → 正解 → 复制 → mailto
+ *
+ * 注意：本 describe 依赖 navigator.clipboard.readText，webkit (mobile-iphone-se)
+ * 不支持该 API；用 describe.skip 限制只跑 desktop project。
  */
 import { expect, test } from "@playwright/test";
 
 test.describe("联系页流程", () => {
+  test.skip(
+    ({ isMobile }) => isMobile === true,
+    "webkit 不支持 navigator.clipboard.readText，仅在 desktop 跑",
+  );
+
+  // 完整流程涉及多次 page navigation + 异步解密，移动 webkit 启动慢，30s 不够
+  test.describe.configure({ mode: "default", timeout: 60_000 });
+
   test("完整流程：首页 → 联系 → 验证 → 复制", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 
