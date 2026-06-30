@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const avatarSrc = "/avatar.webp";
+const avatarSrc = "/avatar-52491de8.webp";
 </script>
 
 <template>
