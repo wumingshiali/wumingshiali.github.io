@@ -116,17 +116,19 @@ onMounted(() => {
       <span>提供</span>
     </a>
 
-    <!-- 当前页传输协议、延迟与加载用时（仅在能采集到时展示） -->
+    <!-- 当前页传输协议、延迟与加载用时；任一项采不到时显示「无法获取」占位 -->
     <p
-      v-if="loadDuration !== null || httpProtocol || ttfb !== null"
       class="text-xs text-muted-foreground tabular-nums"
       aria-label="页面传输与加载信息"
     >
-      <span v-if="httpProtocol">{{ httpProtocol }}</span>
-      <span v-if="httpProtocol && (ttfb !== null || loadDuration !== null)"> · </span>
-      <span v-if="ttfb !== null">延迟 {{ ttfb }} ms</span>
-      <span v-if="ttfb !== null && loadDuration !== null"> · </span>
-      <span v-if="loadDuration !== null">加载 {{ loadDuration }} ms</span>
+      <template v-if="httpProtocol || ttfb !== null || loadDuration !== null">
+        <span>{{ httpProtocol || "HTTP 无法获取" }}</span>
+        <span> · </span>
+        <span>延迟 {{ ttfb !== null ? `${ttfb} ms` : "无法获取" }}</span>
+        <span> · </span>
+        <span>加载 {{ loadDuration !== null ? `${loadDuration} ms` : "无法获取" }}</span>
+      </template>
+      <span v-else>传输信息无法获取</span>
     </p>
   </main>
 </template>

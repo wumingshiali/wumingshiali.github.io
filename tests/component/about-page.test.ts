@@ -3,8 +3,8 @@
  *
  * 关注：HTTP 协议版本、TTFB 延迟与加载用时的渲染。
  * 关键点：onMounted 中读取 PerformanceNavigationTiming；测试环境默认无
- * nextHopProtocol，需要用 vi.spyOn 注入 mock。空数据时 v-if 守卫生效，
- * 信息条不应渲染。
+ * nextHopProtocol，需要用 vi.spyOn 注入 mock。任一指标采不到时显示
+ * 「无法获取」占位，全部采不到时整段显示「传输信息无法获取」。
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
@@ -51,6 +51,7 @@ describe("/about 页面：传输与加载信息", () => {
     expect(text).toContain("HTTP/3");
     expect(text).toContain("延迟 45 ms");
     expect(text).toContain("加载 235 ms");
+    expect(text).not.toContain("无法获取");
   });
 
   it("HTTP/2 映射：raw = h2 时应展示为 HTTP/2", async () => {
@@ -85,7 +86,7 @@ describe("/about 页面：传输与加载信息", () => {
     expect(text).toContain("HTTP/2+QUIC/43");
   });
 
-  it("边界：loadEventEnd 为 0 时不展示用时，但协议与延迟仍展示", async () => {
+  it("边界：loadEventEnd 为 0 时加载用时显示「无法获取」，协议与延迟正常", async () => {
     mockNavigationEntry({
       startTime: 0,
       requestStart: 10,
@@ -100,10 +101,10 @@ describe("/about 页面：传输与加载信息", () => {
     const text = wrapper.text();
     expect(text).toContain("HTTP/3");
     expect(text).toContain("延迟 70 ms"); // 80 - 10
-    expect(text).not.toContain("加载");
+    expect(text).toContain("加载 无法获取");
   });
 
-  it("边界：responseStart 为 0 时不展示延迟，但协议与加载用时仍展示", async () => {
+  it("边界：responseStart 为 0 时延迟显示「无法获取」，协议与加载用时正常", async () => {
     mockNavigationEntry({
       startTime: 0,
       requestStart: 10,
@@ -118,16 +119,35 @@ describe("/about 页面：传输与加载信息", () => {
     const text = wrapper.text();
     expect(text).toContain("HTTP/3");
     expect(text).toContain("加载 234 ms");
-    expect(text).not.toContain("延迟");
+    expect(text).toContain("延迟 无法获取");
   });
 
-  it("边界：mock 返回空数组时整段信息条不渲染（v-if 守卫）", async () => {
+  it("边界：nextHopProtocol 为空时协议显示「HTTP 无法获取」，其他正常", async () => {
+    mockNavigationEntry({
+      startTime: 0,
+      requestStart: 10,
+      responseStart: 50,
+      loadEventEnd: 200,
+      nextHopProtocol: "",
+    } as PerformanceNavigationTiming);
+
+    const wrapper = await mountAt("/about");
+    await nextTick();
+
+    const text = wrapper.text();
+    expect(text).toContain("HTTP 无法获取");
+    expect(text).toContain("延迟 40 ms");
+    expect(text).toContain("加载 200 ms");
+  });
+
+  it("边界：mock 返回空数组时整段显示「传输信息无法获取」", async () => {
     vi.spyOn(performance, "getEntriesByType").mockReturnValue([] as PerformanceEntry[]);
 
     const wrapper = await mountAt("/about");
     await nextTick();
 
     const infoLine = wrapper.find('[aria-label="页面传输与加载信息"]');
-    expect(infoLine.exists()).toBe(false);
+    expect(infoLine.exists()).toBe(true);
+    expect(infoLine.text()).toBe("传输信息无法获取");
   });
 });
