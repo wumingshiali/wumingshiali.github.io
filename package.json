@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "test:deploy": "vitest run tests/integration/wrangler-dev.test.ts",
     "test:all": "pnpm run typecheck && pnpm run build && pnpm run test:unit && pnpm run test:component && pnpm run test:build && pnpm run test:e2e && pnpm run test:deploy",
-    "e2e:install": "playwright install --with-deps chromium"
+    "e2e:install": "playwright install --with-deps chromium",
+    "new-post": "node scripts/new-post.mjs"
   },
   "dependencies": {
     "@lucide/vue": "^1.18.0",
