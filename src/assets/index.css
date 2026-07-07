@@ -4,6 +4,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn-vue/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -169,4 +170,29 @@
   * {
     transition: none;
   }
+}
+
+/* shiki 代码高亮双主题：
+   light 用 shiki inline 固定色（不覆盖）；
+   dark 用 --shiki-dark 变量覆盖（shiki 输出时定义在 pre/span 上） */
+.dark .shiki {
+  background-color: var(--shiki-dark-bg) !important;
+  color: var(--shiki-dark) !important;
+}
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
+/* 博客卡片进场/过滤过渡：配合 TransitionGroup */
+.card-enter-active,
+.card-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.card-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.card-leave-to {
+  opacity: 0;
+  transform: scale(0.96);
 }

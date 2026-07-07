@@ -44,6 +44,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/': RouteRecordInfo<
+      '/posts/',
+      '/posts',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/[id]': RouteRecordInfo<
+      '/posts/[id]',
+      '/posts/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
   }
 
   /**
@@ -72,6 +86,18 @@ declare module 'vue-router/auto-routes' {
     'src/pages/contact.vue': {
       routes:
         | '/contact'
+      views:
+        | never
+    }
+    'src/pages/posts/index.vue': {
+      routes:
+        | '/posts/'
+      views:
+        | never
+    }
+    'src/pages/posts/[id].vue': {
+      routes:
+        | '/posts/[id]'
       views:
         | never
     }

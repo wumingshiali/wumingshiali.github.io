@@ -3,12 +3,13 @@ import { ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Home, Info, Mail, Sun, Moon } from "@lucide/vue";
+import { FileText, Home, Info, Mail, Sun, Moon } from "@lucide/vue";
 
 // 导航项集中管理
 const navItems = [
   { to: "/", label: "主页", icon: Home },
   { to: "/contact", label: "联系", icon: Mail },
+  { to: "/posts", label: "博客", icon: FileText },
   { to: "/about", label: "关于", icon: Info },
 ] as const;
 
@@ -42,7 +43,7 @@ watch(theme, (val) => {
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col items-center gap-2">
+  <div class="flex flex-1 w-full flex-col items-center gap-2">
     <!-- 主题切换：暗色显太阳(转浅)，浅色显月亮(转暗) -->
     <Button
       variant="outline"
