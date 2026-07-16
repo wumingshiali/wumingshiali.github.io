@@ -2,7 +2,7 @@
 name: 怎么部署这个博客
 desc: 你知道我的博客怎么部署的吗？你想知道怎么部署一样的吗？
 cover: title.webp
-tag: [网页, 博客]
+tag: [网页]
 createTime: 2026-04-03
 ---
 
