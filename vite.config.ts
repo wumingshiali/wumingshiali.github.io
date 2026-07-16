@@ -5,7 +5,47 @@ import vue from "@vitejs/plugin-vue";
 import VueRouter from "unplugin-vue-router/vite";
 import htmlMinifier from "vite-plugin-html-minifier-terser";
 import { compression } from "vite-plugin-compression2";
-import { defineConfig } from "vitest/config";
+import { defineConfig, type Plugin } from "vitest/config";
+
+/**
+ * 把 entry 入口的同步 CSS 内联到 HTML <style>，从关键路径移除额外网络请求。
+ * 适用范围：HTML 中以 <link rel="stylesheet" href="/assets/xxx.css"> 形式引用的
+ * 同步 CSS（即 entry CSS）。异步 chunk 的 CSS 由其 JS 动态加载，仍走外链。
+ */
+function inlineEntryCss(): Plugin {
+  return {
+    name: "inline-entry-css",
+    enforce: "post",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler(html, ctx) {
+        if (!ctx.bundle) return html;
+        const linkRe =
+          /<link\s+[^>]*rel=["']stylesheet["'][^>]*?>/g;
+        return html.replace(linkRe, (tag) => {
+          const hrefMatch = tag.match(/href=["']([^"']+)["']/);
+          if (!hrefMatch) return tag;
+          // HTML 里是 /assets/xxx.css，bundle key 是 assets/xxx.css
+          const href = hrefMatch[1].replace(/^\//, "");
+          for (const [name, asset] of Object.entries(ctx.bundle)) {
+            if (
+              asset.type === "asset" &&
+              name === href &&
+              name.endsWith(".css")
+            ) {
+              const css = String(asset.source);
+              // 已内联 → 从 bundle 移除，避免重复资源
+              delete ctx.bundle[name];
+              return `<style>${css}</style>`;
+            }
+          }
+          return tag;
+        });
+      },
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
@@ -15,6 +55,8 @@ export default defineConfig({
     }),
     vue(),
     tailwindcss(),
+    // 内联 entry CSS 到 HTML（必须早于 htmlMinifier，避免被它二次压缩耗 CPU）
+    inlineEntryCss(),
     htmlMinifier({
       collapseWhitespace: true,
       removeComments: true,
@@ -121,9 +163,16 @@ export default defineConfig({
         assetFileNames: "assets/[name].[hash].[ext]",
         manualChunks(id) {
           if (id.includes("node_modules")) {
+            // 顺序敏感：从最具体到最通用，避免子串误匹配
             if (id.includes("reka-ui")) return "reka";
-            if (id.includes("@vueuse")) return "vueuse";
-            if (id.includes("vue")) return "vue";
+            if (id.includes("@vueuse/core")) return "vueuse";
+            if (id.includes("shiki")) return "shiki";
+            if (id.includes("markdown-it")) return "md";
+            if (id.includes("@noble/ciphers")) return "crypto";
+            if (id.includes("@lucide")) return "lucide";
+            if (id.includes("yaml")) return "md";
+            // 匹配 vue / @vue/* 路径（但不匹配 vueuse、reka-ui）
+            if (/[\\/]node_modules[\\/](@vue[\\/]|vue[\\/]|vue$|vue@)/.test(id)) return "vue";
             return "vendor";
           }
         },
