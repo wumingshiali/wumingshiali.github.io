@@ -5,10 +5,8 @@
  * 解密密钥由用户在 Dialog 中输入的"人机验证答案"按固定规则补齐到 16 字节得到。
  * bot 扫描源码只能拿到无法还原的密文。
  */
-// 静态导入确保 Vite 正确打包；动态 import 子路径在部分环境下 fetch 失败
 // 注意：子路径须带 .js 后缀（@noble/ciphers 的 exports 字段如此定义）
-import { gcm as gcmWebcrypto } from "@noble/ciphers/webcrypto.js";
-import { gcm as gcmJs } from "@noble/ciphers/aes.js";
+// 改为动态 import：避免 noble ciphers 进入初始 vendor，仅在用户点击「解密」时按需下载。
 
 export const contactSecret = {
   // 人机验证题目
@@ -82,7 +80,7 @@ export async function decryptAllContacts(
 
 /**
  * 解密降级链：优先 WebCrypto（硬件加速），失败回退纯 JS AES。
- * 两者 API 对称，均来自 @noble/ciphers，静态导入确保打包可靠。
+ * 两者 API 对称，均来自 @noble/ciphers，动态 import 避免初始 vendor 过大。
  */
 async function decryptAesGcm(
   key: Uint8Array,
@@ -92,6 +90,7 @@ async function decryptAesGcm(
   // 第一层：WebCrypto（最快，浏览器/Workers 原生支持）
   if (typeof globalThis !== "undefined" && globalThis.crypto?.subtle) {
     try {
+      const { gcm: gcmWebcrypto } = await import("@noble/ciphers/webcrypto.js");
       const cipher = gcmWebcrypto(key, nonce);
       return await cipher.decrypt(ciphertext);
     } catch {
@@ -99,6 +98,7 @@ async function decryptAesGcm(
     }
   }
   // 第二层：纯 JS AES（兜底，环境无 WebCrypto.subtle 时使用）
+  const { gcm: gcmJs } = await import("@noble/ciphers/aes.js");
   const cipher = gcmJs(key, nonce);
   return cipher.decrypt(ciphertext);
 }

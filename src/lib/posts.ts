@@ -1,6 +1,8 @@
 import { parse as parseYaml } from "yaml";
-import MarkdownIt from "markdown-it";
-import { createHighlighter, type Highlighter } from "shiki";
+// shiki + markdown-it 改为动态 import：避免把高亮器 + 解析器打进初始 vendor，
+// 仅在用户进入博客详情页触发 getMarkdownRenderer() 时才按需下载。
+import type MarkdownIt from "markdown-it";
+import type { Highlighter } from "shiki";
 
 /** 博客元数据（列表页用） */
 export interface PostMeta {
@@ -149,26 +151,32 @@ const renderedCache = new Map<string, Post>();
 
 function getMarkdownRenderer(): Promise<MarkdownIt> {
   if (mdPromise) return mdPromise;
-  mdPromise = createHighlighter({
-    themes: ["github-light", "github-dark"],
-    langs: [
-      "javascript",
-      "typescript",
-      "vue",
-      "bash",
-      "json",
-      "markdown",
-      "html",
-      "css",
-      "yaml",
-    ],
-  }).then((hl: Highlighter) => {
+  // 动态 import：触发代码分割，shiki + markdown-it 单独成 chunk
+  mdPromise = Promise.all([
+    import("shiki").then((m) => m.createHighlighter({
+      themes: ["github-light", "github-dark"],
+      langs: [
+        "javascript",
+        "typescript",
+        "vue",
+        "bash",
+        "json",
+        "markdown",
+        "html",
+        "css",
+        "yaml",
+      ],
+    })),
+    import("markdown-it"),
+  ]).then(([hl, MarkdownItMod]) => {
+    const hlResolved = hl as Highlighter;
+    const MarkdownIt = MarkdownItMod.default;
     const instance = new MarkdownIt({
       html: false, // 禁内嵌 HTML，安全
       linkify: true,
       highlight(code, lang): string {
-        if (lang && hl.getLoadedLanguages().includes(lang)) {
-          return hl.codeToHtml(code, {
+        if (lang && hlResolved.getLoadedLanguages().includes(lang)) {
+          return hlResolved.codeToHtml(code, {
             lang,
             themes: { light: "github-light", dark: "github-dark" },
           });
