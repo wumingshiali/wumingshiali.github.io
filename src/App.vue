@@ -72,17 +72,36 @@ watch(theme, (val) => {
     </RouterView>
 
     <nav
-      class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 p-1.5 backdrop-blur transition-colors"
+      class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 p-1.5 backdrop-blur"
     >
       <RouterLink
         v-for="item in navItems"
         :key="item.to"
         :to="item.to"
-        class="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground [&.router-link-active]:ring-1 [&.router-link-active]:ring-border [&.router-link-active]:hover:text-foreground dark:[&.router-link-active]:bg-primary dark:[&.router-link-active]:text-primary-foreground"
+        class="group flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-[background-color,border-color,box-shadow] duration-150 hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground [&.router-link-active]:ring-1 [&.router-link-active]:ring-border dark:[&.router-link-active]:bg-primary dark:[&.router-link-active]:text-primary-foreground"
       >
-        <component :is="item.icon" class="size-4" />
+        <component :is="item.icon" class="nav-icon size-4" />
         {{ item.label }}
       </RouterLink>
     </nav>
   </div>
 </template>
+
+<style>
+/*
+ * nav 图标：把激活态从「color 过渡」（触发 SVG path 重新栅格化、paint 主线程阻塞）
+ * 改为「transform 缩放」（GPU 合成线程处理，CLS 友好）。
+ * - hover：父 link group 触发 → scale-110
+ * - active：父 link 命中 .router-link-active → scale-110
+ * - transition 只针对 transform 单一属性
+ */
+.nav-icon {
+  transition: transform 0.15s ease;
+}
+.group:hover .nav-icon {
+  transform: scale(1.1);
+}
+.router-link-active .nav-icon {
+  transform: scale(1.1);
+}
+</style>
