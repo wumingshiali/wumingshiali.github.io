@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { useRoute, RouterLink } from "vue-router";
 import { ArrowLeft } from "@lucide/vue";
 import { getPost, type Post } from "@/lib/posts";
+import Giscus from '@giscus/vue';
 
 const route = useRoute();
 const post = ref<Post | null>(null);
@@ -23,7 +24,25 @@ async function loadPost() {
   }
 }
 
-onMounted(loadPost);
+// 监听 <html> 的 dark class 变化，同步 Giscus 主题
+const isDark = ref(document.documentElement.classList.contains("dark"));
+let observer: MutationObserver | null = null;
+
+onMounted(() => {
+  loadPost();
+  observer = new MutationObserver(() => {
+    isDark.value = document.documentElement.classList.contains("dark");
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+});
+
+onUnmounted(() => {
+  observer?.disconnect();
+});
+
 // 同组件不同 id 时重新加载
 watch(() => route.params.id, loadPost);
 </script>
@@ -64,6 +83,22 @@ watch(() => route.params.id, loadPost);
       </div>
       <!-- 正文：prose 排版 + shiki 高亮 -->
       <div class="prose dark:prose-invert max-w-none" v-html="post.content" />
+
+      <!-- Giscus评论区 -->
+      <Giscus
+          repo="wumingshiali/giscus-for-blog"
+          repo-id="R_kgDOR833VQ"
+          category="Announcements"
+          category-id="DIC_kwDOR833Vc4C6XFc"
+          mapping="pathname"
+          strict="0"
+          reactions-enabled="1"
+          emit-metadata="0"
+          input-position="top"
+          :theme="isDark ? 'dark' : 'light'"
+          lang="zh-CN"
+          loading="lazy"
+        />
     </template>
 
     <div v-else class="flex flex-col items-center gap-2 text-muted-foreground">

@@ -19,6 +19,7 @@
     "new-post": "node scripts/new-post.mjs"
   },
   "dependencies": {
+    "@giscus/vue": "^3.1.1",
     "@lucide/vue": "^1.18.0",
     "@noble/ciphers": "^2.2.0",
     "@tailwindcss/typography": "^0.5.20",
