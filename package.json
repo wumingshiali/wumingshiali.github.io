@@ -31,9 +31,8 @@
     "shadcn-vue": "^2.7.4",
     "shiki": "^4.3.1",
     "tailwind-merge": "^3.6.0",
-    "unplugin-vue-router": "^0.19.2",
     "vue": "^3.5.38",
-    "vue-router": "^4.6.4",
+    "vue-router": "^5.2.0",
     "yaml": "^2.9.0"
   },
   "devDependencies": {

@@ -5,7 +5,7 @@ import { ArrowLeft } from "@lucide/vue";
 import { getPost, type Post } from "@/lib/posts";
 import Giscus from '@giscus/vue';
 
-const route = useRoute();
+const route = useRoute<'/posts/[id]'>();
 const post = ref<Post | null>(null);
 const loading = ref(true);
 const error = ref<unknown>(null);
