@@ -27,19 +27,19 @@ describe("/posts 博客列表页", () => {
   it("渲染标题与示例博客卡片（名称、时间）", async () => {
     const { wrapper } = await mountAt("/posts");
     expect(wrapper.text()).toContain("VoidCat的博客");
-    expect(wrapper.text()).toContain("你好，世界");
-    expect(wrapper.text()).toContain("2026-07-04");
+    expect(wrapper.text()).toContain("又迁移了，这次改了啥，又加了啥？？？");
+    expect(wrapper.text()).toContain("2026-07-16");
   });
 
   it("渲染标签", async () => {
     const { wrapper } = await mountAt("/posts");
-    expect(wrapper.text()).toContain("随笔");
-    expect(wrapper.text()).toContain("公告");
+    expect(wrapper.text()).toContain("网页");
+    expect(wrapper.text()).toContain("Cloudflare");
   });
 
   it("卡片链接到详情页 /posts/hello-world", async () => {
     const { wrapper } = await mountAt("/posts");
-    const link = wrapper.find('a[href="/posts/hello-world"]');
+    const link = wrapper.find('a[href="/posts/change2cy"]');
     expect(link.exists()).toBe(true);
   });
 });
