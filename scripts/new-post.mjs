@@ -35,7 +35,6 @@ const today = new Date().toISOString().slice(0, 10);
 const content = `---
 name: ${id}
 desc: ""
-cover: null
 tag: []
 createTime: ${today}
 ---
