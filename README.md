@@ -2,4 +2,4 @@
 [AI 编程说明](/ai.md)
 # VCHP(VoidCat HomePage)
 基于 Vue 打造的现代化的个人主页。  
-[在线预览](https://dev.meali.top)  
+[在线预览](https://meali.top)  
