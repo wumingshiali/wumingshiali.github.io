@@ -56,15 +56,6 @@ watch(theme, (val) => {
       <Moon v-else class="size-4" />
     </Button>
 
-    <div id="changeTips">
-      <Alert variant="destructive">
-        <AlertTitle>提示</AlertTitle>
-        <AlertDescription>
-          你正在查看v3版本，正在开发，可能不稳定或者不好看，请见谅。
-        </AlertDescription>
-      </Alert>
-    </div>
-
     <RouterView v-slot="{ Component }">
       <Transition name="page" mode="out-in">
         <component :is="Component" />
