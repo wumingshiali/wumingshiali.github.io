@@ -5,6 +5,7 @@ import vue from "@vitejs/plugin-vue";
 import VueRouter from "vue-router/vite";
 import htmlMinifier from "vite-plugin-html-minifier-terser";
 import { compression } from "vite-plugin-compression2";
+import { generateSitemap } from "./vite-plugin-sitemap";
 import { defineConfig, type Plugin } from "vitest/config";
 
 /**
@@ -79,6 +80,7 @@ export default defineConfig({
       exclude: [/\.(br|gz|webp|woff2?)$/i],
       deleteOriginalAssets: false,
     }),
+    generateSitemap(),
   ],
 
   resolve: {
