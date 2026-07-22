@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FileText, Home, Info, Mail, Sun, Moon } from "@lucide/vue";
 
