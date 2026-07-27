@@ -12,6 +12,7 @@
 - MiniMax-M3(需要多模态能力时的开发)
 - Qwen 3.x(聊天)
 - 未知(Qwen Coder 内置模型)
+- DeepSeek v4 pro(v3 简单任务开发)
 ## 各个版本的Vibe Coding使用量
 - v3 90%
 - v2 75%
