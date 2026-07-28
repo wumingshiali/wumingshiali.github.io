@@ -12,7 +12,7 @@ overrides:
   postcss@<=8.5.17: 8.5.18
   sharp@<0.35.0: 0.35.3
   hono@>=4.0.0 <4.12.27: 4.12.27
-  '@hono/node-server@<2.0.5': 2.0.5
+  '@hono/node-server@<2.0.10': 2.0.10
 
 importers:
 
@@ -545,8 +545,8 @@ packages:
     peerDependencies:
       vue: '>=3.2.0'
 
-  '@hono/node-server@2.0.5':
-    resolution: {integrity: sha512-yQFvDmyDo3y6rEOJZDUYPJ49DIKTPpIk4kGvm40xx4Ejne0Pu9a1+exxPN+C1UppWK/WGZX9F++/Xs231tE86g==}
+  '@hono/node-server@2.0.10':
+    resolution: {integrity: sha512-ZcnNVhKTmyDJeg0UlnZjvM73JBsTAuhrH/J4fjwGOw59PwOW51r4J+p6CsKZWXdKSme4MFqU62CZMOsdDrU4CA==}
     engines: {node: '>=20'}
     peerDependencies:
       hono: 4.12.27
@@ -4057,7 +4057,7 @@ snapshots:
       giscus: 1.6.0
       vue: 3.5.38(typescript@6.0.3)
 
-  '@hono/node-server@2.0.5(hono@4.12.27)':
+  '@hono/node-server@2.0.10(hono@4.12.27)':
     dependencies:
       hono: 4.12.27
 
@@ -4243,7 +4243,7 @@ snapshots:
 
   '@modelcontextprotocol/sdk@1.29.0(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 2.0.5(hono@4.12.27)
+      '@hono/node-server': 2.0.10(hono@4.12.27)
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       content-type: 1.0.5
