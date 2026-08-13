@@ -176,6 +176,7 @@ export default defineConfig({
             }
             if (id.includes("markdown-it")) return "md";
             if (id.includes("@noble/ciphers")) return "crypto";
+            if (id.includes("unhead")) return "unhead";
             if (id.includes("@lucide")) return "lucide";
             if (id.includes("yaml")) return "md";
             // 匹配 vue / @vue/* 路径（但不匹配 vueuse、reka-ui）
