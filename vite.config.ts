@@ -93,7 +93,6 @@ export default defineConfig({
     include: [
       "vue",
       "reka-ui",
-      "@vueuse/core",
       "clsx",
       "tailwind-merge",
       "class-variance-authority",
