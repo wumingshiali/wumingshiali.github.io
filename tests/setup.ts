@@ -8,6 +8,18 @@
  */
 import { vi } from "vitest";
 
+// @unhead/vue 在 happy-dom 中不需要真实 DOM 操作，mock 即可
+// 避免组件测试因挂载 useSeo() 而报错
+// - @unhead/vue 导出 useHead / useSeoMeta（composables）
+// - @unhead/vue/client 导出 createHead（Vue 插件）
+vi.mock("@unhead/vue", () => ({
+  useHead: vi.fn(),
+  useSeoMeta: vi.fn(),
+}));
+vi.mock("@unhead/vue/client", () => ({
+  createHead: vi.fn(() => ({})),
+}));
+
 if (typeof window !== "undefined" && !window.matchMedia) {
   Object.defineProperty(window, "matchMedia", {
     writable: true,

@@ -1,14 +1,35 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, defineAsyncComponent } from "vue";
 import { useRoute, RouterLink } from "vue-router";
 import { ArrowLeft } from "@lucide/vue";
 import { getPost, type Post } from "@/lib/posts";
-import Giscus from '@giscus/vue';
+import { useSeo } from "@/composables/useSeo";
+
+// 异步加载评论区：@giscus/vue 独立成 chunk，仅在博客详情页首次渲染时按需下载
+const Giscus = defineAsyncComponent(() => import('@giscus/vue'));
 
 const route = useRoute<'/posts/[id]'>();
 const post = ref<Post | null>(null);
 const loading = ref(true);
 const error = ref<unknown>(null);
+
+// 动态 SEO 元数据：post 加载完成后自动更新 title/meta/JSON-LD
+const seoTitle = computed(() => post.value?.name ?? "博客文章");
+const seoDescription = computed(() => post.value?.desc ?? "阅读 VoidCat 的博客文章");
+const seoImage = computed(() => post.value?.cover ?? undefined);
+const seoPath = computed(() => `/posts/${route.params.id}`);
+const seoPublishedTime = computed(() => post.value?.createTime ?? undefined);
+const seoTags = computed(() => post.value?.tag ?? []);
+
+useSeo({
+  title: seoTitle,
+  description: seoDescription,
+  image: seoImage,
+  path: seoPath,
+  type: "article",
+  publishedTime: seoPublishedTime,
+  tags: seoTags,
+});
 
 async function loadPost() {
   loading.value = true;

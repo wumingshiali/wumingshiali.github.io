@@ -3,6 +3,13 @@ import type { Component } from "vue";
 import { h, onMounted, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import cfLogo from "@/assets/cf.webp";
+import { useSeo } from "@/composables/useSeo";
+
+useSeo({
+  title: "关于",
+  description: "VoidCat 的个人博客项目。基于 Vue 3 + Vite 构建，托管于 Cloudflare Pages。",
+  path: "/about",
+});
 
 // lucide 已移除品牌图标，GitHub 用内联 SVG 保留品牌识别度（与 contact.vue 一致）
 const GithubIcon: Component = {

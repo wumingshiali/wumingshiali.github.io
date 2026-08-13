@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSeo } from "@/composables/useSeo";
 
 const avatarSrc = "/avatar-52491de8.webp";
+
+useSeo({
+  title: "个人主页",
+  description: "开源即自由，自由即万物。Open source is freedom. Freedom builds the world.",
+  path: "/",
+});
 </script>
 
 <template>

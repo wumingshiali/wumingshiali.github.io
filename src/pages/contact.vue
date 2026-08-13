@@ -23,6 +23,13 @@ import {
   decryptAllContacts,
   type ContactName,
 } from "@/lib/contact-crypto";
+import { useSeo } from "@/composables/useSeo";
+
+useSeo({
+  title: "联系",
+  description: "想和 VoidCat 说点什么？通过 GitHub 或解密后的邮箱/微信联系。",
+  path: "/contact",
+});
 
 // lucide 已移除品牌图标，GitHub 用内联 SVG 保留品牌识别度
 const GithubIcon: Component = {

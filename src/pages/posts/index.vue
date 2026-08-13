@@ -5,6 +5,13 @@ import { RouterLink } from "vue-router";
 import { FileText, Search } from "@lucide/vue";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useSeo } from "@/composables/useSeo";
+
+useSeo({
+  title: "博客",
+  description: "VoidCat 的博客文章列表。记录技术、工具与思考。",
+  path: "/posts",
+});
 
 const allPosts = getAllPosts();
 const searchQuery = ref("");
