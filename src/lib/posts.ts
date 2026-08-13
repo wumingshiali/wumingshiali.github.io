@@ -151,22 +151,48 @@ const renderedCache = new Map<string, Post>();
 
 function getMarkdownRenderer(): Promise<MarkdownIt> {
   if (mdPromise) return mdPromise;
-  // 动态 import：触发代码分割，shiki + markdown-it 单独成 chunk
+  // 动态 import：触发代码分割，shiki 核心 + markdown-it 单独成 chunk
+  // 使用 createBundledHighlighter 配合细粒度 lazy import：只打包博客实际用到的
+  // 9 种语言 + 2 种主题（vs createHighlighter 会把全部 200+ 语法打进 bundle）
   mdPromise = Promise.all([
-    import("shiki").then((m) => m.createHighlighter({
-      themes: ["github-light", "github-dark"],
-      langs: [
-        "javascript",
-        "typescript",
-        "vue",
-        "bash",
-        "json",
-        "markdown",
-        "html",
-        "css",
-        "yaml",
-      ],
-    })),
+    // 从 shiki/core 导入：避免主入口拉入全部 200+ 语法
+    import("shiki/core").then(({ createBundledHighlighter }) =>
+      import("shiki/engine/javascript").then(({ createJavaScriptRegexEngine }) =>
+        // createBundledHighlighter 返回工厂函数，调用时才会真正加载语法/主题
+        createBundledHighlighter({
+          langs: {
+            javascript: () => import("shiki/dist/langs/javascript.mjs"),
+            typescript: () => import("shiki/dist/langs/typescript.mjs"),
+            vue: () => import("shiki/dist/langs/vue.mjs"),
+            bash: () => import("shiki/dist/langs/bash.mjs"),
+            json: () => import("shiki/dist/langs/json.mjs"),
+            markdown: () => import("shiki/dist/langs/markdown.mjs"),
+            html: () => import("shiki/dist/langs/html.mjs"),
+            css: () => import("shiki/dist/langs/css.mjs"),
+            yaml: () => import("shiki/dist/langs/yaml.mjs"),
+          },
+          themes: {
+            "github-dark": () => import("shiki/dist/themes/github-dark.mjs"),
+            "github-light": () => import("shiki/dist/themes/github-light.mjs"),
+          },
+          // JS 正则引擎替代 Oniguruma WASM：体积更小、初始化无 WASM 开销
+          engine: () => createJavaScriptRegexEngine(),
+        })({
+          themes: ["github-light", "github-dark"],
+          langs: [
+            "javascript",
+            "typescript",
+            "vue",
+            "bash",
+            "json",
+            "markdown",
+            "html",
+            "css",
+            "yaml",
+          ],
+        }),
+      ),
+    ),
     import("markdown-it"),
   ]).then(([hl, MarkdownItMod]) => {
     const hlResolved = hl as Highlighter;

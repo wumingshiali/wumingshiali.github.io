@@ -168,7 +168,12 @@ export default defineConfig({
             // 顺序敏感：从最具体到最通用，避免子串误匹配
             if (id.includes("reka-ui")) return "reka";
             if (id.includes("@vueuse/core")) return "vueuse";
-            if (id.includes("shiki")) return "shiki";
+            if (id.includes("shiki") || id.includes("@shikijs")) {
+              // shiki 细粒度打包：核心/引擎合并为一个 chunk；
+              // 各语言/主题由动态 import 自然拆分为独立 chunk
+              if (id.includes("/langs/") || id.includes("/themes/")) return undefined;
+              return "shiki";
+            }
             if (id.includes("markdown-it")) return "md";
             if (id.includes("@noble/ciphers")) return "crypto";
             if (id.includes("@lucide")) return "lucide";
