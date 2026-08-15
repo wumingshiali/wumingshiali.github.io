@@ -20,11 +20,11 @@ createTime: 2026-08-13
 ### 核心chuck
 我们早期的代码写的非常屎，引用了shiki竟然还用了Oniguruma WASM，坏，所以我们要删掉Oniguruma WASM，直接用shiki，直接省下%97！！！
 ### 不要老给我加载shiki
-我们主页加载了好几个模块，但是6个都含shiki，但是shiki在这时候完全没有，浪费网络资源。所以我们要完全按需加载，速度猛猛变快啊awa
+我们主页加载了好几个模块，但是6个都含shiki，但是shiki在这时候完全没用，浪费网络资源。所以我们要完全按需加载，速度猛猛变快啊awa
 ## 评论区优化
 我们的giscus是阻塞加载的，bad啊，必须异步！！！
 ## 不要给我依赖这么多
-我们的@vueuse/core是直接依赖的，坏，貌似我们的@vueuse/core直接依赖是useless的，so我们要删掉，只通过reka-ui简介，虽然这真的能提升速度吗。 ~~就算不能也水点内容awa~~
+我们的@vueuse/core是直接依赖的，坏，貌似我们的@vueuse/core直接依赖是useless的，so我们要删掉，只通过reka-ui间接引入，虽然这真的能提升速度吗。 ~~就算不能也水点内容awa~~
 ## ai原文
 ![ai原文](airaw.webp)
 
