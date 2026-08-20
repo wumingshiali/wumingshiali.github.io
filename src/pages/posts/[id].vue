@@ -85,10 +85,18 @@ watch(() => route.params.id, loadPost);
   -->
   <div>
     <!--
-      单列布局：正文 max-w-3xl 居中。桌面端目录用 fixed 定位独立在视口右侧。
+      Grid 双栏布局：正文 + 右侧 TOC 作为整体水平居中。
+      - max-w-7xl mx-auto：外层容器宽度上限，整体水平居中
+      - grid-cols-1 / lg:grid-cols-[minmax(0,1fr)_14rem]：单列（lg 以下）/
+        主内容 + 14rem 目录（lg 以上）
     -->
-    <div class="mx-auto w-full max-w-3xl px-4">
-      <section class="flex flex-col gap-4">
+    <div
+      class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 lg:grid-cols-[minmax(0,1fr)_14rem]"
+    >
+      <!-- 左列：原 section 内容 -->
+      <section
+        class="mx-auto flex w-full max-w-3xl flex-col gap-4 lg:mx-0"
+      >
         <RouterLink
           to="/posts"
           class="inline-flex items-center gap-1.5 self-start text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -150,26 +158,32 @@ watch(() => route.params.id, loadPost);
       </section>
 
       <!--
-        桌面端右侧浮动栏：fixed 定位垂直居中，flex column 垂直堆叠
-        - 第一个子项：CommentButton（评论按钮，在 TOC 上方）
-        - 第二个子项：TOC 卡片
-        - top-1/2 -translate-y-1/2：整体几何中心 = 视口中心
-        - right：紧贴 max-w-7xl 容器外侧 1rem（视口 >= 80rem 时），
-          否则紧贴视口右 1rem，避免与正文重叠
+        右列：桌面端 CommentButton + TOC 卡片
+        - self-stretch：让 aside 高度 = grid 行高（最长列高度），
+          sticky 元素才能有足够滚动空间做 sticky 行为
+        - sticky 垂直居中：内联 style top: calc(50vh - 9rem)
+          （CSS calc 函数空格合法，规避 Tailwind 4 任意值空格解析坑）
+          假设卡片高 ~18rem 时中心对齐视口中央
+        - max-h + overflow-y-auto：内容过长限高并内部滚动
         - lg 以下隐藏，移动端走 MobileTocButton
         - z-30：评论区 Dialog z-50 弹出时盖在上方
       -->
-      <div
+      <aside
         v-if="post && post.headings.length > 0"
-        class="fixed top-1/2 right-[max(1rem,calc((100vw-80rem)/2+1rem))] z-30 hidden -translate-y-1/2 max-h-[calc(100vh-2rem)] w-56 flex-col items-stretch gap-3 overflow-y-auto lg:flex"
+        class="hidden self-stretch lg:block"
       >
-        <CommentButton v-model:open="commentOpen" />
         <div
-          class="overflow-y-auto rounded-lg border border-border bg-card/60 p-3 backdrop-blur"
+          class="sticky z-30 flex w-56 max-h-[calc(100vh-2rem)] flex-col items-stretch gap-3 overflow-y-auto"
+          style="top: calc(50vh - 9rem);"
         >
-          <TableOfContentsList :headings="post.headings" />
+          <CommentButton v-model:open="commentOpen" />
+          <div
+            class="overflow-y-auto rounded-lg border border-border bg-card/60 p-3 backdrop-blur"
+          >
+            <TableOfContentsList :headings="post.headings" />
+          </div>
         </div>
-      </div>
+      </aside>
     </div>
 
     <!--
