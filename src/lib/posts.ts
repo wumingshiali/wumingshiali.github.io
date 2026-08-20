@@ -20,10 +20,28 @@ export interface PostMeta {
   createTime: string;
 }
 
+/** 标题项，目录组件消费 */
+export interface Heading {
+  /** 1-6，对应 h1-h6 */
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  /** 纯文本（去 markdown 语法后的可读标题） */
+  text: string;
+  /** URL 安全 slug，与 user-content- 前缀拼接成 heading id */
+  slug: string;
+}
+
+/** markdown-it 渲染时收集 toc 的 env 形状 */
+interface RenderEnv {
+  postId: string;
+  toc: Heading[];
+}
+
 /** 博客完整数据（详情页用，含渲染后正文） */
 export interface Post extends PostMeta {
   /** markdown 渲染后的 HTML */
   content: string;
+  /** 文章标题大纲（h1-h6），目录组件消费 */
+  headings: Heading[];
 }
 
 interface PostRaw extends PostMeta {
@@ -47,6 +65,38 @@ const imageModules = import.meta.glob(
 function idFromPath(path: string): string | null {
   const m = path.match(/^\/src\/posts\/(.+)\/index\.md$/);
   return m ? m[1] : null;
+}
+
+/** 单篇文章内的 slug 计数（每次 render 前重置），用于重名标题去重 */
+const seenSlugs = new Map<string, number>();
+
+/**
+ * 标题文本 → URL slug。
+ * - 保留 CJK 字符 + ASCII 字母数字
+ * - 去 markdown 标记（inline code / bold / italic）
+ * - 空格 / 连续标点折叠为 -
+ * - 同一篇文章内重名追加 -1, -2, ...
+ * - 兜底字符串 "section"（纯标点 / emoji 标题）
+ */
+export function slugify(text: string, scope: Map<string, number>): string {
+  // 去 markdown 标记残留
+  const cleaned = text
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/_([^_]+)_/g, "$1")
+    .trim();
+  // 保留 unicode 字母/数字 + 空格 + -，其余替换为 -
+  const base = cleaned
+    .replace(/[^\p{L}\p{N}\s-]+/gu, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase() || "section";
+  // 重名计数后缀
+  const count = scope.get(base) ?? 0;
+  scope.set(base, count + 1);
+  return count === 0 ? base : `${base}-${count}`;
 }
 
 /**
@@ -232,6 +282,41 @@ function getMarkdownRenderer(): Promise<MarkdownIt> {
         : self.renderToken(tokens, idx, options);
     };
 
+    // 覆写 heading_open：给标题注入 id，并把大纲信息收集到 env.toc
+    // 让目录组件能直接拿到 { level, text, slug } 列表
+    const defaultHeadingOpen =
+      instance.renderer.rules.heading_open ??
+      function (tokens, idx, options, _env, self) {
+        return self.renderToken(tokens, idx, options);
+      };
+
+    instance.renderer.rules.heading_open = function (
+      tokens,
+      idx,
+      options,
+      env,
+      self,
+    ) {
+      const token = tokens[idx];
+      const level = Number(token.tag.slice(1)) as Heading["level"];
+
+      // heading_open 与 heading_close 之间的 inline token → 拼出标题纯文本
+      let text = "";
+      for (let i = idx + 1; i < tokens.length; i++) {
+        if (tokens[i].type === "heading_close") break;
+        if (tokens[i].type === "inline") text += tokens[i].content;
+      }
+
+      const rEnv = env as RenderEnv;
+      // 兜底：getPost 没传 env.toc 时也能写
+      if (!Array.isArray(rEnv.toc)) rEnv.toc = [];
+      const slug = slugify(text, seenSlugs);
+      token.attrSet("id", `user-content-${slug}`);
+      rEnv.toc.push({ level, text: text.trim(), slug });
+
+      return defaultHeadingOpen(tokens, idx, options, env, self);
+    };
+
     return instance;
   });
   return mdPromise;
@@ -246,9 +331,15 @@ export async function getPost(id: string): Promise<Post | null> {
   if (!raw) return null;
 
   const md = await getMarkdownRenderer();
+  // 每次 render 前清空单篇 slug 计数，避免跨文章污染导致锚点冲突
+  seenSlugs.clear();
+  const toc: Heading[] = [];
+  const env: RenderEnv = { postId: raw.id, toc };
+
   const post: Post = {
     ...raw,
-    content: md.render(raw.rawContent, { postId: raw.id }),
+    content: md.render(raw.rawContent, env),
+    headings: env.toc,
   };
   renderedCache.set(id, post);
   return post;

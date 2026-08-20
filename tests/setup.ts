@@ -44,6 +44,20 @@ if (typeof globalThis !== "undefined" && !(globalThis as { ResizeObserver?: unkn
   };
 }
 
+// happy-dom 不提供 IntersectionObserver；useScrollSpy 在组件 onMounted 立即注册，
+// 提供 noop polyfill 避免测试环境抛 "IntersectionObserver is not defined"。
+if (typeof globalThis !== "undefined" && !(globalThis as { IntersectionObserver?: unknown }).IntersectionObserver) {
+  (globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver = class {
+    observe(): void {}
+    unobserve(): void {}
+    disconnect(): void {}
+    takeRecords(): IntersectionObserverEntry[] { return []; }
+    root = null;
+    rootMargin = "";
+    thresholds = [];
+  };
+}
+
 // happy-dom 20.x 默认挂载的 localStorage 是个空对象 {}，缺 getItem 等方法。
 // 用 Map 实现一个最小可用的 Storage polyfill 覆盖它，满足 App.vue 在 setup
 // 阶段读取主题记忆的需求。
