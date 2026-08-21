@@ -1,5 +1,5 @@
 media:
-  input: public/images # 全局图片上传目录，建议放 public 下方便直接访问
+  input: public/images
   output: /images
 
 content:
@@ -7,35 +7,35 @@ content:
     label: 博客文章
     type: collection
     path: src/posts
-    # 关键配置：让 CMS 按文件夹组织，并在文件夹里生成 index.md
     view:
       layout: tree
+      primary: name          # 👈 主键放 view 里，别放 field 里
+      fields: [name, createTime]
       node:
         filename: index.md
+        hideDirs: others     # 👈 加上这个，隐藏非文章目录
     fields:
       - name: name
         label: 名字
         type: string
-        primary: true # 让名字作为列表主标题，并默认用作 [id] 文件夹名 (slug)
-      
+        # 不要在这里写 primary: true，删掉
+
       - name: desc
         label: 描述
         type: text
-      
+
       - name: tag
         label: 标签
         type: string
-        list: true # 加上 list: true，CMS 就会输出 ["标签 1", "标签 2"] 的数组
-      
+        list: true
+
       - name: createTime
         label: 创建时间
         type: date
         options:
-          format: "yyyy-MM-dd" # PagesCMS 用的是 date-fns 语法
-      
+          format: "yyyy-MM-dd"
+
       - name: cover
-        label: 封面 (可选)
+        label: 封面
         type: image
         required: false
-        options:
-          extensions: [webp, jpg, png]
