@@ -1,6 +1,6 @@
 media:
-  input: public/images
-  output: /images
+  input: src/posts
+  output: /src/posts
 
 content:
   - name: posts
@@ -9,33 +9,34 @@ content:
     path: src/posts
     view:
       layout: tree
-      primary: name          # 👈 主键放 view 里，别放 field 里
+      primary: name
       fields: [name, createTime]
       node:
         filename: index.md
-        hideDirs: others     # 👈 加上这个，隐藏非文章目录
+        hideDirs: others
     fields:
       - name: name
         label: 名字
         type: string
-        # 不要在这里写 primary: true，删掉
-
       - name: desc
         label: 描述
         type: text
-
       - name: tag
         label: 标签
         type: string
         list: true
-
       - name: createTime
         label: 创建时间
         type: date
         options:
           format: "yyyy-MM-dd"
-
       - name: cover
         label: 封面
         type: image
         required: false
+        options:
+          extensions: [webp, jpg, png]
+      # 👇 关键：加上这个才能编辑正文
+      - name: body
+        label: 正文
+        type: rich-text
