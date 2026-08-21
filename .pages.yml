@@ -1,0 +1,30 @@
+collections:
+  - name: posts
+    label: 博客文章
+    folder: src/posts
+    # 关键：告诉 CMS 文章在子目录里，且文件名为 index.md
+    # 语法可能因 Pages CMS 版本略有差异，通常是 path 或 slug
+    path: "{{slug}}/index.md"
+    create: true
+    fields:
+      - name: name
+        label: 名字
+        type: string
+      
+      - name: desc
+        label: 描述
+        type: string
+      
+      - name: tag
+        label: 标签
+        type: list
+      
+      - name: createTime
+        label: 创建时间
+        type: date
+        format: "YYYY-MM-DD" # 对应你的 yyyy-mm-dd
+      
+      - name: cover
+        label: 封面
+        type: image
+        required: false # 对应你的“可选”
