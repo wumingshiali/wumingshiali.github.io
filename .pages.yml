@@ -1,30 +1,41 @@
-collections:
+media:
+  input: public/images # 全局图片上传目录，建议放 public 下方便直接访问
+  output: /images
+
+content:
   - name: posts
     label: 博客文章
-    folder: src/posts
-    # 关键：告诉 CMS 文章在子目录里，且文件名为 index.md
-    # 语法可能因 Pages CMS 版本略有差异，通常是 path 或 slug
-    path: "{{slug}}/index.md"
-    create: true
+    type: collection
+    path: src/posts
+    # 关键配置：让 CMS 按文件夹组织，并在文件夹里生成 index.md
+    view:
+      layout: tree
+      node:
+        filename: index.md
     fields:
       - name: name
         label: 名字
         type: string
+        primary: true # 让名字作为列表主标题，并默认用作 [id] 文件夹名 (slug)
       
       - name: desc
         label: 描述
-        type: string
+        type: text
       
       - name: tag
         label: 标签
-        type: list
+        type: string
+        list: true # 加上 list: true，CMS 就会输出 ["标签 1", "标签 2"] 的数组
       
       - name: createTime
         label: 创建时间
         type: date
-        format: "YYYY-MM-DD" # 对应你的 yyyy-mm-dd
+        options:
+          format: "yyyy-MM-dd" # PagesCMS 用的是 date-fns 语法
       
       - name: cover
-        label: 封面
+        label: 封面 (可选)
         type: image
-        required: false # 对应你的“可选”
+        required: false
+        options:
+          extensions: [webp, jpg, png]
