@@ -1,12 +1,14 @@
 media:
-  input: src/posts
-  output: /src/posts
+  input: public/images
+  output: /images
 
 content:
   - name: posts
     label: 博客文章
     type: collection
     path: src/posts
+    # 👇 关键：告诉 CMS 新建文章时生成 子目录/index.md
+    filename: "{id}/index.md"
     view:
       layout: tree
       primary: name
@@ -15,6 +17,11 @@ content:
         filename: index.md
         hideDirs: others
     fields:
+      # 👇 新增：用于输入文件夹名
+      - name: id
+        label: ID (文件夹名)
+        type: string
+        required: true
       - name: name
         label: 名字
         type: string
@@ -36,7 +43,6 @@ content:
         required: false
         options:
           extensions: [webp, jpg, png]
-      # 👇 关键：加上这个才能编辑正文
       - name: body
         label: 正文
         type: rich-text
