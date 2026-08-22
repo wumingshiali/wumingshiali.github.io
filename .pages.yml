@@ -7,19 +7,16 @@ content:
     label: 博客文章
     type: collection
     path: src/posts
-    # 👇 关键：filename 必须用对象形式，field: create 让你新建时输入
-    filename:
-      template: "{id}/index.md"
-      field: create
+    # 👇 只写目录名，不要带 /index.md
+    filename: "{id}"
     view:
       layout: tree
-      primary: name
+      primary: id
       fields: [name, createTime]
       node:
-        filename: index.md
+        filename: index.md   # 👈 文件名在这里指定
         hideDirs: others
     fields:
-      # 👇 必须定义 id 字段，否则 {id} 无法解析
       - name: id
         label: 文章 ID（文件夹名）
         type: string
