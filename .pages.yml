@@ -7,8 +7,10 @@ content:
     label: 博客文章
     type: collection
     path: src/posts
-    # 👇 关键：告诉 CMS 新建文章时生成 子目录/index.md
-    filename: "{id}/index.md"
+    # 👇 关键：filename 必须用对象形式，field: create 让你新建时输入
+    filename:
+      template: "{id}/index.md"
+      field: create
     view:
       layout: tree
       primary: name
@@ -17,9 +19,9 @@ content:
         filename: index.md
         hideDirs: others
     fields:
-      # 👇 新增：用于输入文件夹名
+      # 👇 必须定义 id 字段，否则 {id} 无法解析
       - name: id
-        label: ID (文件夹名)
+        label: 文章 ID（文件夹名）
         type: string
         required: true
       - name: name
