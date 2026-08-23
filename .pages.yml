@@ -7,14 +7,16 @@ content:
     label: 博客文章
     type: collection
     path: src/posts
-    # 👇 只写目录名，不要带 /index.md
-    filename: "{id}"
+    # 👇 用对象形式 + field: create，新建时弹出输入框
+    filename:
+      template: "{id}/index.md"
+      field: create
     view:
       layout: tree
       primary: id
       fields: [name, createTime]
       node:
-        filename: index.md   # 👈 文件名在这里指定
+        filename: index.md
         hideDirs: others
     fields:
       - name: id
