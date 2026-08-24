@@ -121,6 +121,8 @@ watch(() => route.params.id, loadPost);
           <h1 class="text-3xl font-bold tracking-tight">{{ post.name }}</h1>
           <div class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <time>{{ post.createTime }}</time>
+            <span aria-hidden="true">·</span>
+            <span>{{ post.wordCount }} 字</span>
             <span
               v-for="t in post.tag"
               :key="t"
