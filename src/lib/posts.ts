@@ -1,7 +1,8 @@
 import { parse as parseYaml } from "yaml";
 // shiki + markdown-it 改为动态 import：避免把高亮器 + 解析器打进初始 vendor，
 // 仅在用户进入博客详情页触发 getMarkdownRenderer() 时才按需下载。
-import type MarkdownIt from "markdown-it";
+// markdown-it@15 自带类型：default 导出是构造函数值，实例类型需用 named import
+import type { MarkdownIt } from "markdown-it";
 import type { Highlighter } from "shiki";
 
 /** 博客元数据（列表页用） */
@@ -30,11 +31,11 @@ export interface Heading {
   slug: string;
 }
 
-/** markdown-it 渲染时收集 toc 的 env 形状 */
-interface RenderEnv {
+/** markdown-it 渲染时收集 toc 的 env 形状（type 而非 interface：可隐式匹配 Env 索引签名） */
+type RenderEnv = {
   postId: string;
   toc: Heading[];
-}
+};
 
 /** 博客完整数据（详情页用，含渲染后正文） */
 export interface Post extends PostMeta {
@@ -271,7 +272,9 @@ function getMarkdownRenderer(): Promise<MarkdownIt> {
       self,
     ) {
       const token = tokens[idx];
-      const src = token.attrGet("src") ?? "";
+      // attrGet 类型为 string | number | null，img 的 src 实际恒为 string，这里收窄
+      const srcAttr = token.attrGet("src");
+      const src = typeof srcAttr === "string" ? srcAttr : "";
       const postId = (env as { postId?: string } | undefined)?.postId;
       if (src && !/^(https?:)?\/\//.test(src) && !src.startsWith("/") && postId) {
         const url = imageModules[`/src/posts/${postId}/${src}`]?.default;
