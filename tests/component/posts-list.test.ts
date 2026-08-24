@@ -42,4 +42,10 @@ describe("/posts 博客列表页", () => {
     const link = wrapper.find('a[href="/posts/change2cy"]');
     expect(link.exists()).toBe(true);
   });
+
+  it("每张卡片显示字数（包含“字”单位）", async () => {
+    const { wrapper } = await mountAt("/posts");
+    // 至少有一张卡片渲染“字”
+    expect(wrapper.text()).toMatch(/\d+\s*字/);
+  });
 });

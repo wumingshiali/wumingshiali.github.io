@@ -129,9 +129,13 @@ const filteredPosts = computed<PostMeta[]>(() => {
               {{ t }}
             </span>
           </div>
-          <time class="mt-auto text-xs text-muted-foreground">{{
-            post.createTime
-          }}</time>
+          <div
+            class="mt-auto flex items-center gap-1.5 text-xs text-muted-foreground"
+          >
+            <time :datetime="post.createTime">{{ post.createTime }}</time>
+            <span aria-hidden="true">·</span>
+            <span>{{ post.wordCount }} 字</span>
+          </div>
         </div>
       </RouterLink>
     </TransitionGroup>

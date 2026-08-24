@@ -19,6 +19,11 @@ export interface PostMeta {
   tag: string[];
   /** 创建时间 YYYY-MM-DD */
   createTime: string;
+  /**
+   * 正文字数（中文字符按字计、英文/数字按 word 计，已去除 markdown 标记与代码块）。
+   * 构建时基于 rawContent 计算，列表页无需触发 shiki 渲染即可展示。
+   */
+  wordCount: number;
 }
 
 /** 标题项，目录组件消费 */
@@ -70,6 +75,40 @@ function idFromPath(path: string): string | null {
 
 /** 单篇文章内的 slug 计数（每次 render 前重置），用于重名标题去重 */
 const seenSlugs = new Map<string, number>();
+
+/**
+ * 估算 markdown 正文字数。
+ * - 去除围栏代码块（```...```）和行内代码（`...`）
+ * - 去除 HTML 标签、图片（![alt](url)）、链接 URL（保留链接文本）
+ * - 去除 markdown 标记残留（#、>、-、*、_ 等）
+ * - 中文字符按字计（CJK 范围 \p{Script=Han}）
+ * - 英文/数字单词按 word 计（连续 [A-Za-z0-9_]+）
+ */
+export function countWords(markdown: string): number {
+  const text = markdown
+    // 围栏代码块（含 ```lang 起始行与 ``` 结束行）
+    .replace(/```[\s\S]*?```/g, " ")
+    // 行内代码
+    .replace(/`[^`]*`/g, " ")
+    // HTML 标签
+    .replace(/<[^>]+>/g, " ")
+    // 图片：![alt](url) → 去掉
+    .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
+    // 链接：[text](url) → 保留 text
+    .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
+    // 标题、引用、列表、无序列表项前缀
+    .replace(/^\s{0,3}(#{1,6}|>+|[-*+]|\d+\.)\s+/gm, "")
+    // 水平线
+    .replace(/^\s{0,3}[-*_]{3,}\s*$/gm, " ")
+    // 强调标记：成对 **xx** __xx__ *xx* _xx_ ~~xx~~
+    .replace(/(\*\*|__|~~)(.+?)\1/g, "$2")
+    .replace(/(\*|_)(.+?)\1/g, "$2");
+
+  // 统计：中文字符按字计 + 英文/数字按 word 计
+  const cjkMatches = text.match(/\p{Script=Han}/gu);
+  const wordMatches = text.match(/[A-Za-z0-9_]+/g);
+  return (cjkMatches?.length ?? 0) + (wordMatches?.length ?? 0);
+}
 
 /**
  * 标题文本 → URL slug。
@@ -168,6 +207,7 @@ function parsePost(path: string, raw: string): PostRaw | null {
     cover: resolveCover(id, cover),
     tag: tagList,
     createTime,
+    wordCount: countWords(content),
     rawContent: content,
   };
 }
@@ -185,14 +225,17 @@ const allPostsRaw: PostRaw[] = (() => {
 
 /** 获取所有博客元数据（列表页用，不加载 shiki） */
 export function getAllPosts(): PostMeta[] {
-  return allPostsRaw.map(({ id, name, desc, cover, tag, createTime }) => ({
-    id,
-    name,
-    desc,
-    cover,
-    tag,
-    createTime,
-  }));
+  return allPostsRaw.map(
+    ({ id, name, desc, cover, tag, createTime, wordCount }) => ({
+      id,
+      name,
+      desc,
+      cover,
+      tag,
+      createTime,
+      wordCount,
+    }),
+  );
 }
 
 // --- markdown 渲染（懒加载 shiki，仅详情页触发） ---
