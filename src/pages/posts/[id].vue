@@ -13,14 +13,13 @@ import CommentButton from "@/components/CommentButton.vue";
 const Giscus = defineAsyncComponent(() => import("@giscus/vue"));
 
 const route = useRoute<'/posts/[id]'>();
-const post = ref<Post | null>(null);
-const loading = ref(true);
-const error = ref<unknown>(null);
+// 数据来自构建期预渲染（posts-data.ts），同步即可拿到，无需 loading/error 状态
+const post = ref<Post | null>(getPost(route.params.id as string));
 
 // 评论区抽屉开关：独立浮动按钮（CommentButton）点击后切换
 const commentOpen = ref(false);
 
-// 动态 SEO 元数据：post 加载完成后自动更新 title/meta/JSON-LD
+// 动态 SEO 元数据：post 在 setup 阶段即就绪，title/meta/JSON-LD 同步注入
 const seoTitle = computed(() => post.value?.name ?? "博客文章");
 const seoDescription = computed(() => post.value?.desc ?? "阅读 VoidCat 的博客文章");
 const seoImage = computed(() => post.value?.cover ?? undefined);
@@ -38,26 +37,11 @@ useSeo({
   tags: seoTags,
 });
 
-async function loadPost() {
-  loading.value = true;
-  error.value = null;
-  try {
-    const id = route.params.id as string;
-    post.value = await getPost(id);
-  } catch (e) {
-    error.value = e;
-    post.value = null;
-  } finally {
-    loading.value = false;
-  }
-}
-
 // 监听 <html> 的 dark class 变化，同步 Giscus 主题
 const isDark = ref(document.documentElement.classList.contains("dark"));
 let observer: MutationObserver | null = null;
 
 onMounted(() => {
-  loadPost();
   // 预拉 Giscus chunk：进入博客详情页就开始后台下载评论组件 chunk，
   // 用户点评论按钮时 chunk 已就绪，只需等待 Giscus iframe 内部加载。
   void import("@giscus/vue");
@@ -74,8 +58,13 @@ onUnmounted(() => {
   observer?.disconnect();
 });
 
-// 同组件不同 id 时重新加载
-watch(() => route.params.id, loadPost);
+// 同组件不同 id 时同步刷新（预渲染数据本地读取，无网络/异步开销）
+watch(
+  () => route.params.id,
+  (id) => {
+    post.value = getPost(id as string);
+  },
+);
 </script>
 
 <template>
@@ -105,13 +94,7 @@ watch(() => route.params.id, loadPost);
           返回列表
         </RouterLink>
 
-        <div v-if="loading" class="text-muted-foreground">加载中…</div>
-
-        <div v-else-if="error" class="text-destructive">
-          加载失败：{{ String(error) }}
-        </div>
-
-        <template v-else-if="post">
+        <template v-if="post">
           <img
             v-if="post.cover"
             :src="post.cover"
@@ -131,7 +114,7 @@ watch(() => route.params.id, loadPost);
               {{ t }}
             </span>
           </div>
-          <!-- 正文：prose 排版 + shiki 高亮 -->
+          <!-- 正文：prose 排版 + shiki 高亮（HTML 已在构建期渲染好） -->
           <div class="prose dark:prose-invert max-w-none" v-html="post.content" />
 
           <!-- 文章底部 Giscus评论区（保留供直接访问/无 JS 用户） -->

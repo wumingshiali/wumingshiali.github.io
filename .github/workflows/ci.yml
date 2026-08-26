@@ -45,6 +45,16 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # 预渲染数据文件必须在提交时与 src/posts 保持一致：
+      # 构建会重新生成它，若与 HEAD 不一致或未提交则 CI 失败，防止静默漂移
+      - name: Verify generated posts data is committed and in sync
+        run: |
+          git diff --exit-code -- src/generated/posts-data.ts
+          if git status --porcelain -- src/generated/posts-data.ts | grep -q .; then
+            echo "::error::src/generated/posts-data.ts 未提交或与构建结果不一致，请运行 pnpm build 后提交该文件"
+            exit 1
+          fi
+
       - name: Component tests
         run: pnpm run test:component
 
@@ -64,3 +74,4 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
+

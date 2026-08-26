@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { getAllPosts, getPost, type Post, type PostMeta } from "@/lib/posts";
 import { RouterLink } from "vue-router";
 import { FileText, Search } from "@lucide/vue";
@@ -16,19 +16,10 @@ useSeo({
 const allPosts = getAllPosts();
 const searchQuery = ref("");
 const deepSearch = ref(false);
-const deepPosts = ref<Post[]>([]);
-const deepLoading = ref(false);
-
-// 详细搜索开启时加载所有正文（首次触发 shiki 渲染，较慢）
-watch(deepSearch, async (deep) => {
-  if (deep && deepPosts.value.length === 0) {
-    deepLoading.value = true;
-    deepPosts.value = (
-      await Promise.all(allPosts.map((p) => getPost(p.id)))
-    ).filter((p): p is Post => p !== null);
-    deepLoading.value = false;
-  }
-});
+// 详细搜索所需正文：getPost 现为构建期预渲染数据的同步读取，可立即全量加载
+const deepPosts: Post[] = allPosts
+  .map((p) => getPost(p.id))
+  .filter((p): p is Post => p !== null);
 
 // 去 HTML 标签，转小写，用于正文搜索
 function stripHtml(html: string): string {
@@ -39,8 +30,8 @@ const filteredPosts = computed<PostMeta[]>(() => {
   const q = searchQuery.value.trim().toLowerCase();
   if (!q) return allPosts;
   // 详细搜索：标题 + 简介 + 正文
-  if (deepSearch.value && deepPosts.value.length) {
-    return deepPosts.value.filter(
+  if (deepSearch.value) {
+    return deepPosts.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.desc.toLowerCase().includes(q) ||
@@ -72,7 +63,7 @@ const filteredPosts = computed<PostMeta[]>(() => {
       </div>
       <label class="flex items-center gap-2 text-sm text-muted-foreground">
         <Checkbox v-model="deepSearch" />
-        详细搜索（含正文<span v-if="deepLoading">，加载中…</span>）
+        详细搜索（含正文）
       </label>
     </div>
 

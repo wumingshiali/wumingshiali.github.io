@@ -6,7 +6,8 @@ import vue from "@vitejs/plugin-vue";
 import VueRouter from "vue-router/vite";
 import htmlMinifier from "vite-plugin-html-minifier-terser";
 import { compression } from "vite-plugin-compression2";
-import { generateSitemap } from "./vite-plugin-sitemap";
+import { generateSitemap } from "./vite-plugin-sitemap.ts";
+import { prerenderPosts } from "./vite-plugin-prerender-posts.ts";
 import { defineConfig, type Plugin } from "vitest/config";
 
 /**
@@ -94,6 +95,7 @@ export default defineConfig({
       deleteOriginalAssets: false,
     }),
     generateSitemap(),
+    prerenderPosts(),
   ],
 
   define: {
