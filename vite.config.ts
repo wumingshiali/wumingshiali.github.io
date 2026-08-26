@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+import { execSync } from "node:child_process";
 import { fileURLToPath, URL } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
@@ -8,6 +9,18 @@ import { compression } from "vite-plugin-compression2";
 import { generateSitemap } from "./vite-plugin-sitemap";
 import { defineConfig, type Plugin } from "vitest/config";
 
+/**
+ * 读取当前构建对应的 git 提交 ID（短哈希）。
+ * 构建环境（本地 / CI）理应存在 git，读取失败时回退为 "unknown"，
+ * 保证构建不因 git 缺失而中断。
+ */
+function getGitCommitId(): string {
+  try {
+    return execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim();
+  } catch {
+    return "unknown";
+  }
+}
 /**
  * 把 entry 入口的同步 CSS 内联到 HTML <style>，从关键路径移除额外网络请求。
  * 适用范围：HTML 中以 <link rel="stylesheet" href="/assets/xxx.css"> 形式引用的
@@ -83,6 +96,10 @@ export default defineConfig({
     generateSitemap(),
   ],
 
+  define: {
+    // 构建时注入 git 提交 ID，about 页展示当前版本来源
+    __GIT_COMMIT_ID__: JSON.stringify(getGitCommitId()),
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

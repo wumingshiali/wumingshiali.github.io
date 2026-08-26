@@ -35,6 +35,9 @@ const GithubIcon: Component = {
 // 本项目 GitHub 仓库地址
 const repoUrl = "https://github.com/wumingshiali/wumingshiali.github.io";
 
+// 构建时由 vite.config.ts 注入的 git 提交 ID（短哈希）；git 不可用时为 "unknown"
+const buildCommitId = __GIT_COMMIT_ID__;
+
 // Cloudflare 官网
 const cloudflareUrl = "https://www.cloudflare.com";
 
@@ -136,6 +139,23 @@ onMounted(() => {
         <span>加载 {{ loadDuration !== null ? `${loadDuration} ms` : "无法获取" }}</span>
       </template>
       <span v-else>传输信息无法获取</span>
+    </p>
+
+    <!-- 当前构建对应的 git 提交：链接到 GitHub commit，便于溯源 -->
+    <p
+      v-if="buildCommitId && buildCommitId !== 'unknown'"
+      class="text-xs text-muted-foreground tabular-nums"
+      aria-label="构建版本信息"
+    >
+      构建
+      <a
+        :href="`${repoUrl}/commit/${buildCommitId}`"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground"
+      >
+        <code>{{ buildCommitId }}</code>
+      </a>
     </p>
   </main>
 </template>

@@ -150,4 +150,22 @@ describe("/about 页面：传输与加载信息", () => {
     expect(infoLine.exists()).toBe(true);
     expect(infoLine.text()).toBe("传输信息无法获取");
   });
+
+describe("/about 页面：构建 git 提交 ID", () => {
+  it("显示构建提交 ID 并链接到对应 GitHub commit", async () => {
+    const wrapper = await mountAt("/about");
+    await nextTick();
+
+    const info = wrapper.find('[aria-label="构建版本信息"]');
+    expect(info.exists()).toBe(true);
+    const link = info.find("a");
+    expect(link.exists()).toBe(true);
+    // 文本为 git 短哈希（至少 7 位十六进制），且链接指向仓库对应 commit
+    const commitId = link.text().trim();
+    expect(commitId).toMatch(/^[0-9a-f]{7,}$/);
+    expect(link.attributes("href")).toBe(
+      `https://github.com/wumingshiali/wumingshiali.github.io/commit/${commitId}`,
+    );
+  });
+});
 });
