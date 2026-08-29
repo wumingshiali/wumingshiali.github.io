@@ -32,6 +32,7 @@ function onNavigate() {
   -->
   <Button
     v-if="headings.length > 0"
+    variant="outline"
     size="icon"
     class="fixed bottom-20 right-4 z-40 rounded-full border border-border bg-card/80 shadow-md backdrop-blur lg:hidden"
     aria-label="打开文章目录"
