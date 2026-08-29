@@ -2,15 +2,9 @@
 import { ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { Button } from "@/components/ui/button";
-import { FileText, Home, Info, Mail, Sun, Moon } from "@lucide/vue";
-
-// 导航项集中管理
-const navItems = [
-  { to: "/", label: "主页", icon: Home },
-  { to: "/contact", label: "联系", icon: Mail },
-  { to: "/posts", label: "博客", icon: FileText },
-  { to: "/about", label: "关于", icon: Info },
-] as const;
+import { Sun, Moon } from "@lucide/vue";
+import MobileNav from "@/components/MobileNav.vue";
+import { navItems } from "@/lib/nav";
 
 // 主题：dark / light，默认跟随系统偏好，选择记忆到 localStorage
 const THEME_KEY = "theme";
@@ -61,8 +55,9 @@ watch(theme, (val) => {
       </Transition>
     </RouterView>
 
+    <!-- 桌面端底部中央导航（lg 及以上显示）；移动端由 MobileNav 悬浮按钮替代 -->
     <nav
-      class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 p-1.5 backdrop-blur"
+      class="fixed bottom-4 left-1/2 z-50 hidden -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 p-1.5 backdrop-blur lg:flex"
     >
       <RouterLink
         v-for="item in navItems"
@@ -74,6 +69,9 @@ watch(theme, (val) => {
         {{ item.label }}
       </RouterLink>
     </nav>
+
+    <!-- 移动端左下角悬浮导航按钮 + 弹出菜单 -->
+    <MobileNav />
   </div>
 </template>
 
