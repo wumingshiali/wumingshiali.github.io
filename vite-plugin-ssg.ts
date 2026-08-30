@@ -183,9 +183,12 @@ async function prerenderRoutes(
         }
         // 等 unhead 完成 meta / title 注入
         await page.waitForTimeout(100);
-        const html = `<!doctype html>${await page.evaluate(
+        // 清洗渲染期由 Vite preload helper 注入的本地绝对 URL（http://127.0.0.1:<port>/）
+        // → 站点根相对路径，避免线上浏览器浪费连接尝试本地端口
+        const rawHtml = await page.evaluate(
           () => document.documentElement.outerHTML,
-        )}`;
+        );
+        const html = `<!doctype html>${rawHtml.split(base + "/").join("/")}`;
         mkdirSync(dirname(route.output), { recursive: true });
         writeFileSync(route.output, html, "utf8");
         console.log(`[ssg] 已预渲染 ${route.path}`);
