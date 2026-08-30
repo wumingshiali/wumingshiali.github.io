@@ -19,6 +19,7 @@ useSeo({
       >
         <AvatarImage
           :src="avatarSrc"
+          alt="VoidCat 头像"
           loading="eager"
           decoding="async"
           fetchpriority="high"
