@@ -26,6 +26,7 @@ const seoImage = computed(() => post.value?.cover ?? undefined);
 const seoPath = computed(() => `/posts/${route.params.id}`);
 const seoPublishedTime = computed(() => post.value?.createTime ?? undefined);
 const seoTags = computed(() => post.value?.tag ?? []);
+const seoWordCount = computed(() => post.value?.wordCount ?? undefined);
 
 useSeo({
   title: seoTitle,
@@ -35,6 +36,7 @@ useSeo({
   type: "article",
   publishedTime: seoPublishedTime,
   tags: seoTags,
+  wordCount: seoWordCount,
 });
 
 // 监听 <html> 的 dark class 变化，同步 Giscus 主题

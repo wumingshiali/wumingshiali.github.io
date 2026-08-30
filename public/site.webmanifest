@@ -1,0 +1,19 @@
+{
+  "name": "VoidCat - 个人主页",
+  "short_name": "VoidCat",
+  "description": "开源即自由，自由即万物。个人博客，记录技术与思考。",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbfbfa",
+  "theme_color": "#343434",
+  "icons": [
+    {
+      "src": "/avatar-52491de8.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

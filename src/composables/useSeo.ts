@@ -13,7 +13,7 @@ export interface UseSeoInput {
   title: MaybeRefOrGetter<string>;
   /** Meta 描述 */
   description: MaybeRefOrGetter<string>;
-  /** OG/Twitter 图片 URL；未提供时 fallback 到默认头像 */
+  /** OG/Twitter 图片 URL；未提供时 fallback 到默认横幅 */
   image?: MaybeRefOrGetter<string | null | undefined>;
   /** 页面路径（相对站点根），如 "/posts/my-post" */
   path?: MaybeRefOrGetter<string>;
@@ -21,16 +21,20 @@ export interface UseSeoInput {
   type?: "website" | "article";
   /** ISO 日期字符串 YYYY-MM-DD，article 类型时用于 datePublished */
   publishedTime?: MaybeRefOrGetter<string | undefined>;
-  /** 标签列表，article 类型时用于 JSON-LD keywords */
+  /** ISO 日期字符串 YYYY-MM-DD，article 类型时用于 dateModified（缺省不输出） */
+  modifiedTime?: MaybeRefOrGetter<string | undefined>;
+  /** 标签列表，article 类型时用于 JSON-LD keywords / article:tag */
   tags?: MaybeRefOrGetter<string[]>;
+  /** 正文字数，article 类型时用于 JSON-LD wordCount */
+  wordCount?: MaybeRefOrGetter<number | undefined>;
 }
 
 /**
  * 统一注入页面级 SEO 元数据。
  *
  * - 标题自动追加 " - VoidCat" 后缀
- * - 自动设置 OG / Twitter Card / canonical URL
- * - type: "article" 时自动注入 JSON-LD Article 结构化数据
+ * - 自动设置 OG / Twitter Card / canonical URL / OG 图片 alt
+ * - type: "article" 时自动注入 OG article 标签与 JSON-LD Article 结构化数据
  */
 export function useSeo(input: UseSeoInput) {
   const title = computed(() => `${toValue(input.title)} - ${SITE_NAME}`);
@@ -40,6 +44,12 @@ export function useSeo(input: UseSeoInput) {
     input.path ? `${SITE_URL}${toValue(input.path)}` : SITE_URL,
   );
   const type = input.type ?? "website";
+  const publishedTime = computed(() => toValue(input.publishedTime));
+  const modifiedTime = computed(() => toValue(input.modifiedTime));
+  const tags = computed(() => toValue(input.tags) ?? []);
+  const wordCount = computed(() => toValue(input.wordCount));
+  // article:section 取首个标签作为栏目名（无标签时不输出）
+  const section = computed(() => tags.value[0] ?? undefined);
 
   useSeoMeta({
     title,
@@ -47,6 +57,7 @@ export function useSeo(input: UseSeoInput) {
     ogTitle: title,
     ogDescription: description,
     ogImage: image,
+    ogImageAlt: title,
     ogUrl: url,
     ogType: type,
     ogLocale: "zh_CN",
@@ -55,6 +66,15 @@ export function useSeo(input: UseSeoInput) {
     twitterTitle: title,
     twitterDescription: description,
     twitterImage: image,
+    // article 类型专属 OG 标签
+    ...(type === "article"
+      ? {
+          articlePublishedTime: publishedTime,
+          articleModifiedTime: modifiedTime,
+          articleSection: section,
+          articleTag: tags,
+        }
+      : {}),
   });
 
   useHead({
@@ -73,11 +93,24 @@ export function useSeo(input: UseSeoInput) {
             headline: toValue(title),
             description: toValue(description),
             image: toValue(image),
-            datePublished: toValue(input.publishedTime),
-            author: { "@type": "Person", name: SITE_NAME },
-            ...(input.tags && toValue(input.tags).length > 0
-              ? { keywords: toValue(input.tags).join(", ") }
+            datePublished: publishedTime.value,
+            ...(modifiedTime.value
+              ? { dateModified: modifiedTime.value }
               : {}),
+            ...(wordCount.value ? { wordCount: wordCount.value } : {}),
+            author: {
+              "@type": "Person",
+              name: SITE_NAME,
+              url: SITE_URL,
+            },
+            publisher: {
+              "@type": "Organization",
+              name: SITE_NAME,
+              logo: { "@type": "ImageObject", url: DEFAULT_OG_IMAGE },
+            },
+            mainEntityOfPage: { "@type": "WebPage", "@id": url.value },
+            inLanguage: "zh-CN",
+            ...(tags.value.length > 0 ? { keywords: tags.value.join(", ") } : {}),
           },
         },
       ],
