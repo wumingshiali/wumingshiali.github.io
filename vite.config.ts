@@ -124,10 +124,6 @@ export default defineConfig({
     ],
   },
 
-  esbuild: {
-    drop: ["console", "debugger"],
-    legalComments: "none",
-  },
 
   build: {
     target: "esnext",

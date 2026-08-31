@@ -58,46 +58,41 @@ if (typeof globalThis !== "undefined" && !(globalThis as { IntersectionObserver?
   };
 }
 
-// happy-dom 20.x 默认挂载的 localStorage 是个空对象 {}，缺 getItem 等方法。
-// 用 Map 实现一个最小可用的 Storage polyfill 覆盖它，满足 App.vue 在 setup
-// 阶段读取主题记忆的需求。
-if (typeof globalThis !== "undefined") {
-  const ls = (globalThis as { localStorage?: Storage }).localStorage;
-  const needsPolyfill = !ls || typeof ls.getItem !== "function";
-  if (needsPolyfill) {
-    const store = new Map<string, string>();
-    const localStoragePolyfill: Storage = {
-      getItem(key) {
-        return store.has(key) ? (store.get(key) as string) : null;
-      },
-      setItem(key, value) {
-        store.set(key, String(value));
-      },
-      removeItem(key) {
-        store.delete(key);
-      },
-      clear() {
-        store.clear();
-      },
-      key(index) {
-        return Array.from(store.keys())[index] ?? null;
-      },
-      get length() {
-        return store.size;
-      },
-    };
-    Object.defineProperty(globalThis, "localStorage", {
-      configurable: true,
-      writable: true,
-      value: localStoragePolyfill,
-    });
-    if (typeof window !== "undefined") {
-      Object.defineProperty(window, "localStorage", {
-        configurable: true,
-        writable: true,
-        value: localStoragePolyfill,
-      });
-    }
-  }
+// happy-dom 20.x 默认挂载的 localStorage 是个空对象 {}，缺 getItem 等方法；
+// Node 22+ 的 globalThis.localStorage 需要 --localstorage-file 才可用，直接读取
+// 还会打印 "localStorage is not available" ExperimentalWarning。因此不读取原值，
+// 无条件用 Map 实现的最小 Storage 覆盖（满足 App.vue 在 setup 阶段读取主题记忆）。
+const store = new Map<string, string>();
+const localStoragePolyfill: Storage = {
+  getItem(key) {
+    return store.has(key) ? (store.get(key) as string) : null;
+  },
+  setItem(key, value) {
+    store.set(key, String(value));
+  },
+  removeItem(key) {
+    store.delete(key);
+  },
+  clear() {
+    store.clear();
+  },
+  key(index) {
+    return Array.from(store.keys())[index] ?? null;
+  },
+  get length() {
+    return store.size;
+  },
+};
+Object.defineProperty(globalThis, "localStorage", {
+  configurable: true,
+  writable: true,
+  value: localStoragePolyfill,
+});
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "localStorage", {
+    configurable: true,
+    writable: true,
+    value: localStoragePolyfill,
+  });
 }
 
