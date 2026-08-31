@@ -12,6 +12,7 @@
  * - 覆盖 dist/index.html 后重新生成 .br/.gz，与 vite-plugin-compression2 保持一致
  * - 浏览器不可用或单个路由渲染失败仅告警跳过，不阻塞构建
  */
+import { execSync } from "node:child_process";
 import { createServer } from "node:http";
 import {
   existsSync,
@@ -206,6 +207,43 @@ async function prerenderRoutes(
   }
 }
 
+/**
+ * 启动 Playwright chromium；未安装时自动下载后重试。
+ * Cloudflare Pages 等构建环境不预装 Playwright 浏览器，首次构建会触发下载。
+ * 下载仍失败时返回 null（降级跳过，不阻塞构建）。
+ */
+async function ensureBrowser(): Promise<Browser | null> {
+  const { chromium } = await import("@playwright/test");
+  const launch = (): Promise<Browser> => chromium.launch();
+  try {
+    return await launch();
+  } catch {
+    // 浏览器缺失：自动安装后重试（优先带系统依赖，失败则回退纯下载）
+    console.log("[ssg] 未检测到 chromium，尝试自动安装...");
+    const installCmds = [
+      "pnpm exec playwright install --with-deps chromium",
+      "pnpm exec playwright install chromium",
+    ];
+    for (const cmd of installCmds) {
+      try {
+        execSync(cmd, {
+          stdio: "inherit",
+          env: { ...process.env, PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT: "120000" },
+        });
+        return await launch();
+      } catch (err) {
+        console.warn(
+          "[ssg] 浏览器安装失败: " +
+            cmd +
+            " -> " +
+            (err instanceof Error ? err.message : String(err)),
+        );
+      }
+    }
+    return null;
+  }
+}
+
 export function ssgPages(): Plugin {
   let outDir = "dist";
 
@@ -221,16 +259,10 @@ export function ssgPages(): Plugin {
     async closeBundle() {
       const routes = listRoutes(outDir);
 
-      // 启动无头浏览器；不可用（如未安装 chromium）时降级跳过，不阻塞构建
-      let browser: Browser | null = null;
-      try {
-        const { chromium } = await import("@playwright/test");
-        browser = await chromium.launch();
-      } catch (err) {
-        console.warn(
-          "[ssg] Playwright chromium 不可用，跳过预渲染: " +
-            (err instanceof Error ? err.message : String(err)),
-        );
+      // 启动无头浏览器；未安装时自动下载（Cloudflare Pages 构建环境无预装浏览器）
+      const browser = await ensureBrowser();
+      if (!browser) {
+        console.warn("[ssg] 无法启动 chromium，跳过预渲染（站点将保持纯 SPA）");
         return;
       }
 
