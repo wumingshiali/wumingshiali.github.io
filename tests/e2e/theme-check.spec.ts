@@ -1,4 +1,18 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+// 预置 cookie 同意状态（统计开启）：避免 Cookie 选择弹窗遮挡交互
+// （弹窗自身流程由 tests/e2e/cookie-consent.spec.ts 覆盖）
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    {
+      name: "cookie_consent",
+      value: encodeURIComponent(
+        JSON.stringify({ necessary: true, statistics: true }),
+      ),
+      domain: "127.0.0.1",
+      path: "/",
+    },
+  ]);
+});
 
 // 与 playwright.config.ts 的 baseURL 保持一致；之前硬编码 4321 与当前 4173 不符
 const BASE = "http://127.0.0.1:4173";

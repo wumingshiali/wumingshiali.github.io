@@ -162,6 +162,11 @@ async function prerenderRoutes(
     if (url.startsWith(base)) route.continue();
     else route.abort();
   });
+  // 标记 SSG 渲染环境：Cookie 弹窗检测到该标记后不显示，
+  // 避免把交互弹窗固化进静态 HTML（否则 hydrate 时会残留/重复）
+  await page.addInitScript(() => {
+    (window as unknown as { __SSG_RENDER__?: boolean }).__SSG_RENDER__ = true;
+  });
 
   try {
     for (const route of routes) {

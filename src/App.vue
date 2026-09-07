@@ -4,6 +4,7 @@ import { RouterLink, RouterView } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { Sun, Moon } from "@lucide/vue";
 import MobileNav from "@/components/MobileNav.vue";
+import CookieConsentDialog from "@/components/CookieConsentDialog.vue";
 import { navItems } from "@/lib/nav";
 
 // 主题：dark / light，默认跟随系统偏好，选择记忆到 localStorage
@@ -72,6 +73,9 @@ watch(theme, (val) => {
 
     <!-- 移动端左下角悬浮导航按钮 + 弹出菜单 -->
     <MobileNav />
+
+    <!-- Cookie 选择弹窗：首次进入时出现 -->
+    <CookieConsentDialog />
   </div>
 </template>
 

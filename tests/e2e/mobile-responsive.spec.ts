@@ -7,6 +7,20 @@
  * - 提交按钮可见
  */
 import { expect, test } from "@playwright/test";
+// 预置 cookie 同意状态（统计开启）：避免 Cookie 选择弹窗遮挡交互
+// （弹窗自身流程由 tests/e2e/cookie-consent.spec.ts 覆盖）
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    {
+      name: "cookie_consent",
+      value: encodeURIComponent(
+        JSON.stringify({ necessary: true, statistics: true }),
+      ),
+      domain: "127.0.0.1",
+      path: "/",
+    },
+  ]);
+});
 
 test.describe("移动端响应式", () => {
   // 断言依赖 375 视口宽度；desktop project 视口 1280+ 必然失败。

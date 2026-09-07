@@ -8,6 +8,21 @@
  */
 import { expect, test } from "@playwright/test";
 
+// 预置 cookie 同意状态（统计开启）：避免 Cookie 选择弹窗遮挡交互
+// （弹窗自身流程由 tests/e2e/cookie-consent.spec.ts 覆盖）
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    {
+      name: "cookie_consent",
+      value: encodeURIComponent(
+        JSON.stringify({ necessary: true, statistics: true }),
+      ),
+      domain: "127.0.0.1",
+      path: "/",
+    },
+  ]);
+});
+
 test.describe("联系页流程", () => {
   test.skip(
     ({ isMobile }) => isMobile === true,
