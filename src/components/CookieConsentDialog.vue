@@ -33,11 +33,11 @@ onMounted(() => {
       </DialogDescription>
 
       <div class="flex flex-col gap-3">
-        <!-- 必要 Cookies：固定开启，不可取消 -->
+        <!-- 必要 Cookies：始终开启且默认勾选，不可取消 -->
         <div
           class="flex items-start gap-3 rounded-lg border border-border bg-card p-3"
         >
-          <Checkbox :checked="true" disabled class="mt-0.5" />
+          <Checkbox :model-value="true" disabled aria-label="必要 Cookies" class="mt-0.5" />
           <div class="flex flex-col gap-0.5">
             <span class="text-sm font-medium">必要 Cookies</span>
             <span class="text-xs text-muted-foreground">
@@ -47,19 +47,23 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- 统计 Cookies：可勾选，默认开启 -->
-        <div
-          class="flex items-start gap-3 rounded-lg border border-border bg-card p-3"
-        >
-          <Checkbox v-model:checked="statistics" class="mt-0.5" />
+        <!-- 统计 Cookies：子项（Umami / Clarity）各自独立选择 -->
+        <div class="rounded-lg border border-border bg-card p-3">
           <div class="flex flex-col gap-0.5">
             <span class="text-sm font-medium">统计 Cookies</span>
             <span class="text-xs text-muted-foreground">
               优化用户体验的 Cookies
             </span>
-            <span class="text-xs text-muted-foreground/70">
-              自建 Umami、Microsoft Clarity
-            </span>
+          </div>
+          <div class="mt-2 flex flex-col gap-2">
+            <label class="flex cursor-pointer items-center gap-3">
+              <Checkbox v-model="statistics.umami" aria-label="自建 Umami" />
+              <span class="text-sm">自建 Umami</span>
+            </label>
+            <label class="flex cursor-pointer items-center gap-3">
+              <Checkbox v-model="statistics.clarity" aria-label="Microsoft Clarity" />
+              <span class="text-sm">Microsoft Clarity</span>
+            </label>
           </div>
         </div>
       </div>

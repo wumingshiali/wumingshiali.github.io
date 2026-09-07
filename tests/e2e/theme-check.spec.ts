@@ -6,7 +6,7 @@ test.beforeEach(async ({ context }) => {
     {
       name: "cookie_consent",
       value: encodeURIComponent(
-        JSON.stringify({ necessary: true, statistics: true }),
+        JSON.stringify({ necessary: true, statistics: { umami: true, clarity: true } }),
       ),
       domain: "127.0.0.1",
       path: "/",
