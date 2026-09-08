@@ -87,25 +87,41 @@ function loadStatScripts(statistics: CookieConsent["statistics"]) {
  * @returns open 弹窗开关；statistics 统计子项勾选态（umami / clarity）；
  *          acceptAll / acceptNecessary / confirm 三个保存动作
  */
-export function useCookieConsent() {
-  const open = ref(false);
-  const statistics = ref<CookieConsent["statistics"]>({ umami: true, clarity: true });
-  // 首次访问（无 cookie）标记：由组件在挂载后延迟弹出，
-  // 避免 SSG 预渲染把弹窗固化进静态 HTML 导致 hydrate 重复渲染
-  let needsPrompt = false;
+// 模块级共享状态（单例）：弹窗组件与各页面入口（如关于页）共享同一份同意状态
+const open = ref(false);
+const statistics = ref<CookieConsent["statistics"]>({ umami: true, clarity: true });
+// 首次访问（无 cookie）标记：由弹窗组件在挂载后延迟弹出，
+// 避免 SSG 预渲染把弹窗固化进静态 HTML 导致 hydrate 重复渲染
+let needsPrompt = false;
+let initialized = false;
+
+/** 首次调用时初始化：读取已保存选择 / 标记需要弹窗（幂等） */
+function initialize() {
+  if (initialized) return;
+  initialized = true;
 
   // Vitest 环境不弹窗也不加载统计脚本，避免干扰现有组件测试
   const isTest = import.meta.env.MODE === "test";
+  if (isTest) return;
 
-  if (!isTest) {
-    const saved = readConsent();
-    if (saved) {
-      statistics.value = saved.statistics;
-      loadStatScripts(saved.statistics);
-    } else {
-      needsPrompt = true;
-    }
+  const saved = readConsent();
+  if (saved) {
+    statistics.value = saved.statistics;
+    loadStatScripts(saved.statistics);
+  } else {
+    needsPrompt = true;
   }
+}
+
+/**
+ * Cookie 同意状态管理（单例）。
+ *
+ * @returns open 弹窗开关；statistics 统计子项勾选态（umami / clarity）；
+ *          statisticsAll / statisticsPartial 父级联动态；openDialog 主动打开弹窗；
+ *          acceptAll / acceptNecessary / confirm 三个保存动作
+ */
+export function useCookieConsent() {
+  initialize();
 
   function apply(consent: CookieConsent) {
     writeConsent(consent);
@@ -127,6 +143,11 @@ export function useCookieConsent() {
   /** 确认：按当前勾选状态保存 */
   function confirm() {
     apply({ necessary: true, statistics: { ...statistics.value } });
+  }
+
+  /** 主动打开 Cookie 配置弹窗（关于页等入口调用） */
+  function openDialog() {
+    open.value = true;
   }
 
   /** 统计子项是否全部勾选（父级点亮） */
@@ -152,6 +173,7 @@ export function useCookieConsent() {
     statisticsAll,
     statisticsPartial,
     setStatisticsAll,
+    openDialog,
     needsPrompt,
     acceptAll,
     acceptNecessary,

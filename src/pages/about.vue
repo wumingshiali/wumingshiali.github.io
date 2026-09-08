@@ -2,6 +2,8 @@
 import type { Component } from "vue";
 import { h, onMounted, ref } from "vue";
 import { Button } from "@/components/ui/button";
+import { Cookie } from "@lucide/vue";
+import { useCookieConsent } from "@/composables/useCookieConsent";
 import cfLogo from "@/assets/cf.webp";
 import { useSeo } from "@/composables/useSeo";
 
@@ -10,6 +12,9 @@ useSeo({
   description: "VoidCat 的个人博客项目。基于 Vue 3 + Vite 构建，托管于 Cloudflare Pages。",
   path: "/about",
 });
+
+// Cookie 配置入口：主动打开全局 Cookie 选择弹窗（单例共享状态）
+const { openDialog } = useCookieConsent();
 
 // lucide 已移除品牌图标，GitHub 用内联 SVG 保留品牌识别度（与 contact.vue 一致）
 const GithubIcon: Component = {
@@ -104,6 +109,17 @@ onMounted(() => {
     >
       <GithubIcon />
       GitHub 仓库
+    </Button>
+
+    <!-- Cookie 配置入口：重新打开 Cookie 选择弹窗 -->
+    <Button
+      variant="outline"
+      size="lg"
+      class="border-border bg-card text-card-foreground hover:bg-card/80 dark:bg-card dark:text-card-foreground dark:hover:bg-card/80"
+      @click="openDialog"
+    >
+      <Cookie class="size-5" />
+      Cookie 设置
     </Button>
 
     <!-- 性能与安全由 Cloudflare 提供 -->

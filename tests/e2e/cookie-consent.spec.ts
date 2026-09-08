@@ -136,6 +136,27 @@ test.describe("Cookie 选择弹窗", () => {
     expect(cookie).toContain('"statistics":{"umami":true,"clarity":false}');
   });
 
+  test("关于页入口：点击「Cookie 设置」重新打开弹窗", async ({ page, context }) => {
+    // 预置已同意状态：首次访问不自动弹窗
+    await context.addCookies([
+      {
+        name: "cookie_consent",
+        value: consentValue({ umami: true, clarity: true }),
+        domain: "127.0.0.1",
+        path: "/",
+      },
+    ]);
+    await page.goto(BASE + "/about");
+    await page.waitForTimeout(600);
+    // 已同意过 → 不自动弹窗
+    await expect(page.getByRole("heading", { name: "Cookie 设置" })).toBeHidden();
+
+    // 点击关于页「Cookie 设置」入口 → 弹窗打开
+    await page.getByRole("button", { name: "Cookie 设置" }).click();
+    await expect(page.getByRole("heading", { name: "Cookie 设置" })).toBeVisible();
+    await expect(page.getByRole("checkbox", { name: "统计 Cookies" })).toBeVisible();
+  });
+
   test("已保存选择后再次访问不再弹窗，并按选择加载对应脚本", async ({ page, context }) => {
     await context.addCookies([
       {
