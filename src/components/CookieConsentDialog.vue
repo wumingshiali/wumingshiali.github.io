@@ -10,8 +10,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { onMounted } from "vue";
 import { useCookieConsent } from "@/composables/useCookieConsent";
 
-const { open, statistics, needsPrompt, acceptAll, acceptNecessary, confirm } =
-  useCookieConsent();
+const {
+  open,
+  statistics,
+  statisticsAll,
+  statisticsPartial,
+  setStatisticsAll,
+  needsPrompt,
+  acceptAll,
+  acceptNecessary,
+  confirm,
+} = useCookieConsent();
 
 onMounted(() => {
   // SSG 预渲染阶段不显示（vite-plugin-ssg 注入 __SSG_RENDER__ 标记），
@@ -33,29 +42,42 @@ onMounted(() => {
       </DialogDescription>
 
       <div class="flex flex-col gap-3">
-        <!-- 必要 Cookies：始终开启且默认勾选，不可取消 -->
-        <div
-          class="flex items-start gap-3 rounded-lg border border-border bg-card p-3"
-        >
-          <Checkbox :model-value="true" disabled aria-label="必要 Cookies" class="mt-0.5" />
-          <div class="flex flex-col gap-0.5">
-            <span class="text-sm font-medium">必要 Cookies</span>
-            <span class="text-xs text-muted-foreground">
-              维持网站运行的 Cookies
-            </span>
-            <span class="text-xs text-muted-foreground/70">状态记录</span>
+        <!-- 必要 Cookies：父级始终勾选不可取消，子项同步开启 -->
+        <div class="rounded-lg border border-border bg-card p-3">
+          <div class="flex items-start gap-3">
+            <Checkbox :model-value="true" disabled aria-label="必要 Cookies" class="mt-0.5" />
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-medium">必要 Cookies</span>
+              <span class="text-xs text-muted-foreground">
+                维持网站运行的 Cookies
+              </span>
+            </div>
+          </div>
+          <div class="mt-2 flex flex-col gap-2 pl-7">
+            <label class="flex cursor-pointer items-center gap-3">
+              <Checkbox :model-value="true" disabled aria-label="状态记录" />
+              <span class="text-sm">状态记录</span>
+            </label>
           </div>
         </div>
 
         <!-- 统计 Cookies：子项（Umami / Clarity）各自独立选择 -->
         <div class="rounded-lg border border-border bg-card p-3">
-          <div class="flex flex-col gap-0.5">
-            <span class="text-sm font-medium">统计 Cookies</span>
-            <span class="text-xs text-muted-foreground">
-              优化用户体验的 Cookies
-            </span>
+          <div class="flex items-start gap-3">
+            <Checkbox
+              :model-value="statisticsPartial ? 'indeterminate' : statisticsAll"
+              aria-label="统计 Cookies"
+              class="mt-0.5"
+              @update:model-value="setStatisticsAll"
+            />
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-medium">统计 Cookies</span>
+              <span class="text-xs text-muted-foreground">
+                优化用户体验的 Cookies
+              </span>
+            </div>
           </div>
-          <div class="mt-2 flex flex-col gap-2">
+          <div class="mt-2 flex flex-col gap-2 pl-7">
             <label class="flex cursor-pointer items-center gap-3">
               <Checkbox v-model="statistics.umami" aria-label="自建 Umami" />
               <span class="text-sm">自建 Umami</span>

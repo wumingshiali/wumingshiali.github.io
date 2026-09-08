@@ -5,7 +5,8 @@ import { CheckboxRoot, CheckboxIndicator } from "reka-ui";
 import { Check } from "@lucide/vue";
 
 const props = defineProps<{ class?: HTMLAttributes["class"] }>();
-const model = defineModel<boolean>();
+// reka-ui 半选状态用 modelValue === "indeterminate" 表示（而非 indeterminate prop）
+const model = defineModel<boolean | "indeterminate">();
 </script>
 
 <template>

@@ -5,7 +5,7 @@
  * - 统计类脚本（Umami / Clarity）按子项独立加载，仅用户同意对应项才注入
  * - 测试环境（Vitest）不弹窗、不加载统计脚本，避免干扰现有组件测试
  */
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 /** Cookie 同意状态 */
 export interface CookieConsent {
@@ -129,5 +129,32 @@ export function useCookieConsent() {
     apply({ necessary: true, statistics: { ...statistics.value } });
   }
 
-  return { open, statistics, needsPrompt, acceptAll, acceptNecessary, confirm };
+  /** 统计子项是否全部勾选（父级点亮） */
+  const statisticsAll = computed(
+    () => statistics.value.umami && statistics.value.clarity,
+  );
+  /** 统计子项是否部分勾选（父级半选） */
+  const statisticsPartial = computed(
+    () =>
+      (statistics.value.umami || statistics.value.clarity) &&
+      !statisticsAll.value,
+  );
+
+  /** 父级开关：勾选 = 全选统计子项，取消 = 全部取消（半选点击视为全选） */
+  function setStatisticsAll(checked: boolean | "indeterminate" | undefined) {
+    const on = checked === true;
+    statistics.value = { umami: on, clarity: on };
+  }
+
+  return {
+    open,
+    statistics,
+    statisticsAll,
+    statisticsPartial,
+    setStatisticsAll,
+    needsPrompt,
+    acceptAll,
+    acceptNecessary,
+    confirm,
+  };
 }
