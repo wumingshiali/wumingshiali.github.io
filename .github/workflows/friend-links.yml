@@ -1,0 +1,31 @@
+name: 友链 PR 检测
+
+# pull_request_target：fork 的 PR 也能拿到写权限评论；
+# 脚本自包含（不执行 pnpm install / 不运行 PR 代码），仅读取 TOML 与发起网络请求
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check:
+    name: 链接可达性检测
+    runs-on: ubuntu-latest
+    # 只处理标题以 [友链] 开头的 PR
+    if: startsWith(github.event.pull_request.title, '[友链]')
+    timeout-minutes: 10
+    steps:
+      # 显式检出 PR 分支代码（pull_request_target 默认检出基分支）
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: 检测友链可达性并评论
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: node scripts/check-friend-links.mjs
