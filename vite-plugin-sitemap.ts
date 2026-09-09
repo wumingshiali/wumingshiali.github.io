@@ -19,6 +19,7 @@ const STATIC_ROUTES: { path: string; priority: number; changefreq: string }[] = 
   { path: "/about", priority: 0.5, changefreq: "monthly" },
   { path: "/contact", priority: 0.5, changefreq: "monthly" },
   { path: "/posts", priority: 0.8, changefreq: "daily" },
+  { path: "/links", priority: 0.5, changefreq: "monthly" },
 ];
 
 /** 博客文章 frontmatter 关键字段 */

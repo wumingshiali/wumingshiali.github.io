@@ -8,6 +8,7 @@ import htmlMinifier from "vite-plugin-html-minifier-terser";
 import { compression } from "vite-plugin-compression2";
 import { generateSitemap } from "./vite-plugin-sitemap.ts";
 import { prerenderPosts } from "./vite-plugin-prerender-posts.ts";
+import { linksData } from "./vite-plugin-links.ts";
 import { generateRssFeed } from "./vite-plugin-rss.ts";
 import { ssgPages } from "./vite-plugin-ssg.ts";
 import { defineConfig, type Plugin } from "vitest/config";
@@ -66,6 +67,7 @@ function inlineEntryCss(): Plugin {
 
 export default defineConfig({
   plugins: [
+    linksData(),
     VueRouter({
       routesFolder: "src/pages",
       dts: "src/route-map.d.ts",
