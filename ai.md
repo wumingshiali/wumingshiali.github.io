@@ -10,7 +10,7 @@
 - [Qwen Coder](https://coder.qwen.ai)
 ## LLM
 - Deepseek v4 flash(v3 开发)
-- GLM-5.x(前v3 开发)
+- GLM-5.x(前 v3 开发)
 - GLM-4.7(v2 开发)
 - MiniMax-M3(需要多模态能力时的开发)
 - Qwen(聊天)
