@@ -2,14 +2,17 @@
  * 友链 PR 可达性检测（配合 .github/workflows/friend-links.yml 使用）。
  *
  * 工作流由 pull_request_target 触发（标题以 [友链] 开头），本脚本：
- * 1. 读取 PR 分支上的 src/links/data.toml（单一数据源）
- * 2. 解析并校验结构（name/url 必填、priority 合法、cover 可选字符串、仅 http/https）
- * 3. 逐个请求 URL 做可达性检测（HEAD，失败回退 GET）
+ * 1. 读取 PR 分支上的 src/links/data.toml，全量解析并校验结构（防止 PR 破坏文件）
+ * 2. 通过 GitHub API 获取该文件的 diff，只提取「新增 / 修改」的友链条目
+ * 3. 仅对改动条目的 url 做可达性检测（HEAD，失败回退 GET）
  * 4. 全部通过 → 评论 @wumingshiali 并告知贡献者等待人工审核
  *    任一项失败 → 评论失败详情并退出非 0，让 PR 检查变红
  *
- * 安全说明：脚本自包含、不执行 pnpm install，只读取数据文件与发起网络请求，
- * 适合在 pull_request_target 的仓库上下文中安全运行。
+ * 关键设计：只检测 diff 中新增/修改的友链，不检测存量链接——避免历史链接
+ * 暂时不可达导致新友链 PR 被误判失败。
+ *
+ * 安全说明：脚本自包含、不执行 pnpm install，只读取数据文件、调用 GitHub API
+ * 与发起网络请求，适合在 pull_request_target 的仓库上下文中安全运行。
  */
 import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
@@ -92,6 +95,97 @@ export function validateLinks(links) {
   return errors;
 }
 
+/**
+ * 从 data.toml 的 unified diff 中提取「新增 / 修改」的 [[links]] 条目。
+ *
+ * 规则：
+ * - 块内出现 + 行（新增/修改字段）→ 视为有新增内容，需检测
+ * - 字段值：+ 行优先（改动后的值），其次取上下文行（未变部分）
+ * - 只删除了字段（无 + 行）或整块被删除 → 不计入：没有需要检测的新链接
+ */
+export function extractChangedLinks(patch) {
+  const blocks = [];
+  let current = null;
+  for (const rawLine of patch.split(/\r?\n/)) {
+    if (
+      !rawLine ||
+      rawLine.startsWith("diff --git") ||
+      rawLine.startsWith("index ") ||
+      rawLine.startsWith("@@") ||
+      rawLine.startsWith("--- ") ||
+      rawLine.startsWith("+++ ")
+    ) {
+      continue;
+    }
+    const mark = rawLine[0];
+    const body = rawLine.slice(1);
+    if (body.trim() === "[[links]]") {
+      if (mark === "-") {
+        // 块头被删除 → 整个块是删除，不产生待检测条目
+        current = null;
+      } else {
+        current = { fields: {}, touched: mark === "+", hasAdd: mark === "+" };
+        blocks.push(current);
+      }
+      continue;
+    }
+    if (!current) continue;
+    if (mark === "-") {
+      current.touched = true; // 块内删除字段 → 视为修改
+      continue;
+    }
+    if (mark === "+") {
+      current.touched = true;
+      current.hasAdd = true;
+    }
+    const kv = body.match(/^\s*([A-Za-z_][A-Za-z0-9_-]*)\s*=\s*(".*")\s*$/);
+    if (!kv) continue;
+    const [, key, quoted] = kv;
+    if (mark === "+" || !(key in current.fields)) {
+      try {
+        current.fields[key] = JSON.parse(quoted);
+      } catch {
+        // 值无法解析时忽略，交给后续 validateLinks 报错
+      }
+    }
+  }
+  // 只返回真正有新增/修改内容的块（仅删除字段/整块删除的不需要检测）
+  return blocks.filter((b) => b.touched && b.hasAdd).map((b) => b.fields);
+}
+
+/** 获取 data.toml 的 unified diff：GitHub API 优先，本地调试回退 git diff */
+async function getDataTomlPatch() {
+  const token = process.env.GITHUB_TOKEN;
+  const pr = process.env.PR_NUMBER;
+  const repo = process.env.GITHUB_REPOSITORY;
+  if (token && pr && repo) {
+    const res = await fetch(
+      `https://api.github.com/repos/${repo}/pulls/${pr}/files?per_page=100&path=${encodeURIComponent(LINKS_FILE)}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+          "x-github-api-version": "2022-11-28",
+          "user-agent": "friend-links-checker",
+          accept: "application/vnd.github.v3+json",
+        },
+      },
+    );
+    if (!res.ok) {
+      throw new Error(`获取 PR 文件失败: ${res.status}`);
+    }
+    const files = await res.json();
+    const target = Array.isArray(files) ? files.find((f) => f.filename === LINKS_FILE) : undefined;
+    return target?.patch ?? "";
+  }
+  // 本地调试回退：与基线分支对比
+  try {
+    const { execSync } = await import("node:child_process");
+    return execSync(`git diff origin/v3...HEAD -- ${LINKS_FILE}`, { encoding: "utf8" });
+  } catch {
+    return "";
+  }
+}
+
 /** 对单个 URL 发起一次请求，返回状态码；失败抛错 */
 async function fetchStatus(url, method) {
   const controller = new AbortController();
@@ -161,6 +255,7 @@ async function fail(message) {
 }
 
 async function main() {
+  // 1. 全量解析 + 结构校验：防止 PR 破坏 data.toml（本地解析，不发网络请求）
   let raw;
   try {
     raw = readFileSync(LINKS_FILE, "utf8");
@@ -174,24 +269,38 @@ async function main() {
   } catch (err) {
     await fail(`❌ 友链 TOML 解析失败\n\n${err.message}\n\n请检查格式后重新推送喵～`);
   }
-  if (links.length === 0) {
-    await fail("❌ 没有找到任何 [[links]] 条目，请按格式添加后重新推送喵～");
+  const allErrors = validateLinks(links);
+  if (allErrors.length > 0) {
+    await fail(`❌ 友链格式校验未通过\n\n${allErrors.map((e) => `- ${e}`).join("\n")}\n\n请修正后重新推送喵～`);
   }
 
-  const errors = validateLinks(links);
-  if (errors.length > 0) {
-    await fail(`❌ 友链格式校验未通过\n\n${errors.map((e) => `- ${e}`).join("\n")}\n\n请修正后重新推送喵～`);
+  // 2. 只取新增 / 修改的友链条目
+  let patch;
+  try {
+    patch = await getDataTomlPatch();
+  } catch (err) {
+    await fail(`❌ 无法获取 PR 变更：${err.message}`);
+  }
+  const changed = extractChangedLinks(patch);
+  if (changed.length === 0) {
+    await fail("❌ 未检测到 src/links/data.toml 中新增或修改的友链，请修改该文件后重新推送喵～");
   }
 
-  // 并发检测所有链接可达性
+  // 3. 校验改动条目的字段
+  const changeErrors = validateLinks(changed);
+  if (changeErrors.length > 0) {
+    await fail(`❌ 新增/修改友链格式校验未通过\n\n${changeErrors.map((e) => `- ${e}`).join("\n")}\n\n请修正后重新推送喵～`);
+  }
+
+  // 4. 只检测改动条目的可达性
   const results = await Promise.all(
-    links.map(async (link) => ({ link, ok: await isReachable(link.url) })),
+    changed.map(async (link) => ({ link, ok: await isReachable(link.url) })),
   );
   const failed = results.filter((r) => !r.ok);
 
   if (failed.length > 0) {
     await fail(
-      `❌ 友链可达性检测未通过\n\n以下链接无法访问，请检查后修正并重新推送喵～\n\n${failed
+      `❌ 友链可达性检测未通过\n\n以下新增/修改的链接无法访问，请检查后修正并重新推送喵～\n\n${failed
         .map((r) => `- [${r.link.name}](${r.link.url})`)
         .join("\n")}`,
     );
@@ -200,7 +309,7 @@ async function main() {
   const body = [
     "✅ 友链可达性检测通过！",
     "",
-    "以下链接全部可以正常访问：",
+    "本次新增/修改的链接全部可以正常访问：",
     ...results.map((r) => `- [${r.link.name}](${r.link.url})`),
     "",
     "@wumingshiali 站长请进行人工审核喵～",
@@ -208,7 +317,7 @@ async function main() {
     "贡献者辛苦了，请耐心等待人工审核结果喵～",
   ].join("\n");
   await postComment(body);
-  console.log("全部链接可达，已通知站长等待人工审核");
+  console.log("改动链接全部可达，已通知站长等待人工审核");
 }
 
 // 仅直接运行时执行检测（被 import 时只导出函数，便于单元测试）
