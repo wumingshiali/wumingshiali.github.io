@@ -19,3 +19,9 @@ name = "Acofork"
 url = "https://acofork.com"
 priority = "high"
 cover = "https://www.acofork.com/favicon-192.png"
+
+[[links]]
+name = "Example 测试"
+url = "https://example.com"
+priority = "low"
+cover = "https://example.com/example.png"
