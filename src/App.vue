@@ -4,6 +4,8 @@ import { RouterLink, RouterView } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { Sun, Moon } from "@lucide/vue";
 import MobileNav from "@/components/MobileNav.vue";
+import NationalDayBanner from "@/components/NationalDayBanner.vue";
+import { isNationalDayActive } from "@/lib/festival";
 import CookieConsentDialog from "@/components/CookieConsentDialog.vue";
 import { navItems } from "@/lib/nav";
 
@@ -34,6 +36,9 @@ watch(theme, (val) => {
   applyTheme(val);
   localStorage.setItem(THEME_KEY, val);
 });
+
+// 国庆彩蛋：日期命中国庆（10.1-10.7）或 URL 携带 ?egg=cn_birthday 时显示横幅
+const nationalDayActive = isNationalDayActive();
 </script>
 
 <template>
@@ -49,6 +54,8 @@ watch(theme, (val) => {
       <Sun v-if="theme === 'dark'" class="size-4" />
       <Moon v-else class="size-4" />
     </Button>
+
+    <NationalDayBanner v-if="nationalDayActive" />
 
     <RouterView v-slot="{ Component }">
       <Transition name="page" mode="out-in">

@@ -194,3 +194,53 @@
   opacity: 0;
   transform: scale(0.96);
 }
+
+/* ===== 国庆彩蛋主题（html.egg-cn-birthday）=====
+   由 src/lib/festival.ts 与 index.html 内联脚本触发：
+   日期命中 10.1-10.7，或 URL 携带 ?egg=cn_birthday。
+   平时该 class 不存在，以下规则零开销。 */
+.egg-cn-birthday {
+  /* 中国红主色 + 金色点缀 */
+  --primary: oklch(0.577 0.245 27.325);
+  --primary-foreground: oklch(0.985 0.005 95);
+  --ring: oklch(0.55 0.22 28);
+  --chart-1: oklch(0.577 0.245 27.325);
+  --chart-5: oklch(0.769 0.188 70.08);
+}
+
+.egg-cn-birthday.dark {
+  /* 深色背景下调亮中国红，保证对比度 */
+  --primary: oklch(0.68 0.2 30);
+  --primary-foreground: oklch(0.985 0.005 95);
+  --ring: oklch(0.66 0.19 30);
+  --chart-1: oklch(0.68 0.2 30);
+  --chart-5: oklch(0.82 0.17 85);
+}
+
+/* 节日氛围：四角红金柔光（与 base 层 body 的 background-color 叠加） */
+.egg-cn-birthday body {
+  background-image:
+    radial-gradient(60rem 40rem at 10% -5%, oklch(0.577 0.245 27.325 / 0.08), transparent 65%),
+    radial-gradient(50rem 35rem at 95% 105%, oklch(0.769 0.188 70.08 / 0.08), transparent 65%);
+}
+
+.egg-cn-birthday.dark body {
+  background-image:
+    radial-gradient(60rem 40rem at 10% -5%, oklch(0.577 0.245 27.325 / 0.14), transparent 65%),
+    radial-gradient(50rem 35rem at 95% 105%, oklch(0.769 0.188 70.08 / 0.1), transparent 65%);
+}
+
+/* 顶部节日彩带：4px 红金渐变，不遮挡任何固定元素 */
+.egg-cn-birthday body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 4px;
+  z-index: 60;
+  background: linear-gradient(
+    to right,
+    oklch(0.577 0.245 27.325),
+    oklch(0.82 0.17 85),
+    oklch(0.577 0.245 27.325)
+  );
+}

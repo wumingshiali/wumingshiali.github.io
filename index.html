@@ -86,6 +86,21 @@
         } catch (e) {}
       })();
     </script>
+    <script>
+      // 首屏前同步设置国庆彩蛋（日期命中或 ?egg=cn_birthday），避免刷新闪烁。
+      // 用 toggle 而非 add：SSG 构建期恰逢国庆时静态 HTML 可能已带该 class，
+      // 运行时非国庆会主动移除，保证静态产物与访问日期一致。
+      // 逻辑与 src/lib/festival.ts 保持一致。
+      (function () {
+        try {
+          var now = new Date();
+          var active =
+            (now.getMonth() === 9 && now.getDate() >= 1 && now.getDate() <= 7) ||
+            new URLSearchParams(window.location.search).get("egg") === "cn_birthday";
+          document.documentElement.classList.toggle("egg-cn-birthday", active);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
