@@ -96,3 +96,10 @@ if (typeof window !== "undefined") {
   });
 }
 
+
+// 组件测试不发起真实网络请求（如香港天文台农历 API），统一 stub 为失败。
+// festival.ts 的 fetchLunarDate 会捕获异常静默降级；需要验证请求行为的用例应注入 mock fetcher。
+vi.stubGlobal(
+  "fetch",
+  vi.fn().mockRejectedValue(new Error("network disabled in component tests")),
+);

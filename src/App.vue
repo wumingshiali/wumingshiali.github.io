@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { Sun, Moon } from "@lucide/vue";
 import MobileNav from "@/components/MobileNav.vue";
 import NationalDayBanner from "@/components/NationalDayBanner.vue";
-import { isNationalDayActive } from "@/lib/festival";
+import MidAutumnBanner from "@/components/MidAutumnBanner.vue";
+import { applyMidAutumnClass, isMidAutumnActive, isNationalDayActive } from "@/lib/festival";
 import CookieConsentDialog from "@/components/CookieConsentDialog.vue";
 import { navItems } from "@/lib/nav";
 
@@ -39,6 +40,14 @@ watch(theme, (val) => {
 
 // 国庆彩蛋：日期命中国庆（10.1-10.7）或 URL 携带 ?egg=cn_birthday 时显示横幅
 const nationalDayActive = isNationalDayActive();
+
+// 中秋彩蛋：异步查询香港天文台农历 API（数据来源：HKO），失败静默降级
+const midAutumnActive = ref(false);
+onMounted(async () => {
+  const active = await isMidAutumnActive();
+  midAutumnActive.value = active;
+  applyMidAutumnClass(active);
+});
 </script>
 
 <template>
@@ -56,6 +65,7 @@ const nationalDayActive = isNationalDayActive();
     </Button>
 
     <NationalDayBanner v-if="nationalDayActive" />
+    <MidAutumnBanner v-if="midAutumnActive" />
 
     <RouterView v-slot="{ Component }">
       <Transition name="page" mode="out-in">
