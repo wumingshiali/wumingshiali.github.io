@@ -7,22 +7,81 @@
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  applyLaborDayClass,
   applyMidAutumnClass,
   applyNationalDayClass,
   fetchLunarDate,
   formatApiDate,
+  isLaborDay,
+  isLaborDayActive,
   isMidAutumnActive,
   isMidAutumnLunarDate,
   isMidAutumnParamActive,
   isNationalDay,
   isNationalDayActive,
+  LABOR_DAY_CLASS,
   MID_AUTUMN_CLASS,
   NATIONAL_DAY_CLASS,
 } from "@/lib/festival";
 
 afterEach(() => {
   document.documentElement.classList.remove(NATIONAL_DAY_CLASS);
+  document.documentElement.classList.remove(LABOR_DAY_CLASS);
   document.documentElement.classList.remove(MID_AUTUMN_CLASS);
+});
+
+describe("isLaborDay（日期窗口 5.1 - 5.5）", () => {
+  it("5 月 1 日返回 true", () => {
+    expect(isLaborDay(new Date(2026, 4, 1))).toBe(true);
+  });
+
+  it("5 月 5 日返回 true", () => {
+    expect(isLaborDay(new Date(2026, 4, 5))).toBe(true);
+  });
+
+  it("5 月 6 日返回 false", () => {
+    expect(isLaborDay(new Date(2026, 4, 6))).toBe(false);
+  });
+
+  it("4 月 30 日返回 false", () => {
+    expect(isLaborDay(new Date(2026, 3, 30))).toBe(false);
+  });
+
+  it("其它月份（如 10 月）返回 false", () => {
+    expect(isLaborDay(new Date(2026, 9, 1))).toBe(false);
+  });
+});
+
+describe("isLaborDayActive（日期或参数二选一）", () => {
+  it("劳动节期间：无需参数即激活", () => {
+    expect(isLaborDayActive("", new Date(2026, 4, 1))).toBe(true);
+  });
+
+  it("非劳动节：?egg=cn_labor_day 参数激活", () => {
+    expect(isLaborDayActive("?egg=cn_labor_day", new Date(2026, 0, 1))).toBe(true);
+  });
+
+  it("参数可与其它查询参数共存", () => {
+    expect(isLaborDayActive("?a=1&egg=cn_labor_day&b=2", new Date(2026, 0, 1))).toBe(true);
+  });
+
+  it("非劳动节且无参数：不激活", () => {
+    expect(isLaborDayActive("", new Date(2026, 0, 1))).toBe(false);
+  });
+
+  it("参数值不匹配（如 egg=xxx）：不激活", () => {
+    expect(isLaborDayActive("?egg=xxx", new Date(2026, 0, 1))).toBe(false);
+  });
+});
+
+describe("applyLaborDayClass（<html> class 增删）", () => {
+  it("激活时添加 egg-labor-day，关闭时移除", () => {
+    applyLaborDayClass(true);
+    expect(document.documentElement.classList.contains(LABOR_DAY_CLASS)).toBe(true);
+
+    applyLaborDayClass(false);
+    expect(document.documentElement.classList.contains(LABOR_DAY_CLASS)).toBe(false);
+  });
 });
 
 describe("isNationalDay（日期窗口 10.1 - 10.7）", () => {

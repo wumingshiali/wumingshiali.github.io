@@ -6,7 +6,8 @@ import { Sun, Moon } from "@lucide/vue";
 import MobileNav from "@/components/MobileNav.vue";
 import NationalDayBanner from "@/components/NationalDayBanner.vue";
 import MidAutumnBanner from "@/components/MidAutumnBanner.vue";
-import { applyMidAutumnClass, isMidAutumnActive, isNationalDayActive } from "@/lib/festival";
+import LaborDayBanner from "@/components/LaborDayBanner.vue";
+import { applyMidAutumnClass, isLaborDayActive, isMidAutumnActive, isNationalDayActive } from "@/lib/festival";
 import CookieConsentDialog from "@/components/CookieConsentDialog.vue";
 import { navItems } from "@/lib/nav";
 
@@ -41,6 +42,9 @@ watch(theme, (val) => {
 // 国庆彩蛋：日期命中国庆（10.1-10.7）或 URL 携带 ?egg=cn_birthday 时显示横幅
 const nationalDayActive = isNationalDayActive();
 
+// 劳动节彩蛋：日期命中（5.1-5.5）或 URL 携带 ?egg=cn_labor_day 时显示横幅
+const laborDayActive = isLaborDayActive();
+
 // 中秋彩蛋：异步查询香港天文台农历 API（数据来源：HKO），失败静默降级
 const midAutumnActive = ref(false);
 onMounted(async () => {
@@ -66,6 +70,7 @@ onMounted(async () => {
 
     <NationalDayBanner v-if="nationalDayActive" />
     <MidAutumnBanner v-if="midAutumnActive" />
+    <LaborDayBanner v-if="laborDayActive" />
 
     <RouterView v-slot="{ Component }">
       <Transition name="page" mode="out-in">

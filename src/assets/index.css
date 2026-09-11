@@ -196,6 +196,55 @@
 }
 
 
+
+/* ===== 劳动节彩蛋主题（html.egg-labor-day）=====
+   由 src/lib/festival.ts 与 index.html 内联脚本触发：
+   日期命中 5.1-5.5，或 URL 携带 ?egg=cn_labor_day。
+   放在中秋/国庆规则之前：与其它节日时间上不重叠，顺序仅作兜底。 */
+.egg-labor-day {
+  /* 劳动红主色 + 暖橙点缀 */
+  --primary: oklch(0.55 0.2 35);
+  --primary-foreground: oklch(0.985 0.005 95);
+  --ring: oklch(0.55 0.18 35);
+  --chart-1: oklch(0.55 0.2 35);
+  --chart-5: oklch(0.77 0.16 65);
+}
+
+.egg-labor-day.dark {
+  /* 深色背景下调亮劳动红，保证对比度 */
+  --primary: oklch(0.68 0.18 38);
+  --primary-foreground: oklch(0.985 0.005 95);
+  --ring: oklch(0.66 0.17 38);
+  --chart-1: oklch(0.68 0.18 38);
+}
+
+/* 节日氛围：四角红橙柔光（与 base 层 body 的 background-color 叠加） */
+.egg-labor-day body {
+  background-image:
+    radial-gradient(60rem 40rem at 10% -5%, oklch(0.55 0.2 35 / 0.08), transparent 65%),
+    radial-gradient(50rem 35rem at 95% 105%, oklch(0.77 0.16 65 / 0.08), transparent 65%);
+}
+
+.egg-labor-day.dark body {
+  background-image:
+    radial-gradient(60rem 40rem at 10% -5%, oklch(0.55 0.2 35 / 0.14), transparent 65%),
+    radial-gradient(50rem 35rem at 95% 105%, oklch(0.77 0.16 65 / 0.1), transparent 65%);
+}
+
+/* 顶部节日彩带：红橙渐变，不遮挡任何固定元素 */
+.egg-labor-day body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 4px;
+  z-index: 60;
+  background: linear-gradient(
+    to right,
+    oklch(0.55 0.2 35),
+    oklch(0.77 0.16 65),
+    oklch(0.55 0.2 35)
+  );
+}
 /* ===== 中秋节彩蛋主题（html.egg-mid-autumn）=====
    由 src/lib/festival.ts 触发：
    香港天文台农历 API 判断当日为八月十五，或 URL 携带 ?egg=cn_mid_autumn。

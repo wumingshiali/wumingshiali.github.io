@@ -1,5 +1,5 @@
 /**
- * 节日彩蛋（国庆 egg=cn_birthday / 中秋 egg=cn_mid_autumn）。
+ * 节日彩蛋（劳动节 egg=cn_labor_day / 国庆 egg=cn_birthday / 中秋 egg=cn_mid_autumn）。
  *
  * 触发方式均为二选一：
  * 1. 日期命中（国庆 10.1-10.7；中秋由香港天文台农历 API 判断当日是否农历八月十五）；
@@ -8,6 +8,46 @@
  * 命中后给 <html> 添加对应 CLASS，由 index.css 呈现节日主题；
  * 与 index.html 首屏内联脚本保持同步（后者负责首屏前防闪烁）。
  */
+
+/* ===== 劳动节 ===== */
+
+/** 彩蛋参数值：?egg=cn_labor_day */
+export const LABOR_DAY_EGG = "cn_labor_day";
+
+/** 命中劳动节彩蛋时添加到 <html> 的 class */
+export const LABOR_DAY_CLASS = "egg-labor-day";
+
+/** 劳动节假期起始日（5 月 1 日） */
+const LABOR_DAY_START_DAY = 1;
+/** 劳动节假期结束日（5 月 5 日，五一假期） */
+const LABOR_DAY_END_DAY = 5;
+
+/** 日期是否处于劳动节假期（5 月 1 日 - 5 月 5 日）。 */
+export function isLaborDay(now: Date = new Date()): boolean {
+  return (
+    now.getMonth() === 4 &&
+    now.getDate() >= LABOR_DAY_START_DAY &&
+    now.getDate() <= LABOR_DAY_END_DAY
+  );
+}
+
+/** 是否命中劳动节彩蛋：日期命中或 URL 参数 egg=cn_labor_day。 */
+export function isLaborDayActive(
+  search: string = typeof window === "undefined" ? "" : window.location.search,
+  now: Date = new Date(),
+): boolean {
+  return (
+    isLaborDay(now) ||
+    new URLSearchParams(search).get("egg") === LABOR_DAY_EGG
+  );
+}
+
+/** 按命中状态给 <html> 添加/移除劳动节彩蛋 class（幂等）。 */
+export function applyLaborDayClass(
+  active: boolean = isLaborDayActive(),
+): void {
+  document.documentElement.classList.toggle(LABOR_DAY_CLASS, active);
+}
 
 /* ===== 国庆 ===== */
 

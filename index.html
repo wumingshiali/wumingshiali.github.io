@@ -87,6 +87,21 @@
       })();
     </script>
     <script>
+      // 首屏前同步设置劳动节彩蛋（日期命中或 ?egg=cn_labor_day），避免刷新闪烁。
+      // 用 toggle 而非 add：SSG 构建期恰逢劳动节时静态 HTML 可能已带该 class，
+      // 运行时非劳动节会主动移除，保证静态产物与访问日期一致。
+      // 逻辑与 src/lib/festival.ts 保持一致。
+      (function () {
+        try {
+          var now = new Date();
+          var active =
+            (now.getMonth() === 4 && now.getDate() >= 1 && now.getDate() <= 5) ||
+            new URLSearchParams(window.location.search).get("egg") === "cn_labor_day";
+          document.documentElement.classList.toggle("egg-labor-day", active);
+        } catch (e) {}
+      })();
+    </script>
+    <script>
       // 中秋彩蛋：URL 参数 ?egg=cn_mid_autumn 首屏同步生效。
       // 日期命中需异步调用香港天文台农历 API（数据来源：HKO），由 App.vue 处理。
       (function () {
