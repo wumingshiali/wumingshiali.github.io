@@ -57,6 +57,7 @@ const publicContacts = [
   {
     label: "GitHub",
     value: "wumingshiali",
+    href: "https://github.com/wumingshiali",
     icon: GithubIcon,
   },
 ] as const;
@@ -128,11 +129,11 @@ function resetDialog() {
       <p class="text-muted-foreground">想和 VoidCat 说点什么？选个方式吧喵～</p>
     </div>
 
-    <!-- 操作提示：点击卡片可复制 -->
+    <!-- 操作提示：GitHub 直接跳转，加密卡片验证后复制 -->
     <Alert class="w-full max-w-md">
       <Info class="size-4" />
       <AlertDescription>
-        点击任意卡片即可复制内容；邮箱和微信需要先通过验证喵～
+        GitHub 点击直接跳转；邮箱和微信需要先通过验证，再点击复制喵～
       </AlertDescription>
     </Alert>
 
@@ -181,28 +182,24 @@ function resetDialog() {
       </Button>
     </div>
 
-    <!-- 公开联系方式卡片 -->
+    <!-- 公开联系方式卡片：GitHub 点击直接跳转外链 -->
     <div class="grid w-full max-w-md gap-3 sm:grid-cols-2">
       <Button
         v-for="item in publicContacts"
         :key="item.label"
+        as="a"
+        :href="item.href"
+        target="_blank"
+        rel="noopener noreferrer"
         variant="outline"
         size="lg"
         class="h-auto flex-col items-start gap-1 py-4 bg-card hover:bg-card/80 dark:bg-input/30 dark:hover:bg-input/50"
-        @click="copyText(item.label, item.value)"
       >
         <div class="flex w-full items-center justify-between">
           <component :is="item.icon" />
-          <Check
-            v-if="copiedKey === item.label"
-            class="size-4 text-emerald-500"
-          />
         </div>
         <span class="text-xs text-muted-foreground">{{ item.label }}</span>
-        <span v-if="copiedKey === item.label" class="text-sm font-medium text-emerald-500">
-          已复制
-        </span>
-        <span v-else class="text-sm font-medium">{{ item.value }}</span>
+        <span class="text-sm font-medium">{{ item.value }}</span>
       </Button>
     </div>
 

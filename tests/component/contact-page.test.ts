@@ -90,14 +90,14 @@ describe("/contact 页面", () => {
     expect(wrapper.text()).toContain("发封邮件");
   });
 
-  it("公开卡片（GitHub）无需验证：点击后调 clipboard.writeText", async () => {
+  it("公开卡片（GitHub）无需验证：点击直接跳转 GitHub 外链", async () => {
     const wrapper = await mountAt("/contact");
-    const githubBtn = wrapper
-      .findAll("button")
-      .find((b) => b.text().includes("GitHub"));
-    expect(githubBtn).toBeTruthy();
-    await githubBtn!.trigger("click");
-    await settle();
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("wumingshiali");
+    const githubLink = wrapper
+      .findAll("a")
+      .find((a) => a.text().includes("GitHub"));
+    expect(githubLink).toBeTruthy();
+    expect(githubLink!.attributes("href")).toBe("https://github.com/wumingshiali");
+    expect(githubLink!.attributes("target")).toBe("_blank");
+    expect(githubLink!.attributes("rel")).toBe("noopener noreferrer");
   });
 });

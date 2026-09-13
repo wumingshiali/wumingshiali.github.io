@@ -68,12 +68,11 @@ test.describe("联系页流程", () => {
     expect(clip).toBe("ZWj1154142014@hotmail.com");
   });
 
-  test("公开卡片（GitHub）无需验证直接复制", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  test("公开卡片（GitHub）无需验证：点击直接跳转 GitHub", async ({ page }) => {
     await page.goto("/contact");
-    await page.getByRole("button", { name: /GitHub/ }).click();
-    await expect(page.getByText("已复制")).toBeVisible();
-    const clip = await page.evaluate(() => navigator.clipboard.readText());
-    expect(clip).toBe("wumingshiali");
+    const githubLink = page.getByRole("link", { name: /GitHub/ });
+    await expect(githubLink).toHaveAttribute("href", "https://github.com/wumingshiali");
+    await expect(githubLink).toHaveAttribute("target", "_blank");
+    await expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
   });
 });
