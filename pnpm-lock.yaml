@@ -23,7 +23,7 @@ importers:
         version: 3.1.1(vue@3.5.42(typescript@5.9.3))
       '@lucide/vue':
         specifier: ^1.18.0
-        version: 1.45.0(vue@3.5.42(typescript@5.9.3))
+        version: 1.46.0(vue@3.5.42(typescript@5.9.3))
       '@noble/ciphers':
         specifier: ^2.2.0
         version: 2.4.0
@@ -747,8 +747,8 @@ packages:
   '@lit/reactive-element@2.1.2':
     resolution: {integrity: sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==}
 
-  '@lucide/vue@1.45.0':
-    resolution: {integrity: sha512-tbMlusqK6brViI1xj8nsXAgNDyJOvNeOdOQlBI0hOWCAbnBrPRlanoQ6EygDEMv3dqwXfCZPb4a0/ImtI5KAmQ==}
+  '@lucide/vue@1.46.0':
+    resolution: {integrity: sha512-xp4mUamXKM/jYCve8TOcEcuikidFh3Jn9gs0THCeEKn/fAdeU0mKhPqk0fmIwn42fI4CwGLRWrLneLA69h8Nqw==}
     peerDependencies:
       vue: '>=3.0.1'
 
@@ -4122,7 +4122,7 @@ snapshots:
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.6.0
 
-  '@lucide/vue@1.45.0(vue@3.5.42(typescript@5.9.3))':
+  '@lucide/vue@1.46.0(vue@3.5.42(typescript@5.9.3))':
     dependencies:
       vue: 3.5.42(typescript@5.9.3)
 
