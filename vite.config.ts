@@ -142,7 +142,7 @@ export default defineConfig({
         unsafe_arrows: true,
         unsafe_comps: true,
         unsafe_Function: true,
-        unsafe_math: true,
+        unsafe_math: false, // noble 库的 BigInt 代码会被 unsafe_math 压缩破坏（Cannot convert a BigInt value to a number）
         unsafe_symbols: true,
         unsafe_methods: true,
         unsafe_proto: true,
