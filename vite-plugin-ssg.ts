@@ -66,6 +66,10 @@ function listRoutes(outDir: string): Route[] {
     { path: "/links", output: resolve(outDir, "links.html") },
     { path: "/about", output: resolve(outDir, "about.html") },
     { path: "/contact", output: resolve(outDir, "contact.html") },
+    { path: "/tools", output: resolve(outDir, "tools.html") },
+    { path: "/tools/hash", output: resolve(outDir, "tools", "hash.html") },
+    { path: "/tools/symmetric", output: resolve(outDir, "tools", "symmetric.html") },
+    { path: "/tools/asymmetric", output: resolve(outDir, "tools", "asymmetric.html") },
     ...posts.map((id) => ({
       path: "/posts/" + id,
       output: resolve(outDir, "posts", id + ".html"),

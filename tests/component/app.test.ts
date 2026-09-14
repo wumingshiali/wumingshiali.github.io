@@ -57,6 +57,17 @@ describe("App shell", () => {
     expect(links.some((t) => t.includes("联系"))).toBe(true);
   });
 
+  it("桌面导航「工具」入口：可点击进总览，悬停子菜单包含全部工具链接", async () => {
+    const { wrapper } = await mountAt("/");
+    // 点击「工具」进入总览页
+    const toolsLink = wrapper.find('a[href="/tools"]');
+    expect(toolsLink.exists()).toBe(true);
+
+    // 悬停子菜单的三个工具链接常驻 DOM（显示/隐藏由 CSS group-hover 控制）
+    for (const href of ["/tools/hash", "/tools/symmetric", "/tools/asymmetric"]) {
+      expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
+    }
+  });
   it("调 router.push('/contact') 切换到联系页面", async () => {
     const { wrapper, router } = await mountAt("/");
     await router.push("/contact");
@@ -84,7 +95,7 @@ describe("移动端悬浮导航（MobileNav）", () => {
     const labels = Array.from(dialog!.querySelectorAll("a")).map(
       (a) => a.textContent?.trim() ?? "",
     );
-    expect(labels).toEqual(["主页", "联系", "博客", "友链", "关于"]);
+    expect(labels).toEqual(["主页", "联系", "博客", "友链", "工具", "关于"]);
   });
 
   it("点击菜单项：链接指向对应路由并收起菜单", async () => {

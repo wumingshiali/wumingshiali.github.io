@@ -153,6 +153,17 @@
   transform: translateY(-8px);
 }
 
+/* 工具页 文本/文件 输入模式切换动画（out-in：先淡出再淡入） */
+.tool-mode-enter-active,
+.tool-mode-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.tool-mode-enter-from,
+.tool-mode-leave-to {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
 /* 主题切换：颜色平滑过渡。
    放在 @layer 之外 → 优先级高于所有 utility（含 Button cva 的 transition-all），
    保证全站时长统一；仅过渡颜色属性，避开 transform/opacity 以免干扰路由切换与按压位移。 */

@@ -52,6 +52,29 @@ onMounted(async () => {
   midAutumnActive.value = active;
   applyMidAutumnClass(active);
 });
+
+// 桌面导航链接共用样式（普通项与「工具」入口一致，保证视觉统一）
+const desktopNavLinkClass = [
+  "group",
+  "flex",
+  "items-center",
+  "gap-1.5",
+  "rounded-full",
+  "px-4",
+  "py-1.5",
+  "text-sm",
+  "font-medium",
+  "text-muted-foreground",
+  "transition-[background-color,border-color,box-shadow]",
+  "duration-150",
+  "hover:text-foreground",
+  "[&.router-link-active]:bg-muted",
+  "[&.router-link-active]:text-foreground",
+  "[&.router-link-active]:ring-1",
+  "[&.router-link-active]:ring-border",
+  "dark:[&.router-link-active]:bg-primary",
+  "dark:[&.router-link-active]:text-primary-foreground",
+];
 </script>
 
 <template>
@@ -82,15 +105,45 @@ onMounted(async () => {
     <nav
       class="fixed bottom-4 left-1/2 z-50 hidden -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 p-1.5 backdrop-blur lg:flex"
     >
-      <RouterLink
-        v-for="item in navItems"
-        :key="item.to"
-        :to="item.to"
-        class="group flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium text-muted-foreground transition-[background-color,border-color,box-shadow] duration-150 hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground [&.router-link-active]:ring-1 [&.router-link-active]:ring-border dark:[&.router-link-active]:bg-primary dark:[&.router-link-active]:text-primary-foreground"
-      >
-        <component :is="item.icon" class="nav-icon size-4" />
-        {{ item.label }}
-      </RouterLink>
+      <template v-for="item in navItems" :key="item.to">
+        <!-- 带子项的工具入口：点击进总览页，悬停/键盘聚焦时向上弹出纵向子菜单 -->
+        <div v-if="item.children?.length" class="group relative">
+          <RouterLink
+            :to="item.to"
+            :class="desktopNavLinkClass"
+            aria-haspopup="menu"
+          >
+            <component :is="item.icon" class="nav-icon size-4" />
+            {{ item.label }}
+          </RouterLink>
+          <div
+            class="tool-dropdown invisible absolute bottom-full left-1/2 z-50 w-44 -translate-x-1/2 translate-y-1 scale-95 pb-2 opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:opacity-100"
+          >
+            <!-- 内层面板；外层 pb-2 作为鼠标悬停桥接区，避免按钮与菜单之间的死区 -->
+            <div
+              class="rounded-2xl border border-border bg-popover/95 p-1.5 shadow-lg backdrop-blur"
+            >
+              <RouterLink
+                v-for="child in item.children"
+                :key="child.to"
+                :to="child.to"
+                class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground"
+              >
+                <component :is="child.icon" class="size-4 shrink-0" />
+                {{ child.label }}
+              </RouterLink>
+            </div>
+          </div>
+        </div>
+        <RouterLink
+          v-else
+          :to="item.to"
+          :class="desktopNavLinkClass"
+        >
+          <component :is="item.icon" class="nav-icon size-4" />
+          {{ item.label }}
+        </RouterLink>
+      </template>
     </nav>
 
     <!-- 移动端左下角悬浮导航按钮 + 弹出菜单 -->
@@ -117,5 +170,23 @@ onMounted(async () => {
 }
 .router-link-active .nav-icon {
   transform: scale(1.1);
+}
+
+/*
+ * 工具悬停子菜单的过渡动画。
+ * tw-animate-css 会在 CSS 末尾注入无层级的全局 *{transition:...}，
+ * 按层叠规则压过 Tailwind 的 transition 工具类，导致 opacity/transform 动画失效。
+ * 这里用普通类规则（特异性高于 *）显式声明自己的过渡，并尊重 reduced-motion。
+ */
+.tool-dropdown {
+  transition-property: opacity, transform, translate, scale;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-dropdown {
+    transition: none;
+  }
 }
 </style>

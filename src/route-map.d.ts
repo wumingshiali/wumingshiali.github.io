@@ -73,6 +73,34 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/tools/': RouteRecordInfo<
+      '/tools/',
+      '/tools',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/asymmetric': RouteRecordInfo<
+      '/tools/asymmetric',
+      '/tools/asymmetric',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/hash': RouteRecordInfo<
+      '/tools/hash',
+      '/tools/hash',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/symmetric': RouteRecordInfo<
+      '/tools/symmetric',
+      '/tools/symmetric',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
   }
 
   /**
@@ -133,6 +161,38 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'id'
+    }
+    'src/pages/tools/index.vue': {
+      routes:
+        | '/tools/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/asymmetric.vue': {
+      routes:
+        | '/tools/asymmetric'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/hash.vue': {
+      routes:
+        | '/tools/hash'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/symmetric.vue': {
+      routes:
+        | '/tools/symmetric'
+      views:
+        | never
+      pathParamNames:
+        | never
     }
   }
 
