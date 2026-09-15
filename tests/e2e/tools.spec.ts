@@ -84,7 +84,7 @@ test.describe("工具页功能", () => {
   test("单向加密：上传文件计算 SHA-256", async ({ page }) => {
     await page.goto("/tools/hash");
     await page.getByRole("tab", { name: "文件" }).click();
-    await page.locator('input[type="file"]').setInputFiles({
+    await page.locator('input[aria-label="选择要处理的文件"]').setInputFiles({
       name: "hello.txt",
       mimeType: "text/plain",
       buffer: Buffer.from("abc"),
@@ -108,7 +108,7 @@ test.describe("工具页功能", () => {
   test("对称加密：上传文件加密后可用同一密码解密", async ({ page }) => {
     await page.goto("/tools/symmetric");
     await page.getByRole("tab", { name: "文件" }).click();
-    await page.locator('input[type="file"]').setInputFiles({
+    await page.locator('input[aria-label="选择要处理的文件"]').setInputFiles({
       name: "note.txt",
       mimeType: "text/plain",
       buffer: Buffer.from("文件加密内容喵～"),
@@ -125,6 +125,27 @@ test.describe("工具页功能", () => {
     await page.getByRole("button", { name: "解密", exact: true }).click();
     await expect(page.locator('textarea[aria-label="解密结果"]')).toHaveValue(
       "文件加密内容喵～",
+    );
+  });
+
+  test("对称加密：上传密文文件后自动解密", async ({ page }) => {
+    await page.goto("/tools/symmetric");
+    const plaintext = "上传密文文件解密喵～";
+    await page.locator('input[type="password"]').fill("hunter2");
+    await page.locator("textarea").first().fill(plaintext);
+    await page.getByRole("button", { name: "加密", exact: true }).click();
+    const payload = await page.locator('textarea[aria-label="加密结果"]').inputValue();
+
+    // 模拟接收方只有密文文件：重新加载后直接上传
+    await page.goto("/tools/symmetric");
+    await page.locator('input[type="password"]').fill("hunter2");
+    await page.locator('input[aria-label="上传密文文件"]').setInputFiles({
+      name: "secret.enc",
+      mimeType: "text/plain",
+      buffer: Buffer.from(payload, "utf8"),
+    });
+    await expect(page.locator('textarea[aria-label="解密结果"]')).toHaveValue(
+      plaintext,
     );
   });
 

@@ -14,6 +14,7 @@ import ToolLayout from "@/components/ToolLayout.vue";
 import CopyButton from "@/components/CopyButton.vue";
 import DownloadButton from "@/components/DownloadButton.vue";
 import ModeToggle from "@/components/ModeToggle.vue";
+import FileUploadButton from "@/components/FileUploadButton.vue";
 import ToolFileInput from "@/components/ToolFileInput.vue";
 import {
   asymmetricAlgorithms,
@@ -148,6 +149,29 @@ async function handleDecrypt() {
     busy.value = false;
   }
 }
+
+/** 上传公钥 / 私钥文件：读为文本后填入对应输入框 */
+function onPublicKeyLoaded(text: string) {
+  publicKeyText.value = text;
+  ciphertext.value = "";
+  decryptedBytes.value = null;
+  decryptedText.value = "";
+}
+
+function onPrivateKeyLoaded(text: string) {
+  privateKeyText.value = text;
+  decryptedBytes.value = null;
+  decryptedText.value = "";
+}
+
+/** 上传密文文件：读为文本后自动解密（私钥已填时） */
+async function onCiphertextLoaded(text: string) {
+  decryptInput.value = text;
+  errorMessage.value = "";
+  if (privateKeyText.value) {
+    await handleDecrypt();
+  }
+}
 </script>
 
 <template>
@@ -199,8 +223,20 @@ async function handleDecrypt() {
       <div class="grid w-full gap-3 sm:grid-cols-2">
         <label class="flex flex-col gap-1.5">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-sm font-medium">公钥（可编辑导入）</span>
-            <CopyButton :text="publicKeyText" :disabled="!publicKeyText" />
+            <span class="text-sm font-medium">公钥</span>
+            <div class="flex items-center gap-2">
+              <FileUploadButton
+                label="上传公钥"
+                accept=".pem,.txt,.key,text/plain"
+                @loaded="onPublicKeyLoaded"
+              />
+              <DownloadButton
+                :filename="keyIsBase64 ? 'public-key.txt' : 'public-key.pem'"
+                :data="publicKeyText"
+                :disabled="!publicKeyText"
+              />
+              <CopyButton :text="publicKeyText" :disabled="!publicKeyText" />
+            </div>
           </div>
           <textarea
             v-model="publicKeyText"
@@ -212,8 +248,20 @@ async function handleDecrypt() {
         </label>
         <label class="flex flex-col gap-1.5">
           <div class="flex items-center justify-between gap-2">
-            <span class="text-sm font-medium">私钥（可编辑导入）</span>
-            <CopyButton :text="privateKeyText" :disabled="!privateKeyText" />
+            <span class="text-sm font-medium">私钥</span>
+            <div class="flex items-center gap-2">
+              <FileUploadButton
+                label="上传私钥"
+                accept=".pem,.txt,.key,text/plain"
+                @loaded="onPrivateKeyLoaded"
+              />
+              <DownloadButton
+                :filename="keyIsBase64 ? 'private-key.txt' : 'private-key.pem'"
+                :data="privateKeyText"
+                :disabled="!privateKeyText"
+              />
+              <CopyButton :text="privateKeyText" :disabled="!privateKeyText" />
+            </div>
           </div>
           <textarea
             v-model="privateKeyText"
@@ -316,10 +364,14 @@ async function handleDecrypt() {
           <UnlockKeyhole class="size-4" />
           <h2 class="text-sm font-medium">用私钥解密</h2>
         </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-sm font-medium">密文（可粘贴或上传 .enc 文件）</span>
+          <FileUploadButton label="上传密文文件" accept=".enc,.txt,text/plain" @loaded="onCiphertextLoaded" />
+        </div>
         <textarea
           v-model="decryptInput"
           rows="3"
-          placeholder="粘贴本工具生成的密文…"
+          placeholder="粘贴本工具生成的密文，或点击上方上传文件…"
           spellcheck="false"
           class="w-full resize-y rounded-lg border border-input bg-background px-3 py-2 font-mono text-xs leading-relaxed outline-none placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         />

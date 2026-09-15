@@ -14,6 +14,10 @@ import HashPage from "@/pages/tools/hash.vue";
 import SymmetricPage from "@/pages/tools/symmetric.vue";
 import AsymmetricPage from "@/pages/tools/asymmetric.vue";
 import { symmetricEncrypt } from "@/lib/crypto/symmetric";
+import {
+  encryptWithPublicKey,
+  generateKeyPairText,
+} from "@/lib/crypto/asymmetric";
 
 async function mountAt(component: unknown, initialRoute: string) {
   const router = createRouter({ history: createMemoryHistory(), routes });
@@ -226,7 +230,7 @@ describe("/tools/hash 文件上传", () => {
       .trigger("click");
     await settle();
 
-    const fileInput = wrapper.find('input[type="file"]');
+    const fileInput = wrapper.find('input[aria-label="选择要处理的文件"]');
     const file = new File(["abc"], "hello.txt", { type: "text/plain" });
     Object.defineProperty(fileInput.element, "files", {
       value: [file],
@@ -260,7 +264,7 @@ describe("/tools/symmetric 文件模式", () => {
       .find((b) => b.text().includes("文件"))!
       .trigger("click");
     await settle();
-    const fileInput = wrapper.find('input[type="file"]');
+    const fileInput = wrapper.find('input[aria-label="选择要处理的文件"]');
     const file = new File([plaintext], "note.txt", { type: "text/plain" });
     Object.defineProperty(fileInput.element, "files", { value: [file], configurable: true });
     await fileInput.trigger("change");
@@ -300,7 +304,7 @@ describe("/tools/asymmetric 文件模式", () => {
       .find((b) => b.text().includes("文件"))!
       .trigger("click");
     await settle();
-    const fileInput = wrapper.find('input[type="file"]');
+    const fileInput = wrapper.find('input[aria-label="选择要处理的文件"]');
     const file = new File([plaintext], "secret.txt", { type: "text/plain" });
     Object.defineProperty(fileInput.element, "files", { value: [file], configurable: true });
     await fileInput.trigger("change");
@@ -337,5 +341,70 @@ describe("友好错误提示", () => {
     expect(text).toContain("解密失败：密码错误、密文被篡改或格式不正确");
     // 不直接输出底层报错（原始英文 / OperationError）
     expect(text).not.toMatch(/OperationError|Decryption failed|decrypt/i);
+  });
+});
+
+
+describe("上传解密文件与密钥", () => {
+  it("对称加密：上传密文文件后自动解密", async () => {
+    const wrapper = await mountAt(SymmetricPage, "/tools/symmetric");
+    const plaintext = "上传密文文件解密喵～";
+    const payload = await symmetricEncrypt("AES-256-GCM", plaintext, "pw");
+
+    await wrapper.find('input[type="password"]').setValue("pw");
+    const up = wrapper.find('input[aria-label="上传密文文件"]');
+    const file = new File([payload], "secret.enc", { type: "text/plain" });
+    Object.defineProperty(up.element, "files", { value: [file], configurable: true });
+    await up.trigger("change");
+    await settle();
+
+    expect(
+      (wrapper.find('textarea[aria-label="解密结果"]').element as HTMLTextAreaElement).value,
+    ).toBe(plaintext);
+  });
+
+  it("非对称：上传公钥/私钥文件与密文文件后解密", async () => {
+    const wrapper = await mountAt(AsymmetricPage, "/tools/asymmetric");
+    const plaintext = "密钥文件解密喵～";
+    const pair = await generateKeyPairText("ML-KEM-768");
+    const payload = await encryptWithPublicKey("ML-KEM-768", pair.publicKey, plaintext);
+
+    // 切到 ML-KEM-768（密钥文本为 base64）
+    await wrapper.find("select").setValue("ML-KEM-768");
+    await settle();
+
+    // 上传公钥文件
+    const pubUp = wrapper.find('input[aria-label="上传公钥"]');
+    Object.defineProperty(pubUp.element, "files", {
+      value: [new File([pair.publicKey], "public-key.txt", { type: "text/plain" })],
+      configurable: true,
+    });
+    await pubUp.trigger("change");
+    await settle();
+    expect(
+      (wrapper.find('textarea[placeholder*="base64 公钥"]').element as HTMLTextAreaElement).value,
+    ).toBe(pair.publicKey);
+
+    // 上传私钥文件
+    const privUp = wrapper.find('input[aria-label="上传私钥"]');
+    Object.defineProperty(privUp.element, "files", {
+      value: [new File([pair.privateKey], "private-key.txt", { type: "text/plain" })],
+      configurable: true,
+    });
+    await privUp.trigger("change");
+    await settle();
+
+    // 上传密文文件 → 自动解密
+    const ctUp = wrapper.find('input[aria-label="上传密文文件"]');
+    Object.defineProperty(ctUp.element, "files", {
+      value: [new File([payload], "secret.enc", { type: "text/plain" })],
+      configurable: true,
+    });
+    await ctUp.trigger("change");
+    await settle();
+
+    expect(
+      (wrapper.find('textarea[aria-label="私钥解密结果"]').element as HTMLTextAreaElement).value,
+    ).toBe(plaintext);
   });
 });

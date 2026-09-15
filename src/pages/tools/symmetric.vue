@@ -7,6 +7,7 @@ import ToolLayout from "@/components/ToolLayout.vue";
 import CopyButton from "@/components/CopyButton.vue";
 import DownloadButton from "@/components/DownloadButton.vue";
 import ModeToggle from "@/components/ModeToggle.vue";
+import FileUploadButton from "@/components/FileUploadButton.vue";
 import ToolFileInput from "@/components/ToolFileInput.vue";
 import {
   symmetricAlgorithms,
@@ -95,6 +96,15 @@ async function handleDecrypt() {
     decryptedText.value = "";
   } finally {
     busy.value = false;
+  }
+}
+
+/** 上传密文文件：读为文本后自动解密（密码已填时） */
+async function onCiphertextLoaded(text: string) {
+  decryptInput.value = text;
+  errorMessage.value = "";
+  if (password.value) {
+    await handleDecrypt();
   }
 }
 </script>
@@ -203,10 +213,14 @@ async function handleDecrypt() {
           <UnlockKeyhole class="size-4" />
           <h2 class="text-sm font-medium">解密</h2>
         </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-sm font-medium">密文（可粘贴或上传 .enc 文件）</span>
+          <FileUploadButton label="上传密文文件" accept=".enc,.txt,text/plain" @loaded="onCiphertextLoaded" />
+        </div>
         <textarea
           v-model="decryptInput"
           rows="3"
-          placeholder="粘贴本工具生成的密文…"
+          placeholder="粘贴本工具生成的密文，或点击上方上传文件…"
           class="w-full resize-y rounded-lg border border-input bg-background px-3 py-2 font-sans text-sm leading-relaxed outline-none placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         />
         <Button
