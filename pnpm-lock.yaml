@@ -38,7 +38,7 @@ importers:
         version: 0.5.20(tailwindcss@4.3.3)
       '@unhead/vue':
         specifier: ^3.3.1
-        version: 3.4.0(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))(vue@3.5.42(typescript@5.9.3))
+        version: 3.4.1(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))(vue@3.5.42(typescript@5.9.3))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1255,16 +1255,16 @@ packages:
   '@ungap/structured-clone@1.3.3':
     resolution: {integrity: sha512-60YRaenCQcVjYEKOcG824+DRGGIQ3VKErcBoAEDJZz5bKIs2ZG+X/H9Nk+Q6EVkwJk5QNApxbrc5QtBSwtrXAg==}
 
-  '@unhead/bundler@3.4.0':
-    resolution: {integrity: sha512-RnsCYynvDiUwmZ/U7TkFwFLr6yTRXVFJlZFj3ehi+m6M4f+GWL/O+6BTQzaHdz59zg2UHHejQvwuXvcL7dj0Dw==}
+  '@unhead/bundler@3.4.1':
+    resolution: {integrity: sha512-1RLNvuZYCt6K+oIK7v0mKlbmFbTuNZRgAMrf+GdmiO5xfml2pl/ViZmBrCOxoBtLxCboDZ70hs+F9+z2YWHLuQ==}
     peerDependencies:
-      '@unhead/cli': ^3.4.0
+      '@unhead/cli': ^3.4.1
       '@vitejs/devtools-kit': ^0.4.1
       esbuild: '>=0.17.0'
       lightningcss: '>=1.20.0'
       oxc-parser: '>=0.98.0'
       rolldown: '>=1.0.0'
-      unhead: ^3.4.0
+      unhead: ^3.4.1
       vite: '>=6.4.2'
       webpack: '>=5.0.0'
     peerDependenciesMeta:
@@ -1285,8 +1285,8 @@ packages:
       webpack:
         optional: true
 
-  '@unhead/vue@3.4.0':
-    resolution: {integrity: sha512-fSnDS9d++bqR4t1z6+zFN7bQB5F0+5nwvE4yHW7BGRfEmssCP4fel0GprooUgoLkzx+FcAWMwVIakyaeErSRBA==}
+  '@unhead/vue@3.4.1':
+    resolution: {integrity: sha512-FQLTdsX1+m+a7Z5SzkQde8TR/4QK6p0+NQ6BuO9zbtc5xps2fRy7W+wQ90qn177C2X88aZAPzw29mg6T4VFSdA==}
     peerDependencies:
       vite: '>=6.4.2'
       vue: '>=3.5.18'
@@ -2527,8 +2527,8 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  magic-string@1.2.3:
-    resolution: {integrity: sha512-Bpb0W2TbLKOZ7vJnOUnVRGq3WL2p+ISV29M6hYPL1AFCpyKZpdr5ytiXoTSSxRVhg8YW7f65+6gbG8WG6PCa/g==}
+  magic-string@1.4.1:
+    resolution: {integrity: sha512-8lyCu36ErXR0J9uaGKlKQoiLZKmtI63YGLE8G2o9jyRPdr4X47LusSOwgOJOzcVtp81fTAAjxR7BwKz682Jhow==}
 
   make-asynchronous@1.1.0:
     resolution: {integrity: sha512-ayF7iT+44LXdxJLTrTd3TLQpFDDvPCBxXxbv+pMUSuHA5Q8zyAfwkRP6aHHwNVFBUFWtxAHqwNJxF8vMZLAbVg==}
@@ -3240,8 +3240,8 @@ packages:
   unenv@2.0.0-rc.24:
     resolution: {integrity: sha512-i7qRCmY42zmCwnYlh9H2SvLEypEFGye5iRmEMKjcGi7zk9UquigRjFtTLz0TYqr0ZGLZhaMHl/foy1bZR+Cwlw==}
 
-  unhead@3.4.0:
-    resolution: {integrity: sha512-OlgpyYjY+NkFyQCaMihg2uTFbbvyr5lZr6TokS68VdFTXJ5jo4JwFtGR8PwKy/wRpjbQYgKF7ZYO+pbRgxtSmw==}
+  unhead@3.4.1:
+    resolution: {integrity: sha512-P1lDTwwMMICFQ84BXA1ac5CF/DPRCcrARQOGwblQFpHOekbBWq/724BV42C8ptH39NvyrUQLOwyt6qSd76GKPQ==}
     peerDependencies:
       vite: '>=6.4.2'
     peerDependenciesMeta:
@@ -4508,11 +4508,11 @@ snapshots:
 
   '@ungap/structured-clone@1.3.3': {}
 
-  '@unhead/bundler@3.4.0(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(unhead@3.4.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1)))(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))':
+  '@unhead/bundler@3.4.1(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(unhead@3.4.1(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1)))(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))':
     dependencies:
-      magic-string: 1.2.3
+      magic-string: 1.4.1
       oxc-walker: 1.1.1(@oxc-project/types@0.149.0)(rolldown@1.2.8)
-      unhead: 3.4.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
+      unhead: 3.4.1(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
       unplugin: 3.3.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
     optionalDependencies:
       esbuild: 0.28.1
@@ -4527,11 +4527,11 @@ snapshots:
       - rollup
       - unloader
 
-  '@unhead/vue@3.4.0(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))(vue@3.5.42(typescript@5.9.3))':
+  '@unhead/vue@3.4.1(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))(vue@3.5.42(typescript@5.9.3))':
     dependencies:
-      '@unhead/bundler': 3.4.0(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(unhead@3.4.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1)))(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
+      '@unhead/bundler': 3.4.1(@oxc-project/types@0.149.0)(esbuild@0.28.1)(lightningcss@1.33.0)(rolldown@1.2.8)(rollup@4.61.1)(unhead@3.4.1(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1)))(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
       hookable: 6.1.1
-      unhead: 3.4.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
+      unhead: 3.4.1(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
       unplugin: 3.3.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
       vue: 3.5.42(typescript@5.9.3)
     optionalDependencies:
@@ -5799,7 +5799,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  magic-string@1.2.3:
+  magic-string@1.4.1:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
 
@@ -6636,7 +6636,7 @@ snapshots:
     dependencies:
       pathe: 2.0.3
 
-  unhead@3.4.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1)):
+  unhead@3.4.1(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1)):
     dependencies:
       hookable: 6.1.1
       unplugin: 3.3.0(esbuild@0.28.1)(rolldown@1.2.8)(rollup@4.61.1)(vite@8.3.0(@types/node@26.4.1)(esbuild@0.28.1)(jiti@2.7.0)(stylus@0.57.0)(terser@5.51.2)(yaml@2.9.1))
