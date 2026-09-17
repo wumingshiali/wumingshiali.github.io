@@ -219,6 +219,16 @@ async function onCiphertextLoaded(text: string) {
         </div>
       </div>
 
+      <!-- 密钥用途说明：加密密钥 vs GitHub 签名密钥 -->
+      <Alert>
+        <CircleHelp class="size-4" />
+        <AlertDescription>
+          密钥用途说明：这里生成的是<strong>加密密钥</strong>（公钥加密 / 私钥解密），仅在本工具内互通使用。
+          GitHub 登录与提交用的 SSH / GPG 是<strong>签名密钥</strong>，格式与用途不同，不能直接混用。
+          RSA 与 ECC 广泛兼容；后量子 ML-KEM（Kyber，FIPS 203）是新一代标准，GitHub / SSH / TLS 目前尚未支持，仅作实验用途。
+        </AlertDescription>
+      </Alert>
+
       <!-- 公钥 / 私钥 -->
       <div class="grid w-full gap-3 sm:grid-cols-2">
         <label class="flex flex-col gap-1.5">
