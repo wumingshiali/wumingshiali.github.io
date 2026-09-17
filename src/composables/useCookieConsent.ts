@@ -90,8 +90,7 @@ function loadStatScripts(statistics: CookieConsent["statistics"]) {
 // 模块级共享状态（单例）：弹窗组件与各页面入口（如关于页）共享同一份同意状态
 const open = ref(false);
 const statistics = ref<CookieConsent["statistics"]>({ umami: true, clarity: true });
-// 首次访问（无 cookie）标记：由弹窗组件在挂载后延迟弹出，
-// 避免 SSG 预渲染把弹窗固化进静态 HTML 导致 hydrate 重复渲染
+// 首次访问（无 cookie）标记：由弹窗组件在挂载后延迟弹出
 let needsPrompt = false;
 let initialized = false;
 

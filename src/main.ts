@@ -1,4 +1,4 @@
-import { createSSRApp } from "vue";
+import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";
 import { createHead } from "@unhead/vue/client";
@@ -22,6 +22,5 @@ applyLaborDayClass();
 // 中秋彩蛋：参数命中同步生效（日期命中需异步调香港天文台农历 API，由 App.vue 处理）
 if (isMidAutumnParamActive()) applyMidAutumnClass(true);
 
-// createSSRApp + mount 在客户端容器有内容时自动 hydrate：复用 SSG 静态 DOM，
-// 避免 createApp().mount() 清空重渲染导致 LCP 图片重新解码（LCP 大幅推迟）。
-createSSRApp(App).use(router).use(head).mount("#app");
+// 纯客户端渲染（SPA）：静态 HTML 为空壳，无需 SSR/hydrate。
+createApp(App).use(router).use(head).mount("#app");

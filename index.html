@@ -88,8 +88,8 @@
     </script>
     <script>
       // 首屏前同步设置劳动节彩蛋（日期命中或 ?egg=cn_labor_day），避免刷新闪烁。
-      // 用 toggle 而非 add：SSG 构建期恰逢劳动节时静态 HTML 可能已带该 class，
-      // 运行时非劳动节会主动移除，保证静态产物与访问日期一致。
+      // 日期命中或 ?egg=cn_labor_day 参数命中时启用劳动节主题。
+      // 用 toggle 而非 add：日期变化时主动移除，保证与访问日期一致。
       // 逻辑与 src/lib/festival.ts 保持一致。
       (function () {
         try {
@@ -116,8 +116,8 @@
     </script>
     <script>
       // 首屏前同步设置国庆彩蛋（日期命中或 ?egg=cn_birthday），避免刷新闪烁。
-      // 用 toggle 而非 add：SSG 构建期恰逢国庆时静态 HTML 可能已带该 class，
-      // 运行时非国庆会主动移除，保证静态产物与访问日期一致。
+      // 日期命中或 ?egg=cn_birthday 参数命中时启用国庆主题。
+      // 用 toggle 而非 add：日期变化时主动移除，保证与访问日期一致。
       // 逻辑与 src/lib/festival.ts 保持一致。
       (function () {
         try {

@@ -23,10 +23,8 @@ const {
 } = useCookieConsent();
 
 onMounted(() => {
-  // SSG 预渲染阶段不显示（vite-plugin-ssg 注入 __SSG_RENDER__ 标记），
-  // 避免交互弹窗固化进静态 HTML 导致 hydrate 残留/重复；
-  // 仅真实浏览器首次访问时弹出
-  if (needsPrompt && !(window as unknown as { __SSG_RENDER__?: boolean }).__SSG_RENDER__) {
+  // 仅首次访问（无 cookie_consent）时弹出
+  if (needsPrompt) {
     open.value = true;
   }
 });

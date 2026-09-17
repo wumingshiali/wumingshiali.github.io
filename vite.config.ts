@@ -10,7 +10,6 @@ import { generateSitemap } from "./vite-plugin-sitemap.ts";
 import { prerenderPosts } from "./vite-plugin-prerender-posts.ts";
 import { linksData } from "./vite-plugin-links.ts";
 import { generateRssFeed } from "./vite-plugin-rss.ts";
-import { ssgPages } from "./vite-plugin-ssg.ts";
 import { defineConfig, type Plugin } from "vitest/config";
 
 /**
@@ -101,7 +100,6 @@ export default defineConfig({
     generateSitemap(),
     prerenderPosts(),
     generateRssFeed(),
-    ssgPages(),
   ],
 
   define: {

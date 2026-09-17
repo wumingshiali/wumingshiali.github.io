@@ -67,7 +67,7 @@ function formatProtocol(raw: string): string {
 }
 
 onMounted(() => {
-  // SSR / 老浏览器兜底：performance.getEntriesByType 可能不存在
+  // 老浏览器兜底：performance.getEntriesByType 可能不存在
   if (typeof performance === "undefined" || typeof performance.getEntriesByType !== "function") {
     return;
   }
