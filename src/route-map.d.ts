@@ -87,6 +87,62 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/tools/conversion/': RouteRecordInfo<
+      '/tools/conversion/',
+      '/tools/conversion',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/conversion/document': RouteRecordInfo<
+      '/tools/conversion/document',
+      '/tools/conversion/document',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/conversion/image': RouteRecordInfo<
+      '/tools/conversion/image',
+      '/tools/conversion/image',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/conversion/video': RouteRecordInfo<
+      '/tools/conversion/video',
+      '/tools/conversion/video',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/encryption/': RouteRecordInfo<
+      '/tools/encryption/',
+      '/tools/encryption',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/encryption/asymmetric': RouteRecordInfo<
+      '/tools/encryption/asymmetric',
+      '/tools/encryption/asymmetric',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/encryption/hash': RouteRecordInfo<
+      '/tools/encryption/hash',
+      '/tools/encryption/hash',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/encryption/symmetric': RouteRecordInfo<
+      '/tools/encryption/symmetric',
+      '/tools/encryption/symmetric',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/tools/hash': RouteRecordInfo<
       '/tools/hash',
       '/tools/hash',
@@ -173,6 +229,70 @@ declare module 'vue-router/auto-routes' {
     'src/pages/tools/asymmetric.vue': {
       routes:
         | '/tools/asymmetric'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/conversion/index.vue': {
+      routes:
+        | '/tools/conversion/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/conversion/document.vue': {
+      routes:
+        | '/tools/conversion/document'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/conversion/image.vue': {
+      routes:
+        | '/tools/conversion/image'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/conversion/video.vue': {
+      routes:
+        | '/tools/conversion/video'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/encryption/index.vue': {
+      routes:
+        | '/tools/encryption/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/encryption/asymmetric.vue': {
+      routes:
+        | '/tools/encryption/asymmetric'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/encryption/hash.vue': {
+      routes:
+        | '/tools/encryption/hash'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/encryption/symmetric.vue': {
+      routes:
+        | '/tools/encryption/symmetric'
       views:
         | never
       pathParamNames:

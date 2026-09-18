@@ -9,12 +9,16 @@
 import { describe, expect, it } from "vitest";
 import { hashBytes, hashText, hashAlgorithms } from "@/lib/crypto/hash";
 import {
+  kdfAlgorithms,
+  parseSymmetricPayload,
+  PBKDF2_ITERATIONS,
   symmetricAlgorithms,
   symmetricDecrypt,
   symmetricDecryptBytes,
   symmetricEncrypt,
   symmetricEncryptBytes,
 } from "@/lib/crypto/symmetric";
+import { bytesToBase64 } from "@/lib/crypto/utils";
 import {
   asymmetricAlgorithms,
   decryptBytesWithPrivateKey,
@@ -87,16 +91,70 @@ describe("对称加密", () => {
   const plaintext = "秘密内容：喵～ 12345";
 
   for (const algo of symmetricAlgorithms) {
-    it(`${algo.id} 加解密往返`, async () => {
+    it(`${algo.id} 加解密往返（默认 Argon2id）`, async () => {
       const payload = await symmetricEncrypt(algo.id, plaintext, "correct horse battery staple");
-      expect(payload.startsWith(`v1:${algo.id}:`)).toBe(true);
-      // 自描述格式：v1:<算法>:<盐>:<IV>:<数据>
-      expect(payload.split(":")).toHaveLength(5);
+      expect(payload.startsWith(`v2:argon2id:${algo.id}:`)).toBe(true);
+      // 自描述格式：v2:<KDF>:<算法>:<盐>:<IV>:<数据>
+      expect(payload.split(":")).toHaveLength(6);
       expect(await symmetricDecrypt(payload, "correct horse battery staple")).toBe(
         plaintext,
       );
     });
   }
+
+  for (const kdf of kdfAlgorithms) {
+    it(`${kdf.id} 密钥派生加解密往返`, async () => {
+      const payload = await symmetricEncrypt(
+        "AES-256-GCM",
+        plaintext,
+        "correct horse battery staple",
+        kdf.id,
+      );
+      expect(payload.startsWith(`v2:${kdf.id}:AES-256-GCM:`)).toBe(true);
+      expect(await symmetricDecrypt(payload, "correct horse battery staple")).toBe(
+        plaintext,
+      );
+    });
+  }
+
+  it("parseSymmetricPayload 识别 v2 KDF 与 v1 回退", async () => {
+    const v2 = await symmetricEncrypt("AES-256-GCM", "x", "pw", "argon2i");
+    expect(parseSymmetricPayload(v2)).toMatchObject({
+      version: "v2",
+      kdf: "argon2i",
+      algorithm: "AES-256-GCM",
+    });
+    expect(() => parseSymmetricPayload("garbage")).toThrow("密文格式不正确");
+  });
+
+  it("兼容解密旧版 v1 密文（PBKDF2 派生）", async () => {
+    const encoder = new TextEncoder();
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const baseKey = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode("legacy-pw"),
+      "PBKDF2",
+      false,
+      ["deriveKey"],
+    );
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
+      baseKey,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["encrypt"],
+    );
+    const ciphertext = new Uint8Array(
+      await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        key,
+        encoder.encode("旧版密文"),
+      ),
+    );
+    const payload = `v1:AES-256-GCM:${bytesToBase64(salt)}:${bytesToBase64(iv)}:${bytesToBase64(ciphertext)}`;
+    expect(await symmetricDecrypt(payload, "legacy-pw")).toBe("旧版密文");
+  });
 
   it("同一明文两次加密结果不同（随机盐 + IV）", async () => {
     const a = await symmetricEncrypt("AES-256-GCM", plaintext, "password");

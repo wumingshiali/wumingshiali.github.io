@@ -11,6 +11,8 @@ const props = defineProps<{
   modelValue: File | null;
   /** 未选择时的提示文案 */
   hint?: string;
+  /** 文件选择过滤，如 "image/*"、"video/*" */
+  accept?: string;
 }>();
 
 const emit = defineEmits<{
@@ -51,6 +53,7 @@ function removeFile() {
       type="file"
       class="hidden"
       aria-label="选择要处理的文件"
+      :accept="props.accept"
       @change="onFileChange"
     />
   </label>

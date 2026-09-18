@@ -35,6 +35,9 @@ test.describe("工具页入口", () => {
     await expect(submenu.getByRole("link", { name: "单向加密" })).toBeVisible();
     await expect(submenu.getByRole("link", { name: "对称加密", exact: true })).toBeVisible();
     await expect(submenu.getByRole("link", { name: "非对称加密", exact: true })).toBeVisible();
+    await expect(submenu.getByRole("link", { name: "图片转换" })).toBeVisible();
+    await expect(submenu.getByRole("link", { name: "视频转换" })).toBeVisible();
+    await expect(submenu.getByRole("link", { name: "文档转换" })).toBeVisible();
 
     // 真实鼠标路径：从按钮中心逐步移到第一个菜单项，途中菜单必须保持可见。
     // 回归保护：若按钮与菜单之间存在悬停死区，真实鼠标将无法选中菜单项。
@@ -56,7 +59,7 @@ test.describe("工具页入口", () => {
     }
 
     await firstItem.click();
-    await expect(page).toHaveURL(/\/tools\/hash$/);
+    await expect(page).toHaveURL(/\/tools\/encryption\/hash$/);
   });
 
   test("移动端：悬浮菜单包含「工具」入口并指向总览页", async ({ page, isMobile }) => {
@@ -72,17 +75,26 @@ test.describe("工具页入口", () => {
   });
 });
 
+test.describe("旧地址兼容", () => {
+  test("旧 /tools/hash 自动跳转到新的加密分组地址", async ({ page }) => {
+    await page.goto("/tools/hash");
+    await expect(page).toHaveURL(/\/tools\/encryption\/hash$/, { timeout: 10_000 });
+  });
+});
+
 test.describe("工具页功能", () => {
-  test("总览页展示全部工具卡片", async ({ page }) => {
+  test("总览页展示加密 / 转换两个分组卡片", async ({ page }) => {
     await page.goto("/tools");
     await expect(page.getByRole("heading", { name: "工具" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^加密/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^转换/ })).toBeVisible();
+    await page.getByRole("link", { name: /^加密/ }).click();
+    await expect(page).toHaveURL(/\/tools\/encryption$/);
     await expect(page.getByRole("link", { name: /^单向加密/ })).toBeVisible();
-    await expect(page.getByRole("link", { name: /^对称加密/ })).toBeVisible();
-    await expect(page.getByRole("link", { name: /^非对称加密/ })).toBeVisible();
   });
 
   test("单向加密：上传文件计算 SHA-256", async ({ page }) => {
-    await page.goto("/tools/hash");
+    await page.goto("/tools/encryption/hash");
     await page.getByRole("tab", { name: "文件" }).click();
     await page.locator('input[aria-label="选择要处理的文件"]').setInputFiles({
       name: "hello.txt",
@@ -98,7 +110,7 @@ test.describe("工具页功能", () => {
   });
 
   test("单向加密：SHA-256 计算正确", async ({ page }) => {
-    await page.goto("/tools/hash");
+    await page.goto("/tools/encryption/hash");
     await page.locator("textarea").first().fill("abc");
     await expect(page.locator('textarea[aria-label*="SHA-256"]')).toHaveValue(
       "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
@@ -106,7 +118,7 @@ test.describe("工具页功能", () => {
   });
 
   test("对称加密：上传文件加密后可用同一密码解密", async ({ page }) => {
-    await page.goto("/tools/symmetric");
+    await page.goto("/tools/encryption/symmetric");
     await page.getByRole("tab", { name: "文件" }).click();
     await page.locator('input[aria-label="选择要处理的文件"]').setInputFiles({
       name: "note.txt",
@@ -119,7 +131,7 @@ test.describe("工具页功能", () => {
     const ciphertext = page.locator('textarea[aria-label="加密结果"]');
     await expect(ciphertext).toBeVisible();
     const payload = await ciphertext.inputValue();
-    expect(payload.startsWith("v1:AES-256-GCM:")).toBe(true);
+    expect(payload.startsWith("v2:argon2id:AES-256-GCM:")).toBe(true);
 
     await page.locator('textarea[placeholder*="粘贴本工具生成的密文"]').fill(payload);
     await page.getByRole("button", { name: "解密", exact: true }).click();
@@ -129,7 +141,7 @@ test.describe("工具页功能", () => {
   });
 
   test("对称加密：上传密文文件后自动解密", async ({ page }) => {
-    await page.goto("/tools/symmetric");
+    await page.goto("/tools/encryption/symmetric");
     const plaintext = "上传密文文件解密喵～";
     await page.locator('input[type="password"]').fill("hunter2");
     await page.locator("textarea").first().fill(plaintext);
@@ -137,7 +149,7 @@ test.describe("工具页功能", () => {
     const payload = await page.locator('textarea[aria-label="加密结果"]').inputValue();
 
     // 模拟接收方只有密文文件：重新加载后直接上传
-    await page.goto("/tools/symmetric");
+    await page.goto("/tools/encryption/symmetric");
     await page.locator('input[type="password"]').fill("hunter2");
     await page.locator('input[aria-label="上传密文文件"]').setInputFiles({
       name: "secret.enc",
@@ -150,7 +162,7 @@ test.describe("工具页功能", () => {
   });
 
   test("对称加密：加密后可用同一密码解密", async ({ page }) => {
-    await page.goto("/tools/symmetric");
+    await page.goto("/tools/encryption/symmetric");
     const plaintext = "猫娘工程师的机密喵～ 42";
     await page.locator('input[type="password"]').fill("hunter2");
     await page.locator("textarea").first().fill(plaintext);
@@ -159,7 +171,7 @@ test.describe("工具页功能", () => {
     const ciphertext = page.locator('textarea[aria-label="加密结果"]');
     await expect(ciphertext).toBeVisible();
     const payload = await ciphertext.inputValue();
-    expect(payload.startsWith("v1:AES-256-GCM:")).toBe(true);
+    expect(payload.startsWith("v2:argon2id:AES-256-GCM:")).toBe(true);
 
     await page.locator('textarea[placeholder*="粘贴本工具生成的密文"]').fill(payload);
     await page.getByRole("button", { name: "解密", exact: true }).click();
@@ -167,7 +179,7 @@ test.describe("工具页功能", () => {
   });
 
   test("非对称加密：生成密钥对后公钥加密、私钥解密", async ({ page }) => {
-    await page.goto("/tools/asymmetric");
+    await page.goto("/tools/encryption/asymmetric");
     const plaintext = "公钥加密私钥解密喵～";
     await page.getByRole("button", { name: /生成密钥对/ }).click();
 
@@ -188,5 +200,42 @@ test.describe("工具页功能", () => {
     await expect(page.locator('textarea[aria-label="私钥解密结果"]')).toHaveValue(
       plaintext,
     );
+  });
+});
+
+test.describe("转换工具页", () => {
+  test("图片转换：PNG → JPEG 本地转换并出现下载按钮", async ({ page }) => {
+    await page.goto("/tools/conversion/image");
+    await page.locator('input[aria-label="选择要处理的文件"]').setInputFiles({
+      name: "pixel.png",
+      mimeType: "image/png",
+      // 1×1 透明 PNG
+      buffer: Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+        "base64",
+      ),
+    });
+    await page.locator("select").selectOption("jpeg");
+    await page.getByRole("button", { name: "转换", exact: true }).click();
+
+    await expect(page.getByText(/转换成功/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "下载", exact: true })).toBeVisible();
+  });
+
+  test("视频转换：页面渲染并展示文件入口", async ({ page }) => {
+    await page.goto("/tools/conversion/video");
+    await expect(page.getByRole("heading", { name: "视频转换" })).toBeVisible();
+    await expect(page.getByText("点击选择文件")).toBeVisible();
+  });
+
+  test("文档转换：页面渲染并展示双向入口", async ({ page }) => {
+    await page.goto("/tools/conversion/document");
+    await expect(page.getByRole("heading", { name: "文档转换" })).toBeVisible();
+    await expect(
+      page.getByRole("tab", { name: /Markdown → DOCX/ }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("tab", { name: /DOCX → Markdown/ }),
+    ).toBeVisible();
   });
 });

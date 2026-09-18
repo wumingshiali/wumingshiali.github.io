@@ -109,6 +109,11 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // pandoc-wasm 的 exports 只暴露包根，转换工具需要绕过浏览器入口（它会打包 58MB wasm），
+      // 直接导入环境无关的 core.js，由运行时从 CDN 拉取 wasm 二进制
+      "pandoc-wasm/core": fileURLToPath(
+        new URL("./node_modules/pandoc-wasm/src/core.js", import.meta.url),
+      ),
     },
   },
 
@@ -121,6 +126,8 @@ export default defineConfig({
       "class-variance-authority",
       "@noble/ciphers/webcrypto.js",
       "@noble/ciphers/aes.js",
+      "@ffmpeg/ffmpeg",
+      "@ffmpeg/util",
     ],
   },
 
@@ -210,6 +217,8 @@ export default defineConfig({
   // include 覆盖全部 tests/，由 CLI 路径参数（test:unit / test:component /
   // test:build）决定实际跑哪些子目录；不带参数时 `pnpm test` 跑全部。
   test: {
+    // Argon2 / ML-KEM 等加密运算在低配机器上可能超过默认 5s，放宽到 30s
+    testTimeout: 30_000,
     environment: "happy-dom",
     globals: true,
     include: ["tests/**/*.test.ts"],

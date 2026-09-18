@@ -20,6 +20,8 @@
     "new-post": "node scripts/new-post.mjs"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@giscus/vue": "^3.1.1",
     "@lucide/vue": "^1.18.0",
     "@noble/ciphers": "^2.2.0",
@@ -30,6 +32,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "markdown-it": "^15.0.0",
+    "pandoc-wasm": "^1.1.0",
     "reka-ui": "^2.9.10",
     "shadcn-vue": "^2.7.4",
     "shiki": "^4.3.1",

@@ -10,9 +10,14 @@ import { nextTick } from "vue";
 import { createMemoryHistory, createRouter } from "vue-router";
 import { routes } from "vue-router/auto-routes";
 import ToolsIndexPage from "@/pages/tools/index.vue";
-import HashPage from "@/pages/tools/hash.vue";
-import SymmetricPage from "@/pages/tools/symmetric.vue";
-import AsymmetricPage from "@/pages/tools/asymmetric.vue";
+import EncryptionIndexPage from "@/pages/tools/encryption/index.vue";
+import ConversionIndexPage from "@/pages/tools/conversion/index.vue";
+import HashPage from "@/pages/tools/encryption/hash.vue";
+import SymmetricPage from "@/pages/tools/encryption/symmetric.vue";
+import AsymmetricPage from "@/pages/tools/encryption/asymmetric.vue";
+import ImagePage from "@/pages/tools/conversion/image.vue";
+import VideoPage from "@/pages/tools/conversion/video.vue";
+import DocumentPage from "@/pages/tools/conversion/document.vue";
 import { symmetricEncrypt } from "@/lib/crypto/symmetric";
 import {
   encryptWithPublicKey,
@@ -31,7 +36,7 @@ async function mountAt(component: unknown, initialRoute: string) {
 
 // 等防抖计时器 + 异步加密链路完成
 async function settle() {
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise((resolve) => setTimeout(resolve, 1200));
   for (let i = 0; i < 5; i++) {
     await nextTick();
     await flushPromises();
@@ -43,24 +48,51 @@ function findButton(wrapper: ReturnType<typeof mount>, label: string) {
 }
 
 describe("/tools 工具总览页", () => {
-  it("渲染三张工具卡片并链接到对应路由", async () => {
+  it("渲染加密 / 转换两个分组卡片并链接到分组路由", async () => {
     const wrapper = await mountAt(ToolsIndexPage, "/tools");
+    expect(wrapper.text()).toContain("加密");
+    expect(wrapper.text()).toContain("转换");
+    for (const href of ["/tools/encryption", "/tools/conversion"]) {
+      expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
+    }
+  });
+});
+
+describe("/tools/encryption 加密分组页", () => {
+  it("渲染三张加密工具卡片并链接到对应路由", async () => {
+    const wrapper = await mountAt(EncryptionIndexPage, "/tools/encryption");
     expect(wrapper.text()).toContain("单向加密");
     expect(wrapper.text()).toContain("对称加密");
     expect(wrapper.text()).toContain("非对称加密");
     for (const href of [
-      "/tools/hash",
-      "/tools/symmetric",
-      "/tools/asymmetric",
+      "/tools/encryption/hash",
+      "/tools/encryption/symmetric",
+      "/tools/encryption/asymmetric",
     ]) {
       expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
     }
   });
 });
 
-describe("/tools/hash 单向加密页", () => {
+describe("/tools/conversion 转换分组页", () => {
+  it("渲染三张转换工具卡片并链接到对应路由", async () => {
+    const wrapper = await mountAt(ConversionIndexPage, "/tools/conversion");
+    expect(wrapper.text()).toContain("图片转换");
+    expect(wrapper.text()).toContain("视频转换");
+    expect(wrapper.text()).toContain("文档转换");
+    for (const href of [
+      "/tools/conversion/image",
+      "/tools/conversion/video",
+      "/tools/conversion/document",
+    ]) {
+      expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
+    }
+  });
+});
+
+describe("/tools/encryption/hash 单向加密页", () => {
   it("输入文本后实时输出 SHA-256 摘要", async () => {
-    const wrapper = await mountAt(HashPage, "/tools/hash");
+    const wrapper = await mountAt(HashPage, "/tools/encryption/hash");
     await wrapper.find("textarea").setValue("abc");
     await settle();
 
@@ -72,11 +104,11 @@ describe("/tools/hash 单向加密页", () => {
   });
 });
 
-describe("/tools/symmetric 对称加密页", () => {
+describe("/tools/encryption/symmetric 对称加密页", () => {
   const plaintext = "猫娘工程师的机密喵～ 42";
 
   it("加密 → 解密 往返还原明文", async () => {
-    const wrapper = await mountAt(SymmetricPage, "/tools/symmetric");
+    const wrapper = await mountAt(SymmetricPage, "/tools/encryption/symmetric");
     await wrapper.find('input[type="password"]').setValue("hunter2");
     await wrapper.find("textarea").setValue(plaintext);
 
@@ -85,7 +117,7 @@ describe("/tools/symmetric 对称加密页", () => {
 
     const ciphertext = wrapper.find('textarea[aria-label="加密结果"]');
     const payload = (ciphertext.element as HTMLTextAreaElement).value;
-    expect(payload.startsWith("v1:AES-256-GCM:")).toBe(true);
+    expect(payload.startsWith("v2:argon2id:AES-256-GCM:")).toBe(true);
 
     await wrapper
       .find('textarea[placeholder*="粘贴本工具生成的密文"]')
@@ -98,11 +130,11 @@ describe("/tools/symmetric 对称加密页", () => {
   });
 });
 
-describe("/tools/asymmetric 非对称加密页", () => {
+describe("/tools/encryption/asymmetric 非对称加密页", () => {
   const plaintext = "公钥加密私钥解密喵～";
 
   it("生成密钥对 → 加密 → 解密 往返还原明文", async () => {
-    const wrapper = await mountAt(AsymmetricPage, "/tools/asymmetric");
+    const wrapper = await mountAt(AsymmetricPage, "/tools/encryption/asymmetric");
 
     await findButton(wrapper, "生成密钥对").trigger("click");
     await settle();
@@ -132,9 +164,9 @@ describe("/tools/asymmetric 非对称加密页", () => {
   });
 });
 
-describe("/tools/hash 带盐与密钥算法", () => {
+describe("/tools/encryption/hash 带盐与密钥算法", () => {
   it("HMAC-SHA256：输入密钥与消息后输出标准结果", async () => {
-    const wrapper = await mountAt(HashPage, "/tools/hash");
+    const wrapper = await mountAt(HashPage, "/tools/encryption/hash");
     await wrapper.find("select").setValue("HMAC-SHA256");
     await settle();
     await wrapper.find('input[placeholder*="共享密钥"]').setValue("key");
@@ -148,7 +180,7 @@ describe("/tools/hash 带盐与密钥算法", () => {
   });
 
   it("PBKDF2-SHA256：密码 + 盐 + 迭代次数派生密钥", async () => {
-    const wrapper = await mountAt(HashPage, "/tools/hash");
+    const wrapper = await mountAt(HashPage, "/tools/encryption/hash");
     await wrapper.find("select").setValue("PBKDF2-SHA256");
     await settle();
     await wrapper.find('input[placeholder*="要派生的密码"]').setValue("password");
@@ -163,11 +195,11 @@ describe("/tools/hash 带盐与密钥算法", () => {
   });
 });
 
-describe("/tools/asymmetric ECC 与后量子", () => {
+describe("/tools/encryption/asymmetric ECC 与后量子", () => {
   const plaintext = "新的算法也能往返喵～";
 
   it("ECDH-P-256：生成密钥 → 加密 → 解密 往返", async () => {
-    const wrapper = await mountAt(AsymmetricPage, "/tools/asymmetric");
+    const wrapper = await mountAt(AsymmetricPage, "/tools/encryption/asymmetric");
     await wrapper.find("select").setValue("ECDH-P-256");
     await settle();
 
@@ -193,7 +225,7 @@ describe("/tools/asymmetric ECC 与后量子", () => {
   });
 
   it("ML-KEM-768（后量子）：生成密钥 → 加密 → 解密 往返", async () => {
-    const wrapper = await mountAt(AsymmetricPage, "/tools/asymmetric");
+    const wrapper = await mountAt(AsymmetricPage, "/tools/encryption/asymmetric");
     await wrapper.find("select").setValue("ML-KEM-768");
     await settle();
 
@@ -219,9 +251,9 @@ describe("/tools/asymmetric ECC 与后量子", () => {
   });
 });
 
-describe("/tools/hash 文件上传", () => {
+describe("/tools/encryption/hash 文件上传", () => {
   it("文件模式：上传文件后计算其 SHA-256 并展示文件名", async () => {
-    const wrapper = await mountAt(HashPage, "/tools/hash");
+    const wrapper = await mountAt(HashPage, "/tools/encryption/hash");
 
     // 切换到文件模式
     await wrapper
@@ -253,9 +285,9 @@ describe("/tools/hash 文件上传", () => {
 });
 
 
-describe("/tools/symmetric 文件模式", () => {
+describe("/tools/encryption/symmetric 文件模式", () => {
   it("上传文件 → 加密 → 解密 还原明文", async () => {
-    const wrapper = await mountAt(SymmetricPage, "/tools/symmetric");
+    const wrapper = await mountAt(SymmetricPage, "/tools/encryption/symmetric");
     const plaintext = "文件加密内容喵～";
 
     // 切到文件模式并选择文件
@@ -276,7 +308,7 @@ describe("/tools/symmetric 文件模式", () => {
 
     const ciphertext = wrapper.find('textarea[aria-label="加密结果"]');
     const payload = (ciphertext.element as HTMLTextAreaElement).value;
-    expect(payload.startsWith("v1:AES-256-GCM:")).toBe(true);
+    expect(payload.startsWith("v2:argon2id:AES-256-GCM:")).toBe(true);
 
     // 解密：粘贴密文，还原明文（文件模式也提供 UTF-8 预览）
     await wrapper.find('textarea[placeholder*="粘贴本工具生成的密文"]').setValue(payload);
@@ -288,9 +320,9 @@ describe("/tools/symmetric 文件模式", () => {
   });
 });
 
-describe("/tools/asymmetric 文件模式", () => {
+describe("/tools/encryption/asymmetric 文件模式", () => {
   it("ML-KEM-768 上传文件 → 加密 → 解密 还原明文", async () => {
-    const wrapper = await mountAt(AsymmetricPage, "/tools/asymmetric");
+    const wrapper = await mountAt(AsymmetricPage, "/tools/encryption/asymmetric");
     const plaintext = "非对称文件加密喵～";
 
     await wrapper.find("select").setValue("ML-KEM-768");
@@ -327,7 +359,7 @@ describe("/tools/asymmetric 文件模式", () => {
 
 describe("友好错误提示", () => {
   it("对称解密密码错误：显示友好提示而非原始报错", async () => {
-    const wrapper = await mountAt(SymmetricPage, "/tools/symmetric");
+    const wrapper = await mountAt(SymmetricPage, "/tools/encryption/symmetric");
     const payload = await symmetricEncrypt("AES-256-GCM", "机密内容", "right-password");
 
     await wrapper.find('input[type="password"]').setValue("wrong-password");
@@ -347,7 +379,7 @@ describe("友好错误提示", () => {
 
 describe("上传解密文件与密钥", () => {
   it("对称加密：上传密文文件后自动解密", async () => {
-    const wrapper = await mountAt(SymmetricPage, "/tools/symmetric");
+    const wrapper = await mountAt(SymmetricPage, "/tools/encryption/symmetric");
     const plaintext = "上传密文文件解密喵～";
     const payload = await symmetricEncrypt("AES-256-GCM", plaintext, "pw");
 
@@ -364,7 +396,7 @@ describe("上传解密文件与密钥", () => {
   });
 
   it("非对称：上传公钥/私钥文件与密文文件后解密", async () => {
-    const wrapper = await mountAt(AsymmetricPage, "/tools/asymmetric");
+    const wrapper = await mountAt(AsymmetricPage, "/tools/encryption/asymmetric");
     const plaintext = "密钥文件解密喵～";
     const pair = await generateKeyPairText("ML-KEM-768");
     const payload = await encryptWithPublicKey("ML-KEM-768", pair.publicKey, plaintext);
@@ -406,5 +438,44 @@ describe("上传解密文件与密钥", () => {
     expect(
       (wrapper.find('textarea[aria-label="私钥解密结果"]').element as HTMLTextAreaElement).value,
     ).toBe(plaintext);
+  });
+});
+
+describe("转换工具页", () => {
+  it("图片转换：渲染页面与文件选择入口", async () => {
+    const wrapper = await mountAt(ImagePage, "/tools/conversion/image");
+    expect(wrapper.text()).toContain("图片转换");
+    expect(
+      wrapper.find('input[aria-label="选择要处理的文件"]').exists(),
+    ).toBe(true);
+  });
+
+  it("视频转换：WASM 引擎加载失败时展示不可用提示", async () => {
+    const wrapper = await mountAt(VideoPage, "/tools/conversion/video");
+    const fileInput = wrapper.find('input[aria-label="选择要处理的文件"]');
+    const file = new File([new Uint8Array([1, 2, 3])], "sample.mp4", {
+      type: "video/mp4",
+    });
+    Object.defineProperty(fileInput.element, "files", {
+      value: [file],
+      configurable: true,
+    });
+    await fileInput.trigger("change");
+    await settle();
+
+    await findButton(wrapper, "转换").trigger("click");
+    await settle();
+
+    // 组件测试禁用网络 → 引擎加载失败，应出现 WASM 不可用提示
+    expect(wrapper.text()).toContain("WASM");
+  });
+
+  it("文档转换：Markdown → DOCX 时 WASM 引擎不可用给出提示", async () => {
+    const wrapper = await mountAt(DocumentPage, "/tools/conversion/document");
+    await wrapper.find("textarea").setValue("# 标题");
+    await findButton(wrapper, "转换").trigger("click");
+    await settle();
+
+    expect(wrapper.text()).toContain("WASM");
   });
 });
