@@ -63,7 +63,11 @@ describe("App shell", () => {
     const toolsLink = wrapper.find('a[href="/tools"]');
     expect(toolsLink.exists()).toBe(true);
 
-    // 悬停子菜单的六个工具链接常驻 DOM（显示/隐藏由 CSS group-hover 控制）
+    // 悬停子菜单按加密 / 转换两个分组分级展示
+    for (const href of ["/tools/encryption", "/tools/conversion"]) {
+      expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
+    }
+    // 六个工具链接常驻 DOM（显示/隐藏由 CSS group-hover 控制）
     for (const href of ["/tools/encryption/hash", "/tools/encryption/symmetric", "/tools/encryption/asymmetric", "/tools/conversion/image", "/tools/conversion/video", "/tools/conversion/document"]) {
       expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
     }

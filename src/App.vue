@@ -106,8 +106,8 @@ const desktopNavLinkClass = [
       class="fixed bottom-4 left-1/2 z-50 hidden -translate-x-1/2 items-center justify-center gap-2 rounded-full border border-border bg-card/80 p-1.5 backdrop-blur lg:flex"
     >
       <template v-for="item in navItems" :key="item.to">
-        <!-- 带子项的工具入口：点击进总览页，悬停/键盘聚焦时向上弹出纵向子菜单 -->
-        <div v-if="item.children?.length" class="group relative">
+        <!-- 带分组的工具入口：点击进总览页，悬停/键盘聚焦时向上弹出纵向子菜单（按分组分级） -->
+        <div v-if="item.groups?.length" class="group relative">
           <RouterLink
             :to="item.to"
             :class="desktopNavLinkClass"
@@ -117,21 +117,38 @@ const desktopNavLinkClass = [
             {{ item.label }}
           </RouterLink>
           <div
-            class="tool-dropdown invisible absolute bottom-full left-1/2 z-50 w-44 -translate-x-1/2 translate-y-1 scale-95 pb-2 opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:opacity-100"
+            class="tool-dropdown invisible absolute bottom-full left-1/2 z-50 w-56 -translate-x-1/2 translate-y-1 scale-95 pb-2 opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:opacity-100"
           >
             <!-- 内层面板；外层 pb-2 作为鼠标悬停桥接区，避免按钮与菜单之间的死区 -->
             <div
               class="rounded-2xl border border-border bg-popover/95 p-1.5 shadow-lg backdrop-blur"
             >
-              <RouterLink
-                v-for="child in item.children"
-                :key="child.to"
-                :to="child.to"
-                class="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground"
-              >
-                <component :is="child.icon" class="size-4 shrink-0" />
-                {{ child.label }}
-              </RouterLink>
+              <template v-for="(group, groupIndex) in item.groups" :key="group.to">
+                <!-- 分组标题：可点击进入分组首页 -->
+                <RouterLink
+                  :to="group.to"
+                  class="flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground"
+                >
+                  <component :is="group.icon" class="size-3.5 shrink-0" />
+                  {{ group.label }}
+                </RouterLink>
+                <!-- 分组内工具（缩进一级） -->
+                <div class="mb-1 flex flex-col gap-0.5 border-l border-border pl-2 ml-1.5">
+                  <RouterLink
+                    v-for="child in group.items"
+                    :key="child.to"
+                    :to="child.to"
+                    class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&.router-link-active]:bg-muted [&.router-link-active]:text-foreground"
+                  >
+                    <component :is="child.icon" class="size-4 shrink-0" />
+                    {{ child.label }}
+                  </RouterLink>
+                </div>
+                <div
+                  v-if="groupIndex < (item.groups?.length ?? 1) - 1"
+                  class="my-1.5 h-px bg-border"
+                />
+              </template>
             </div>
           </div>
         </div>

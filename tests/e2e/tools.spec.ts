@@ -33,6 +33,8 @@ test.describe("工具页入口", () => {
     const submenu = page.locator('a[href="/tools"] ~ div');
     await expect(submenu).toBeVisible();
     await expect(submenu.getByRole("link", { name: "单向加密" })).toBeVisible();
+    await expect(submenu.getByRole("link", { name: "加密", exact: true })).toBeVisible();
+    await expect(submenu.getByRole("link", { name: "转换", exact: true })).toBeVisible();
     await expect(submenu.getByRole("link", { name: "对称加密", exact: true })).toBeVisible();
     await expect(submenu.getByRole("link", { name: "非对称加密", exact: true })).toBeVisible();
     await expect(submenu.getByRole("link", { name: "图片转换" })).toBeVisible();
