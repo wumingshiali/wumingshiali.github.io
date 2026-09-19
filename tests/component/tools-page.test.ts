@@ -479,3 +479,29 @@ describe("转换工具页", () => {
     expect(wrapper.text()).toContain("WASM");
   });
 });
+
+describe("工具页左侧工具栏", () => {
+  it("加密工具页列出加密分组全部工具，不含转换工具", async () => {
+    const wrapper = await mountAt(HashPage, "/tools/encryption/hash");
+    for (const href of [
+      "/tools/encryption/hash",
+      "/tools/encryption/symmetric",
+      "/tools/encryption/asymmetric",
+    ]) {
+      expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
+    }
+    expect(wrapper.find('a[href="/tools/conversion/image"]').exists()).toBe(false);
+  });
+
+  it("转换工具页列出转换分组全部工具，不含加密工具", async () => {
+    const wrapper = await mountAt(DocumentPage, "/tools/conversion/document");
+    for (const href of [
+      "/tools/conversion/image",
+      "/tools/conversion/video",
+      "/tools/conversion/document",
+    ]) {
+      expect(wrapper.find(`a[href="${href}"]`).exists()).toBe(true);
+    }
+    expect(wrapper.find('a[href="/tools/encryption/hash"]').exists()).toBe(false);
+  });
+});
