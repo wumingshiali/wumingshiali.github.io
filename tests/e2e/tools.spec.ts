@@ -241,3 +241,42 @@ test.describe("转换工具页", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("网络工具页", () => {
+  test("CIDR 展开：生产环境 Rust wasm 引擎批处理展开", async ({ page }) => {
+    await page.goto("/tools/network/cidr");
+    await page.locator("textarea").first().fill("192.168.1.0/30\n10.0.0.128/29");
+    await page.getByRole("button", { name: "展开", exact: true }).click();
+    const out = page.locator('textarea[aria-label="CIDR 展开结果"]');
+    await expect(out).toBeVisible({ timeout: 10_000 });
+    const value = await out.inputValue();
+    expect(value).toContain("192.168.1.0");
+    expect(value).toContain("192.168.1.3");
+    expect(value).toContain("10.0.0.135");
+    await expect(page.getByText("Rust wasm 引擎")).toBeVisible();
+  });
+
+  test("IP 归属页渲染", async ({ page }) => {
+    await page.goto("/tools/network/ip");
+    await expect(page.getByRole("heading", { name: "IP 归属" })).toBeVisible();
+    await expect(page.locator("textarea").first()).toBeVisible();
+  });
+
+  test("本地 Ping 页渲染", async ({ page }) => {
+    await page.goto("/tools/network/ping");
+    await expect(page.getByRole("heading", { name: "本地 Ping" })).toBeVisible();
+    await expect(page.locator("textarea").first()).toBeVisible();
+  });
+
+  test("本地测速页渲染", async ({ page }) => {
+    await page.goto("/tools/network/speedtest");
+    await expect(page.getByRole("heading", { name: "本地测速" })).toBeVisible();
+    await expect(page.locator('input[type="url"]').first()).toBeVisible();
+  });
+
+  test("证书信息页渲染（reflect-metadata polyfill 生效）", async ({ page }) => {
+    await page.goto("/tools/network/cert");
+    await expect(page.getByRole("heading", { name: "证书信息" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: /解析 PEM/ })).toBeVisible();
+  });
+});

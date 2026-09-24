@@ -6,8 +6,8 @@
  * - happy-dom 20.x 在未传 --localstorage-file 时不挂载 localStorage，
  *   App.vue 在 setup 阶段就调用 localStorage.getItem；显式注入最小实现。
  */
-// @peculiar/x509 依赖 tsyringe，需要 reflect-metadata polyfill（组件测试不走 main.ts，须在此引入）
-import "reflect-metadata";
+// @peculiar/x509 依赖 tsyringe，需要 reflect-metadata polyfill；内联到 src 避免生产构建 tree-shake（组件测试不走 main.ts，须在此引入）
+import "@/lib/network/reflect-metadata";
 import { vi } from "vitest";
 
 // @unhead/vue 在 happy-dom 中不需要真实 DOM 操作，mock 即可

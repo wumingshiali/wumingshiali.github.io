@@ -34,7 +34,6 @@
     "clsx": "^2.1.1",
     "markdown-it": "^15.0.0",
     "pandoc-wasm": "^1.1.0",
-    "reflect-metadata": "^0.2.2",
     "reka-ui": "^2.9.10",
     "shadcn-vue": "^2.7.4",
     "shiki": "^4.3.1",
