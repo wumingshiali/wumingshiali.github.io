@@ -99,11 +99,11 @@ export const MID_AUTUMN_CLASS = "egg-mid-autumn";
 
 /** 香港天文台农历日期 API */
 export const HKO_LUNAR_API =
-  "https://data.weather.gov.hk/weatherAPI/opendata/lunardate.php";
+  "https://data.gov.hk/sc-data/dataset/hk-hko-rss-gregorian-lunar-calendar-conversion-table";
 
 /** 香港天文台开放数据 API 文档（数据来源标注链接） */
 export const HKO_LUNAR_API_DOC =
-  "https://www.hko.gov.hk/en/weatherAPI/doc/files/HKO_Open_Data_API_Documentation.htm";
+  "https://data.gov.hk/sc-data/dataset/hk-hko-rss-gregorian-lunar-calendar-conversion-table/resource/de65991e-b9cc-4c7d-8290-8511a04b1d54";
 
 /** HKO API 响应体 */
 export interface LunarDateData {
