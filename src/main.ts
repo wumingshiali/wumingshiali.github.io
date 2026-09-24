@@ -1,3 +1,5 @@
+// @peculiar/x509 依赖 tsyringe，需要 reflect-metadata polyfill（须在库代码之前加载）
+import "reflect-metadata";
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";

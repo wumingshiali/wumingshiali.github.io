@@ -150,6 +150,48 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/tools/network/': RouteRecordInfo<
+      '/tools/network/',
+      '/tools/network',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/network/cert': RouteRecordInfo<
+      '/tools/network/cert',
+      '/tools/network/cert',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/network/cidr': RouteRecordInfo<
+      '/tools/network/cidr',
+      '/tools/network/cidr',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/network/ip': RouteRecordInfo<
+      '/tools/network/ip',
+      '/tools/network/ip',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/network/ping': RouteRecordInfo<
+      '/tools/network/ping',
+      '/tools/network/ping',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/network/speedtest': RouteRecordInfo<
+      '/tools/network/speedtest',
+      '/tools/network/speedtest',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/tools/symmetric': RouteRecordInfo<
       '/tools/symmetric',
       '/tools/symmetric',
@@ -301,6 +343,54 @@ declare module 'vue-router/auto-routes' {
     'src/pages/tools/hash.vue': {
       routes:
         | '/tools/hash'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/network/index.vue': {
+      routes:
+        | '/tools/network/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/network/cert.vue': {
+      routes:
+        | '/tools/network/cert'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/network/cidr.vue': {
+      routes:
+        | '/tools/network/cidr'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/network/ip.vue': {
+      routes:
+        | '/tools/network/ip'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/network/ping.vue': {
+      routes:
+        | '/tools/network/ping'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/network/speedtest.vue': {
+      routes:
+        | '/tools/network/speedtest'
       views:
         | never
       pathParamNames:

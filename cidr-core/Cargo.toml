@@ -1,0 +1,15 @@
+[package]
+name = "cidr-core"
+version = "0.1.0"
+edition = "2021"
+description = "CIDR 展开核心（编译为 wasm 供浏览器使用）"
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

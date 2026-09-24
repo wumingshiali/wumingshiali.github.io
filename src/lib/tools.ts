@@ -1,10 +1,16 @@
 import type { Component } from "vue";
 import {
-  Fingerprint,
+  Activity,
+  FileBadge,
   FileCode,
+  Fingerprint,
+  Gauge,
+  Globe,
   Image,
   KeyRound,
   LockKeyhole,
+  MapPin,
+  Network,
   Repeat,
   ShieldCheck,
   Video,
@@ -81,6 +87,38 @@ const conversionTools: ToolInfo[] = [
   },
 ];
 
+const networkTools: ToolInfo[] = [
+  {
+    to: "/tools/network/cidr",
+    label: "CIDR 展开",
+    description: "批量展开 CIDR 为全部 IP，Rust wasm 加速 + JS 回退",
+    icon: Network,
+  },
+  {
+    to: "/tools/network/ip",
+    label: "IP 归属",
+    description: "查询 IP 归属地（省市 / ISP），支持批量",
+    icon: MapPin,
+  },
+  {
+    to: "/tools/network/ping",
+    label: "本地 Ping",
+    description: "HTTP 时延测量与丢包统计，支持批量",
+    icon: Activity,
+  },
+  {
+    to: "/tools/network/speedtest",
+    label: "本地测速",
+    description: "下载 / 上传速度测试，实时进度",
+    icon: Gauge,
+  },
+  {
+    to: "/tools/network/cert",
+    label: "证书信息",
+    description: "解析证书 PEM 或查询 CT 日志",
+    icon: FileBadge,
+  },
+];
 export const toolGroups: ToolGroup[] = [
   {
     to: "/tools/encryption",
@@ -95,6 +133,13 @@ export const toolGroups: ToolGroup[] = [
     description: "图片 / 视频 / 文档格式转换，WASM 引擎按需加载",
     icon: Repeat,
     items: conversionTools,
+  },
+  {
+    to: "/tools/network",
+    label: "网络",
+    description: "CIDR 展开、IP 归属、Ping、测速与证书信息，支持批处理",
+    icon: Globe,
+    items: networkTools,
   },
 ];
 
