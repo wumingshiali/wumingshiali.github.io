@@ -29,6 +29,7 @@ const errorMessage = ref("");
 const progress = ref(0);
 const progressMbps = ref(0);
 const received = ref(0);
+const totalBytes = ref<number | null>(null);
 const result = ref<{ bytes: number; ms: number; mbps: number } | null>(null);
 
 const isDownload = computed(() => mode.value === "download");
@@ -44,6 +45,7 @@ function reset() {
   progress.value = 0;
   progressMbps.value = 0;
   received.value = 0;
+  totalBytes.value = null;
   result.value = null;
 }
 
@@ -55,8 +57,11 @@ function pickPreset(presetUrl: string) {
 function onProgress(p: SpeedProgress) {
   received.value = p.receivedBytes;
   progressMbps.value = p.mbps;
-  // 进度按 100MB 满刻度近似
-  progress.value = Math.min(100, (p.receivedBytes / (100 * 1024 * 1024)) * 100);
+  totalBytes.value = p.totalBytes;
+  // 进度按响应 Content-Length 动态计算；无 Content-Length 时显示不确定进度
+  progress.value = p.totalBytes
+    ? Math.min(100, (p.receivedBytes / p.totalBytes) * 100)
+    : 0;
 }
 
 async function handleStart() {
@@ -65,6 +70,7 @@ async function handleStart() {
   progress.value = 0;
   progressMbps.value = 0;
   received.value = 0;
+  totalBytes.value = null;
   if (!url.value.trim()) {
     errorMessage.value = "请输入测速 URL";
     return;
@@ -168,12 +174,20 @@ function fmtBytes(bytes: number): string {
         <div v-if="busy" class="flex flex-col gap-1">
           <div class="h-2 w-full overflow-hidden rounded-full bg-muted">
             <div
+              v-if="isDownload && totalBytes"
               class="h-full rounded-full bg-primary transition-[width] duration-200"
               :style="{ width: `${progress}%` }"
             />
+            <div
+              v-else
+              class="h-full w-1/3 animate-pulse rounded-full bg-primary"
+            />
           </div>
           <span class="text-xs text-muted-foreground">
-            {{ isDownload ? `已下载 ${fmtBytes(received)}` : "上传中…" }}
+            <template v-if="isDownload">
+              已下载 {{ fmtBytes(received) }}<template v-if="totalBytes"> / {{ fmtBytes(totalBytes) }}（{{ Math.round(progress) }}%）</template>
+            </template>
+            <template v-else>上传中…</template>
             <template v-if="progressMbps">｜实时 {{ progressMbps.toFixed(1) }} Mbps</template>
           </span>
         </div>

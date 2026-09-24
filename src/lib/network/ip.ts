@@ -34,17 +34,21 @@ function jsonp(url: string, timeoutMs = 8000): Promise<Record<string, unknown>> 
   return new Promise((resolve, reject) => {
     const cbName = `__ipjsonp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
     const script = document.createElement("script");
+    let settled = false;
     const timer = window.setTimeout(() => {
       cleanup();
       reject(new Error("查询超时"));
     }, timeoutMs);
     (window as unknown as Record<string, unknown>)[cbName] = (data: unknown) => {
+      if (settled) return;
       cleanup();
       resolve(data as Record<string, unknown>);
     };
     function cleanup() {
+      settled = true;
       window.clearTimeout(timer);
-      delete (window as unknown as Record<string, unknown>)[cbName];
+      // 保留 noop 回调：脚本可能仍会在超时后执行，直接 delete 会抛 TypeError
+      (window as unknown as Record<string, unknown>)[cbName] = () => {};
       script.remove();
     }
     script.src = `${url}${url.includes("?") ? "&" : "?"}cb=${cbName}`;
@@ -110,8 +114,28 @@ export async function lookupIp(ip: string): Promise<IpLocation> {
   };
 }
 
-/** 批量查询（并发，批处理） */
-export async function lookupIps(ips: string[]): Promise<IpLocation[]> {
+/**
+ * 批量查询（批处理）。
+ * JSONP 走 script 标签、不受浏览器连接数限流，因此用固定并发池（默认 5）
+ * 控制请求量，避免一次输入上百 IP 时狂发请求被接口限流。
+ */
+export async function lookupIps(
+  ips: string[],
+  concurrency = 5,
+): Promise<IpLocation[]> {
   const valid = ips.map((s) => s.trim()).filter(Boolean);
-  return Promise.all(valid.map((ip) => lookupIp(ip)));
+  const results: IpLocation[] = new Array(valid.length);
+  let next = 0;
+  async function worker() {
+    while (next < valid.length) {
+      const index = next++;
+      results[index] = await lookupIp(valid[index]);
+    }
+  }
+  const workers = Array.from(
+    { length: Math.min(concurrency, valid.length) },
+    () => worker(),
+  );
+  await Promise.all(workers);
+  return results;
 }

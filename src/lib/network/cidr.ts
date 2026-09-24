@@ -105,7 +105,10 @@ export async function loadCidrWasm(): Promise<CidrWasm | null> {
       return null;
     }
   })();
-  return wasmPromise;
+  const wasm = await wasmPromise;
+  // 失败（网络抖动等）不永久缓存，允许下次调用重试；成功则复用单例
+  if (wasm === null) wasmPromise = null;
+  return wasm;
 }
 
 /** 用 wasm 展开；失败（wasm 不可用 / 超限）返回 null */

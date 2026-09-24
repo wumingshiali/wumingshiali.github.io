@@ -53,7 +53,9 @@ async function handlePing() {
   }
 }
 
-function fmt(ms: number): string {
+/** 无成功样本（全丢包）时显示 "—"，避免 "0 ms" 误导 */
+function fmt(ms: number, hasSamples: boolean): string {
+  if (!hasSamples) return "—";
   return `${ms.toFixed(0)} ms`;
 }
 </script>
@@ -133,9 +135,9 @@ function fmt(ms: number): string {
               </span>
             </div>
             <div class="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground">
-              <span>最小 {{ fmt(stat.min) }}</span>
-              <span>平均 {{ fmt(stat.avg) }}</span>
-              <span>最大 {{ fmt(stat.max) }}</span>
+              <span>最小 {{ fmt(stat.min, stat.samples.length > 0) }}</span>
+              <span>平均 {{ fmt(stat.avg, stat.samples.length > 0) }}</span>
+              <span>最大 {{ fmt(stat.max, stat.samples.length > 0) }}</span>
               <span>丢包 {{ stat.loss }}/{{ sampleCount }}（{{ Math.round(stat.lossRate * 100) }}%）</span>
             </div>
           </div>

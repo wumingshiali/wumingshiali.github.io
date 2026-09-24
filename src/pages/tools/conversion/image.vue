@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Image as ImageIcon, Loader2 } from "@lucide/vue";
@@ -33,6 +33,11 @@ const previewUrl = ref("");
 const currentFormat = computed(
   () => imageFormats.find((f) => f.id === formatId.value)!,
 );
+
+// 卸载时释放预览 URL，避免内存泄漏
+onUnmounted(() => {
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+});
 
 /** 输出文件名：保留原文件主名 */
 watch(

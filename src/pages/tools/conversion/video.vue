@@ -35,6 +35,8 @@ const currentPreset = computed(
 
 /** WASM 加载失败时展示独立提示（区别于普通错误） */
 const wasmUnavailable = computed(() => errorMessage.value.includes("WASM"));
+// ffmpeg 单例的事件监听器只注册一次
+let progressBound = false;
 
 /** ffmpeg 需要带扩展名的输入文件名才能识别格式 */
 function safeInputName(name: string): string {
@@ -53,10 +55,13 @@ async function handleConvert() {
     loadingEngine.value = true;
     ffmpeg = await loadFFmpeg();
     loadingEngine.value = false;
-    // 进度事件只在 exec 期间触发，加载完成后注册即可
-    ffmpeg.on("progress", ({ progress: ratio }) => {
-      progress.value = ratio;
-    });
+    // 进度事件只在 exec 期间触发；监听器只注册一次，避免多次转换后累积
+    if (!progressBound) {
+      progressBound = true;
+      ffmpeg.on("progress", ({ progress: ratio }) => {
+        progress.value = ratio;
+      });
+    }
     const { bytes, outputName } = await convertVideo(
       file.value,
       currentPreset.value,

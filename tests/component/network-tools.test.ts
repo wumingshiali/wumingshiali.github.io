@@ -21,6 +21,11 @@ import CertPage from "@/pages/tools/network/cert.vue";
 import { parseCidr, parseCidrList } from "@/lib/network/cidr";
 import { normalizeUrl } from "@/lib/network/ping";
 import { isValidIp } from "@/lib/network/ip";
+import {
+  DEFAULT_DOWNLOAD_URLS,
+  downloadSpeed,
+  uploadSpeed,
+} from "@/lib/network/speedtest";
 
 async function mountAt(component: unknown, initialRoute: string) {
   const router = createRouter({ history: createMemoryHistory(), routes });
@@ -138,5 +143,67 @@ describe("网络工具页面渲染", () => {
     const wrapper = await mountAt(CertPage, "/tools/network/cert");
     expect(wrapper.text()).toContain("证书信息");
     expect(wrapper.text()).toContain("解析 PEM");
+  });
+});
+
+describe("测速核心逻辑", () => {
+  it("downloadSpeed：读取 Content-Length 作为总量", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new Uint8Array(1024));
+        controller.enqueue(new Uint8Array(1024));
+        controller.close();
+      },
+    });
+    const fake = new Response(stream, { headers: { "content-length": "2048" } });
+    const original = globalThis.fetch;
+    globalThis.fetch = (async () => fake) as typeof fetch;
+    try {
+      const result = await downloadSpeed("https://example.com/file");
+      expect(result.totalBytes).toBe(2048);
+      expect(result.bytes).toBe(2048);
+      expect(result.mbps).toBeGreaterThan(0);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it("downloadSpeed：无 Content-Length 时 totalBytes 为 null", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new Uint8Array(512));
+        controller.close();
+      },
+    });
+    const fake = new Response(stream);
+    const original = globalThis.fetch;
+    globalThis.fetch = (async () => fake) as typeof fetch;
+    try {
+      const result = await downloadSpeed("https://example.com/file");
+      expect(result.totalBytes).toBeNull();
+      expect(result.bytes).toBe(512);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it("uploadSpeed：网络失败抛错（不再误算成极高速度）", async () => {
+    const original = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      throw new TypeError("Failed to fetch");
+    }) as typeof fetch;
+    try {
+      await expect(uploadSpeed("https://example.com/up", 1024)).rejects.toThrow(
+        "上传请求失败",
+      );
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it("国内测速预设已提供（NPMMirror / JSDMirror）", () => {
+    const labels = DEFAULT_DOWNLOAD_URLS.map((d) => d.label).join("|");
+    expect(labels).toContain("NPMMirror");
+    expect(labels).toContain("JSDMirror");
   });
 });
