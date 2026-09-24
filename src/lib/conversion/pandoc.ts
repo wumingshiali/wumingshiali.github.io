@@ -1,22 +1,23 @@
 /**
  * pandoc-wasm 文档转换（Markdown ↔ DOCX）。
  *
- * 设计：pandoc.wasm 二进制约 58MB（npm 包 tarball 仅 16MB），不随站点打包，
- * 首次使用时从 npmmirror 下载 tarball，浏览器内 gzip 解压 + tar 提取后缓存实例；
- * 下载 / 初始化失败时抛 WasmUnavailableError，页面展示「WASM 不可用」提示。
+ * 设计：pandoc.wasm 二进制约 58MB，不随站点打包，首次使用时从 npmmirror 下载
+ * 并缓存实例；下载 / 初始化失败时抛 WasmUnavailableError，页面展示「WASM 不可用」提示。
  *
  * CDN 选型（已逐家实测）：
  * - jsDelivr / jsdmirror（npm 镜像）：单文件上限 50MB，pandoc.wasm 58MB 被 403
  * - esm.run：只是 jsDelivr `/+esm` 的 JS 模块转换代理，不提供二进制文件
  * - zstatic.net：npm 镜像按 Content-Type 白名单过滤，不含 application/wasm → 451
- * - npmmirror：直接文件端点有包名白名单（pandoc-wasm 不在名单），
- *   但 tarball 下载不受限制，故走 tgz → 解压 → 提取的路径
- *
+ * - npmmirror 直链：pandoc-wasm 已加入官方 unpkg 白名单，为主路径
+ * - 回退：白名单未同步到节点时走 tarball 提取（tarball 不受白名单限制）
  */
 import { createPandocInstance, type PandocInstance } from "pandoc-wasm/core";
 import { fetchFileFromTarball } from "./npm-tarball";
 import { WasmUnavailableError } from "./wasm";
-/** 与 package.json 中 pandoc-wasm 版本保持一致的 CDN 二进制地址 */
+/** npmmirror 直链：pandoc-wasm 已加入官方 unpkg 白名单（主路径） */
+const PANDOC_WASM_URL =
+  "https://registry.npmmirror.com/pandoc-wasm/1.1.0/files/src/pandoc.wasm";
+/** 回退路径：npmmirror tarball（不受白名单限制） */
 const PANDOC_TARBALL_URL =
   "https://registry.npmmirror.com/pandoc-wasm/-/pandoc-wasm-1.1.0.tgz";
 const PANDOC_WASM_PATH = "package/src/pandoc.wasm";
@@ -34,9 +35,21 @@ export async function loadPandoc(): Promise<PandocInstance> {
   }
 }
 
+/** 获取 pandoc.wasm：直链优先，失败自动回退 tarball 提取 */
+async function fetchPandocWasm(): Promise<Uint8Array> {
+  try {
+    const response = await fetch(PANDOC_WASM_URL);
+    if (response.ok) {
+      return new Uint8Array(await response.arrayBuffer());
+    }
+  } catch {
+    // 网络异常：继续走回退
+  }
+  return fetchFileFromTarball(PANDOC_TARBALL_URL, PANDOC_WASM_PATH);
+}
+
 async function loadPandocBinary(): Promise<PandocInstance> {
-  // npmmirror 直链被包名白名单拦截，走 tarball 提取（tarball 不受白名单限制）
-  const wasmBytes = await fetchFileFromTarball(PANDOC_TARBALL_URL, PANDOC_WASM_PATH);
+  const wasmBytes = await fetchPandocWasm();
   try {
     return await createPandocInstance(wasmBytes);
   } catch {
