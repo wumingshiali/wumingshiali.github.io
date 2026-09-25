@@ -229,32 +229,33 @@
   --chart-1: oklch(0.68 0.18 38);
 }
 
-/* 节日氛围：四角红橙柔光（与 base 层 body 的 background-color 叠加） */
+/* 节日氛围：全屏淡红橙背景 + 四角红橙柔光 */
 .egg-labor-day body {
+  background-color: oklch(0.95 0.04 45);
   background-image:
     radial-gradient(60rem 40rem at 10% -5%, oklch(0.55 0.2 35 / 0.08), transparent 65%),
     radial-gradient(50rem 35rem at 95% 105%, oklch(0.77 0.16 65 / 0.08), transparent 65%);
 }
 
 .egg-labor-day.dark body {
+  background-color: oklch(0.26 0.05 40);
   background-image:
     radial-gradient(60rem 40rem at 10% -5%, oklch(0.55 0.2 35 / 0.14), transparent 65%),
     radial-gradient(50rem 35rem at 95% 105%, oklch(0.77 0.16 65 / 0.1), transparent 65%);
 }
 
-/* 顶部节日彩带：红橙渐变，不遮挡任何固定元素 */
+/* 劳动节彩框：四条边渐变环绕整个屏幕（fixed + 多背景），不遮挡任何固定元素 */
 .egg-labor-day body::before {
   content: "";
   position: fixed;
-  inset: 0 0 auto 0;
-  height: 4px;
+  inset: 0;
   z-index: 60;
-  background: linear-gradient(
-    to right,
-    oklch(0.55 0.2 35),
-    oklch(0.77 0.16 65),
-    oklch(0.55 0.2 35)
-  );
+  pointer-events: none;
+  background:
+    linear-gradient(to right, oklch(0.55 0.2 35), oklch(0.77 0.16 65), oklch(0.55 0.2 35)) top / 100% 4px no-repeat,
+    linear-gradient(to right, oklch(0.55 0.2 35), oklch(0.77 0.16 65), oklch(0.55 0.2 35)) bottom / 100% 4px no-repeat,
+    linear-gradient(to bottom, oklch(0.55 0.2 35), oklch(0.77 0.16 65), oklch(0.55 0.2 35)) left / 4px 100% no-repeat,
+    linear-gradient(to bottom, oklch(0.55 0.2 35), oklch(0.77 0.16 65), oklch(0.55 0.2 35)) right / 4px 100% no-repeat;
 }
 /* ===== 中秋节彩蛋主题（html.egg-mid-autumn）=====
    由 src/lib/festival.ts 触发：
@@ -277,32 +278,33 @@
   --chart-1: oklch(0.78 0.12 82);
 }
 
-/* 中秋氛围：顶部月光 + 角落淡金柔光（与 base 层 body 的 background-color 叠加） */
+/* 中秋氛围：全屏淡金背景 + 顶部月光 + 角落柔光 */
 .egg-mid-autumn body {
+  background-color: oklch(0.94 0.045 85);
   background-image:
     radial-gradient(60rem 40rem at 50% -10%, oklch(0.85 0.1 85 / 0.16), transparent 60%),
     radial-gradient(50rem 35rem at 90% 110%, oklch(0.6 0.12 70 / 0.08), transparent 60%);
 }
 
 .egg-mid-autumn.dark body {
+  background-color: oklch(0.26 0.045 80);
   background-image:
     radial-gradient(60rem 40rem at 50% -10%, oklch(0.85 0.1 85 / 0.12), transparent 60%),
     radial-gradient(50rem 35rem at 90% 110%, oklch(0.7 0.12 75 / 0.12), transparent 60%);
 }
 
-/* 顶部节日彩带：金色渐变，不遮挡任何固定元素 */
+/* 中秋彩框（金色）：四条边渐变环绕整个屏幕（fixed + 多背景），不遮挡任何固定元素 */
 .egg-mid-autumn body::before {
   content: "";
   position: fixed;
-  inset: 0 0 auto 0;
-  height: 4px;
+  inset: 0;
   z-index: 60;
-  background: linear-gradient(
-    to right,
-    oklch(0.62 0.14 78),
-    oklch(0.85 0.1 85),
-    oklch(0.62 0.14 78)
-  );
+  pointer-events: none;
+  background:
+    linear-gradient(to right, oklch(0.62 0.14 78), oklch(0.85 0.1 85), oklch(0.62 0.14 78)) top / 100% 4px no-repeat,
+    linear-gradient(to right, oklch(0.62 0.14 78), oklch(0.85 0.1 85), oklch(0.62 0.14 78)) bottom / 100% 4px no-repeat,
+    linear-gradient(to bottom, oklch(0.62 0.14 78), oklch(0.85 0.1 85), oklch(0.62 0.14 78)) left / 4px 100% no-repeat,
+    linear-gradient(to bottom, oklch(0.62 0.14 78), oklch(0.85 0.1 85), oklch(0.62 0.14 78)) right / 4px 100% no-repeat;
 }
 /* ===== 国庆彩蛋主题（html.egg-cn-birthday）=====
    由 src/lib/festival.ts 与 index.html 内联脚本触发：
@@ -326,30 +328,31 @@
   --chart-5: oklch(0.82 0.17 85);
 }
 
-/* 节日氛围：四角红金柔光（与 base 层 body 的 background-color 叠加） */
+/* 国庆氛围：全屏淡红背景 + 四角红金柔光 */
 .egg-cn-birthday body {
+  background-color: oklch(0.95 0.035 27);
   background-image:
     radial-gradient(60rem 40rem at 10% -5%, oklch(0.577 0.245 27.325 / 0.08), transparent 65%),
     radial-gradient(50rem 35rem at 95% 105%, oklch(0.769 0.188 70.08 / 0.08), transparent 65%);
 }
 
 .egg-cn-birthday.dark body {
+  background-color: oklch(0.25 0.05 28);
   background-image:
     radial-gradient(60rem 40rem at 10% -5%, oklch(0.577 0.245 27.325 / 0.14), transparent 65%),
     radial-gradient(50rem 35rem at 95% 105%, oklch(0.769 0.188 70.08 / 0.1), transparent 65%);
 }
 
-/* 顶部节日彩带：4px 红金渐变，不遮挡任何固定元素 */
+/* 国庆彩框（红金）：四条边渐变环绕整个屏幕（fixed + 多背景），不遮挡任何固定元素 */
 .egg-cn-birthday body::before {
   content: "";
   position: fixed;
-  inset: 0 0 auto 0;
-  height: 4px;
+  inset: 0;
   z-index: 60;
-  background: linear-gradient(
-    to right,
-    oklch(0.577 0.245 27.325),
-    oklch(0.82 0.17 85),
-    oklch(0.577 0.245 27.325)
-  );
+  pointer-events: none;
+  background:
+    linear-gradient(to right, oklch(0.577 0.245 27.325), oklch(0.82 0.17 85), oklch(0.577 0.245 27.325)) top / 100% 4px no-repeat,
+    linear-gradient(to right, oklch(0.577 0.245 27.325), oklch(0.82 0.17 85), oklch(0.577 0.245 27.325)) bottom / 100% 4px no-repeat,
+    linear-gradient(to bottom, oklch(0.577 0.245 27.325), oklch(0.82 0.17 85), oklch(0.577 0.245 27.325)) left / 4px 100% no-repeat,
+    linear-gradient(to bottom, oklch(0.577 0.245 27.325), oklch(0.82 0.17 85), oklch(0.577 0.245 27.325)) right / 4px 100% no-repeat;
 }
