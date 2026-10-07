@@ -2,7 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSeo } from "@/composables/useSeo";
 
-const avatarSrc = "/avatar-52491de8.webp";
+const avatarSrc = "/avatar-c96cc3fd.webp";
 
 useSeo({
   title: "个人主页",
