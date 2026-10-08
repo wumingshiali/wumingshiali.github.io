@@ -4,7 +4,7 @@ import { h, onMounted, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Cookie } from "@lucide/vue";
 import { useCookieConsent } from "@/composables/useCookieConsent";
-import cfLogo from "https://esaimg.cdn1.vip/i/6ac7a1ece60b8_1791468012.webp";
+// import cfLogo from "https://esaimg.cdn1.vip/i/6ac7a1ece60b8_1791468012.webp";
 import { useSeo } from "@/composables/useSeo";
 
 useSeo({
@@ -36,6 +36,8 @@ const GithubIcon: Component = {
     );
   },
 };
+// 直接赋值，不需要 import
+const cfLogo = "https://esaimg.cdn1.vip/i/6ac7a1ece60b8_1791468012.webp";
 
 // 本项目 GitHub 仓库地址
 const repoUrl = "https://github.com/wumingshiali/wumingshiali.github.io";
