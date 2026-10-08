@@ -4,7 +4,7 @@ import { h, onMounted, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Cookie } from "@lucide/vue";
 import { useCookieConsent } from "@/composables/useCookieConsent";
-import cfLogo from "@/assets/cf.webp";
+import cfLogo from "https://esaimg.cdn1.vip/i/6ac7a1ece60b8_1791468012.webp";
 import { useSeo } from "@/composables/useSeo";
 
 useSeo({
