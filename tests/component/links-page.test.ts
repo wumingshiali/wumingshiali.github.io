@@ -44,7 +44,7 @@ describe("/links 页面", () => {
     // cover 封面渲染：src 与 alt 正确
     const cover = first.find("img");
     expect(cover.exists()).toBe(true);
-    expect(cover.attributes("src")).toBe("https://www.acofork.com/favicon-192.png");
+    expect(cover.attributes("src")).toBe("https://raw-blog.acofork.com/favicon-192.png");
     expect(cover.attributes("alt")).toBe("Acofork 封面");
   });
 
