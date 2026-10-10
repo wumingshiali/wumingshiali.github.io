@@ -20,10 +20,7 @@ jobs:
     steps:
       # 显式检出 PR 分支代码（pull_request_target 默认检出基分支）
       - uses: actions/checkout@v7
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.sha }}
-
+      
       - name: 检测友链可达性并评论
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
