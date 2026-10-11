@@ -1,4 +1,6 @@
-# 喜报！V3已经进入正式版！
+> [!CAUTION]
+> 有一个Critical级的安全漏洞，在cd5742中（对应版本8.0.0）中引入，在830ce38中（对应版本v3-1.2.2）中修复，请立即升级（详见[Github Security Advisories](https://github.com/wumingshiali/wumingshiali.github.io/security/advisories/GHSA-4c2m-gjjg-39qv)）
+
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/wumingshiali/wumingshiali.github.io)  
 [AI 编程说明](/ai.md)
 # VCHP(VoidCat HomePage)
