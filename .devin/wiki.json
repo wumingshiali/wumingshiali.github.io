@@ -1,0 +1,302 @@
+{
+  "repo_notes": [
+    {
+      "content": "Be simple,don't using too many complex expressions."
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "High-level introduction to VoidCat HomePage (VCHP) — what it is, its tech stack, key features (blog, contact encryption, friend links, browser-local tool suite, festival easter eggs), and how the major wiki sections relate.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Project Background & Goals",
+      "purpose": "VCHP project identity, v2 vs v3 versioning, MPL 2.0 open-source philosophy, AI-assisted development workflow (AGENTS.md, CLAUDE.md, ai.md, .claude/settings.json), live deployment URLs.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Getting Started",
+      "purpose": "Cloning, installing with pnpm, dev server, production build, scaffolding posts, running the full test suite, and renovate.json dependency automation.",
+      "parent": "Overview",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Application Architecture",
+      "purpose": "Overview of the Vue 3 SPA structure — entry points, routing, root component, navigation and festival theming — linking to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Entry Points & Bootstrapping",
+      "purpose": "index.html shell, pre-hydration theme and festival scripts that prevent FOUC, reflect-metadata polyfill injection, SEO/JSON-LD head metadata, and how src/main.ts wires Vue, vue-router and unhead together.",
+      "parent": "Application Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Root Component & Navigation Shell",
+      "purpose": "Deep dive into App.vue: theme toggle and localStorage persistence, desktop bottom nav driven by src/lib/nav.ts, the tools hover dropdown (dead-zone handling), MobileNav popover, RouterView transitions, banner/dialog mounting.",
+      "parent": "Application Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "File-Based Routing",
+      "purpose": "How unplugin-vue-router scans src/pages/ to auto-generate typed routes, route-map.d.ts, nested tool folder routes and legacy redirects, and the auto-routes.d.ts module augmentation pattern.",
+      "parent": "Application Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Festival Easter Eggs & Banners",
+      "purpose": "src/lib/festival.ts easter-egg system — Labor Day, National Day and Mid-Autumn detection (date ranges, ?egg= URL params, HKO lunar API), html class application, index.html pre-hydration sync, and the LaborDayBanner / NationalDayBanner / MidAutumnBanner components plus their tests.",
+      "parent": "Application Architecture",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Pages",
+      "purpose": "Overview of the application pages (Home, Contact, Posts, About, Links, Tools) and their roles, linking to child pages for per-page detail.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Home Page (index.vue)",
+      "purpose": "Landing page layout: Avatar component usage, profile branding, LCP-optimized image loading, responsive typography, VoidCat mission statement, useSeo integration.",
+      "parent": "Pages",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Contact Page (contact.vue)",
+      "purpose": "Contact page UI: public vs secret contact cards, human-verification dialog flow, copy-to-clipboard feedback, locked/revealed state machine, mailto link, component test and contact-flow e2e spec.",
+      "parent": "Pages",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "About Page (about.vue)",
+      "purpose": "About page: GitHub repo link, Cloudflare attribution, real-time PerformanceNavigationTiming metrics (TTFB, load duration, HTTP protocol), formatProtocol utility, __GIT_COMMIT_ID__ build info, cookie-settings entry point.",
+      "parent": "Pages",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Friend Links Page (links.vue)",
+      "purpose": "The friend-links feature — src/links/data.toml schema, src/lib/links.ts (FriendLink, LinkPriority, sortLinks, getAllLinks), the links.vue card grid, links-data.d.ts virtual module typing, and its tests.",
+      "parent": "Pages",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Tools Suite",
+      "purpose": "Overview of the browser-local tool suite under /tools — the encryption, conversion and network tool groups, the shared ToolInfo/ToolGroup registry and tool UI components — linking to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Tool Registry & Shared UI",
+      "purpose": "src/lib/tools.ts ToolInfo/ToolGroup registry shared by /tools index, group index pages and the desktop hover submenu; ToolGroupIndex.vue, ToolLayout.vue, ToolFileInput.vue, FileUploadButton.vue, CopyButton.vue, DownloadButton.vue, ModeToggle.vue, and tools-page tests.",
+      "parent": "Tools Suite",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Encryption Tools",
+      "purpose": "The /tools/encryption group: hash.vue (MD5/SHA/HMAC/PBKDF2/scrypt), symmetric.vue (Argon2id + AES-GCM/CBC, v2: payload format) and asymmetric.vue (RSA / ECC / ML-KEM key pairs, SPKI & PKCS#8 PEM), plus legacy /tools/hash|symmetric|asymmetric redirects.",
+      "parent": "Tools Suite",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Crypto Library (src/lib/crypto)",
+      "purpose": "hash.ts, symmetric.ts (PBKDF2/Argon2 + AES-GCM/CBC), asymmetric.ts (RSA, ECDH hybrid, ML-KEM post-quantum), utils.ts encoding helpers, errors.ts friendlyError translation, the self-describing v1:/v2: ciphertext formats, and crypto-tools / friendly-error unit tests.",
+      "parent": "Tools Suite",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Conversion Tools (WASM)",
+      "purpose": "The /tools/conversion group: image.vue (canvas-native PNG/JPEG/WebP/AVIF), video.vue (ffmpeg.wasm transcoding & audio extraction), document.vue (pandoc-wasm Markdown↔DOCX); src/lib/conversion/{image,video,pandoc,wasm,npm-tarball}.ts on-demand WASM loading, pandoc-wasm-core typings and unit tests.",
+      "parent": "Tools Suite",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Network Tools",
+      "purpose": "The /tools/network group: cidr.vue, ip.vue, ping.vue, speedtest.vue, cert.vue pages and src/lib/network/{cidr,ip,ping,speedtest,cert}.ts — batch processing, HTTP-based latency/bandwidth measurement, IP geolocation lookup, and certificate PEM/CT-log parsing via @peculiar/x509 + reflect-metadata polyfill.",
+      "parent": "Tools Suite",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "cidr-core Rust/WASM Module",
+      "purpose": "The cidr-core Rust crate: C-ABI exports (alloc/dealloc/cidr_expand), no_std buffer writing, wasm32-unknown-unknown build, public/cidr.wasm artifact, and the TypeScript fallback path in src/lib/network/cidr.ts.",
+      "parent": "Tools Suite",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "UI Component Library",
+      "purpose": "Overview of the shadcn-vue / reka-ui component system, the cn() utility, design tokens and cookie consent UI, linking to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Component System Overview",
+      "purpose": "shadcn-vue style config, components.json, the cn() helper (clsx + tailwind-merge, src/lib/utils.ts and new-york-v4/lib/utils.ts), and @/components/ui aliasing.",
+      "parent": "UI Component Library",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Alert, Avatar, Button, Checkbox, Dialog, Input & Popover Components",
+      "purpose": "Each UI component family — props, slots, reka-ui primitives wrapped, and where they are used across App.vue, MobileNav, banners, dialogs, tool pages and page components.",
+      "parent": "UI Component Library",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Styling & Design Tokens",
+      "purpose": "src/assets/index.css: Tailwind CSS v4 integration, OKLCH palette, light/dark custom properties, festival egg theme classes, shiki dual-theme overrides, page/card transitions, custom font.",
+      "parent": "UI Component Library",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Cookie Consent & Analytics Loading",
+      "purpose": "src/composables/useCookieConsent.ts singleton (readConsent/writeConsent, granular statistics toggles, Umami + Microsoft Clarity script injection, SSG/test guards) and CookieConsentDialog.vue UI, plus the cookie-consent e2e spec.",
+      "parent": "UI Component Library",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Contact Encryption System",
+      "purpose": "Overview of the two-phase security architecture for protecting contact details, linking to child pages for the offline script and runtime library.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Offline Encryption Script",
+      "purpose": "scripts/encrypt-contacts.mjs: how to run it, SECRETS input format, nonce generation, AES-128-GCM encryption, generated JSON output and .gitignore hygiene.",
+      "parent": "Contact Encryption System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Runtime Decryption Library",
+      "purpose": "src/lib/contact-crypto.ts: contactSecret, deriveKeyFromAnswer, WebCrypto → noble/ciphers fallback chain, decryptContact/decryptAllContacts, ContactName type, and unit tests.",
+      "parent": "Contact Encryption System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Blog System",
+      "purpose": "Overview of the blog/posts feature — authoring, build-time pre-rendering, posts data library, list and detail pages, TOC/comments/SEO — linking to child pages.",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    },
+    {
+      "title": "Build-Time Pre-Rendering Pipeline",
+      "purpose": "vite-plugin-prerender-posts.ts, src/lib/post-render.ts (markdown-it + shiki, heading IDs, image URL resolution), src/lib/post-text.ts (countWords, slugify), src/generated/posts-data.ts and the CI drift check.",
+      "parent": "Blog System",
+      "page_notes": [
+        {
+          "content": ""
+        }
+      ]
+    }
+  ]
+}
