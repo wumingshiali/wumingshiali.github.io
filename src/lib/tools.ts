@@ -1,6 +1,7 @@
 import type { Component } from "vue";
 import {
   Activity,
+  Disc3,
   FileBadge,
   FileCode,
   Fingerprint,
@@ -13,6 +14,7 @@ import {
   Network,
   Repeat,
   ShieldCheck,
+  Sparkles,
   Video,
 } from "@lucide/vue";
 
@@ -31,7 +33,7 @@ export interface ToolInfo {
   icon: Component;
 }
 
-/** 工具分组（加密 / 转换）：对应一个「文件夹」路由 */
+/** 工具分组（加密 / 转换 / 网络 / 其他）：对应一个「文件夹」路由 */
 export interface ToolGroup {
   /** 分组路由，如 "/tools/encryption" */
   to: string;
@@ -119,6 +121,16 @@ const networkTools: ToolInfo[] = [
     icon: FileBadge,
   },
 ];
+
+const otherTools: ToolInfo[] = [
+  {
+    to: "/tools/other/wheel",
+    label: "随机转盘",
+    description: "自定义列表按占比随机抽取，720–2160 力度转动大转盘",
+    icon: Disc3,
+  },
+];
+
 export const toolGroups: ToolGroup[] = [
   {
     to: "/tools/encryption",
@@ -140,6 +152,13 @@ export const toolGroups: ToolGroup[] = [
     description: "CIDR 展开、IP 归属、Ping、测速与证书信息，支持批处理",
     icon: Globe,
     items: networkTools,
+  },
+  {
+    to: "/tools/other",
+    label: "其他",
+    description: "随机转盘等趣味小工具，列表与占比完全自定义",
+    icon: Sparkles,
+    items: otherTools,
   },
 ];
 

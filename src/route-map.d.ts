@@ -192,6 +192,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/tools/other/': RouteRecordInfo<
+      '/tools/other/',
+      '/tools/other',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tools/other/wheel': RouteRecordInfo<
+      '/tools/other/wheel',
+      '/tools/other/wheel',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/tools/symmetric': RouteRecordInfo<
       '/tools/symmetric',
       '/tools/symmetric',
@@ -391,6 +405,22 @@ declare module 'vue-router/auto-routes' {
     'src/pages/tools/network/speedtest.vue': {
       routes:
         | '/tools/network/speedtest'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/other/index.vue': {
+      routes:
+        | '/tools/other/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/other/wheel.vue': {
+      routes:
+        | '/tools/other/wheel'
       views:
         | never
       pathParamNames:
