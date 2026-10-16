@@ -4,7 +4,7 @@
  * 覆盖：
  * - 桌面端：悬停导航「工具」出现纵向子菜单，点击直达工具页
  * - 移动端：悬浮菜单包含「工具」入口
- * - 三个工具页：哈希计算、对称/非对称真实加解密往返
+ * - 各工具页：哈希计算、对称/非对称真实加解密往返、随机转盘等
  */
 import { expect, test } from "@playwright/test";
 // 预置 cookie 同意状态（统计开启）：避免 Cookie 选择弹窗遮挡交互
@@ -47,6 +47,13 @@ test.describe("工具页入口", () => {
     const firstItem = submenu.getByRole("link", { name: "单向加密" });
     const itemBox = (await firstItem.boundingBox())!;
     await page.mouse.move(50, 50);
+    // 模拟真实用户：鼠标先回到按钮（菜单仅从按钮 hover 唤起），再沿真实路径
+    // 移入菜单。菜单关闭时是 visibility:hidden 不参与命中测试，直接瞬移到
+    // 菜单内部区域无法唤起菜单，不是真实交互路径。
+    await page.mouse.move(
+      btnBox.x + btnBox.width / 2,
+      btnBox.y + btnBox.height / 2,
+    );
     const fromX = btnBox.x + btnBox.width / 2;
     const fromY = btnBox.y + btnBox.height / 2;
     const toX = itemBox.x + itemBox.width / 2;
@@ -278,5 +285,24 @@ test.describe("网络工具页", () => {
     await page.goto("/tools/network/cert");
     await expect(page.getByRole("heading", { name: "证书信息" })).toBeVisible();
     await expect(page.getByRole("tab", { name: /解析 PEM/ })).toBeVisible();
+  });
+});
+
+test.describe("其他工具页", () => {
+  test("随机转盘：渲染抽取 / 大转盘两个 tab 与默认列表", async ({ page }) => {
+    await page.goto("/tools/other/wheel");
+    await expect(page.getByRole("tab", { name: "抽取" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "大转盘" })).toBeVisible();
+    await expect(page.locator('input[aria-label^="选项名称"]')).toHaveCount(3);
+    await expect(page.getByRole("button", { name: "增加" })).toBeVisible();
+  });
+
+  test("随机转盘：点击「转」roll 力度并给出命中结果", async ({ page }) => {
+    await page.goto("/tools/other/wheel");
+    await page.getByRole("tab", { name: "大转盘" }).click();
+    await page.getByRole("button", { name: "转", exact: true }).click();
+    // 力度 720–2160 度，旋转最长约 3s，留足超时
+    await expect(page.getByText(/本次力度/)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/命中：/)).toBeVisible({ timeout: 10_000 });
   });
 });

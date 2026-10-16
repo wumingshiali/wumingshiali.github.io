@@ -117,7 +117,7 @@ const desktopNavLinkClass = [
             {{ item.label }}
           </RouterLink>
           <div
-            class="tool-dropdown invisible absolute bottom-full left-1/2 z-50 w-56 -translate-x-1/2 translate-y-1 scale-95 pb-2 opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:opacity-100"
+            class="tool-dropdown invisible absolute bottom-full left-1/2 z-50 w-56 origin-bottom -translate-x-1/2 translate-y-1 scale-95 pb-2 opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:scale-100 group-focus-within:opacity-100"
           >
             <!-- 内层面板；外层 pb-2 作为鼠标悬停桥接区，避免按钮与菜单之间的死区 -->
             <div
