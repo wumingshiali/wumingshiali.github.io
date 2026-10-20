@@ -4,6 +4,7 @@ import { h, onMounted, ref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Cookie } from "@lucide/vue";
 import { useCookieConsent } from "@/composables/useCookieConsent";
+import { useThemePreset, type ThemePreset } from "@/composables/useThemePreset";
 // import cfLogo from "https://esaimg.cdn1.vip/i/6ac7a1ece60b8_1791468012.webp";
 import { useSeo } from "@/composables/useSeo";
 
@@ -15,6 +16,25 @@ useSeo({
 
 // Cookie 配置入口：主动打开全局 Cookie 选择弹窗（单例共享状态）
 const { openDialog } = useCookieConsent();
+
+// 主题预设切换：Rice（默认）/ Endfield（终末地风格），与明暗模式正交
+const { preset: themePreset, setPreset: setThemePreset } = useThemePreset();
+
+/** 主题预设选项：名称 + 一句话描述 + 色板预览（固定色值，不随当前主题变化） */
+const themeOptions: { id: ThemePreset; name: string; desc: string; swatches: string[] }[] = [
+  {
+    id: "rice",
+    name: "Rice",
+    desc: "默认主题 · 米白纸张",
+    swatches: ["#fbfbfa", "#e8e7e2", "#1f1f1f"],
+  },
+  {
+    id: "endfield",
+    name: "Endfield",
+    desc: "终末地 · 工业纸墨",
+    swatches: ["#f4f4f2", "#fffa00", "#161616"],
+  },
+];
 
 // lucide 已移除品牌图标，GitHub 用内联 SVG 保留品牌识别度（与 contact.vue 一致）
 const GithubIcon: Component = {
@@ -99,6 +119,54 @@ onMounted(() => {
 <template>
   <main class="mt-6 flex w-full flex-col items-center gap-6">
     <h1 class="text-4xl font-medium tracking-tight sm:text-5xl">关于</h1>
+
+    <!-- 主题预设：Rice（默认）/ Endfield（终末地风格）切换 -->
+    <section aria-labelledby="theme-heading" class="flex flex-col items-center gap-3">
+      <h2 id="theme-heading" class="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+        主题
+      </h2>
+      <div role="radiogroup" aria-label="选择主题" class="flex flex-wrap justify-center gap-3">
+        <button
+          v-for="opt in themeOptions"
+          :key="opt.id"
+          type="button"
+          role="radio"
+          :aria-checked="themePreset === opt.id"
+          :aria-label="`切换到 ${opt.name} 主题`"
+          class="group flex w-44 flex-col items-center gap-2 rounded-xl border p-4 text-center transition-colors"
+          :class="
+            themePreset === opt.id
+              ? 'border-primary bg-primary text-primary-foreground'
+              : 'border-border bg-card text-card-foreground hover:bg-muted'
+          "
+          @click="setThemePreset(opt.id)"
+        >
+          <!-- 主题色板预览：固定色值，不受当前主题影响 -->
+          <span class="flex h-2.5 w-full overflow-hidden rounded-sm border border-border/60" aria-hidden="true">
+            <span
+              v-for="(c, i) in opt.swatches"
+              :key="i"
+              class="h-full flex-1"
+              :style="{ backgroundColor: c }"
+            />
+          </span>
+          <span class="flex items-center gap-1.5 text-sm font-semibold">
+            {{ opt.name }}
+            <span
+              v-if="themePreset === opt.id"
+              class="size-1.5 rounded-full bg-current"
+              aria-hidden="true"
+            />
+          </span>
+          <span
+            class="text-xs"
+            :class="themePreset === opt.id ? 'text-primary-foreground/80' : 'text-muted-foreground'"
+          >
+            {{ opt.desc }}
+          </span>
+        </button>
+      </div>
+    </section>
 
     <!-- 项目仓库：浅色描边款，与联系页按钮风格一致 -->
     <Button

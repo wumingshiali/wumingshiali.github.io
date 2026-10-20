@@ -10,6 +10,7 @@ import LaborDayBanner from "@/components/LaborDayBanner.vue";
 import { applyMidAutumnClass, isLaborDayActive, isMidAutumnActive, isNationalDayActive } from "@/lib/festival";
 import CookieConsentDialog from "@/components/CookieConsentDialog.vue";
 import { navItems } from "@/lib/nav";
+import { useThemePreset } from "@/composables/useThemePreset";
 
 // 主题：dark / light，默认跟随系统偏好，选择记忆到 localStorage
 const THEME_KEY = "theme";
@@ -38,6 +39,9 @@ watch(theme, (val) => {
   applyTheme(val);
   localStorage.setItem(THEME_KEY, val);
 });
+
+// 主题预设（rice / endfield）：与明暗模式正交，由「关于」页切换；启动即应用（模块副作用已 apply）
+useThemePreset();
 
 // 国庆彩蛋：日期命中国庆（10.1-10.7）或 URL 携带 ?egg=cn_birthday 时显示横幅
 const nationalDayActive = isNationalDayActive();

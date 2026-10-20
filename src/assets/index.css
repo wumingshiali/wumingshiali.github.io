@@ -208,6 +208,195 @@
 
 
 
+
+/* ===== Endfield 主题（html.theme-endfield）=====
+   由 src/composables/useThemePreset.ts 与 index.html 内联脚本触发：
+   用户在「关于」页选择 Endfield 主题后给 <html> 添加该 class。
+   放在节日彩蛋之前：节日命中时节日主色覆盖 Endfield（节日优先）。
+   配色遵循 endfield-ui 的纸面 + 墨色 + 唯一强调黄（#FFFA00）。 */
+
+.theme-endfield {
+  /* 直角 + 细线分隔，工业设备感 */
+  --radius: 0;
+  /* 浅色 Endfield 色板 */
+  --background: #f4f4f2;
+  --foreground: #161616;
+  --card: #ffffff;
+  --card-foreground: #161616;
+  --popover: #ffffff;
+  --popover-foreground: #161616;
+  --primary: #161616;
+  --primary-foreground: #ffffff;
+  --secondary: #e4e4e0;
+  --secondary-foreground: #161616;
+  --muted: #e4e4e0;
+  --muted-foreground: #5c5c5c;
+  --accent: #e4e4e0;
+  --accent-foreground: #161616;
+  --destructive: #b3261e;
+  --border: #d9d9d6;
+  --input: #d9d9d6;
+  --ring: #161616;
+  --chart-1: #161616;
+  --chart-2: #5c5c5c;
+  --chart-3: #d9d9d6;
+  --chart-4: #fffa00;
+  --chart-5: #b3261e;
+  --sidebar: #f4f4f2;
+  --sidebar-foreground: #161616;
+  --sidebar-primary: #161616;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e4e4e0;
+  --sidebar-accent-foreground: #161616;
+  --sidebar-border: #d9d9d6;
+  --sidebar-ring: #161616;
+  /* Endfield 专属 token（供本主题的组件细节使用） */
+  --ef-signal: #fffa00;
+  --ef-on-signal: #161616;
+  --ef-trace: #161616;
+  --ef-paper: #f4f4f2;
+  --ef-panel: #ffffff;
+  --ef-ink: #161616;
+  --ef-ink-2: #5c5c5c;
+  --ef-rule: #d9d9d6;
+  --ef-chip: #e4e4e0;
+  --ef-danger: #b3261e;
+  --ef-grid: color-mix(in srgb, var(--ef-ink) 5%, transparent);
+  color-scheme: light;
+}
+
+.theme-endfield.dark {
+  /* 深色 Endfield 色板：近黑纸面，黄色可作线（trace = signal） */
+  --background: #191919;
+  --foreground: #ededed;
+  --card: #222222;
+  --card-foreground: #ededed;
+  --popover: #222222;
+  --popover-foreground: #ededed;
+  --primary: #ededed;
+  --primary-foreground: #191919;
+  --secondary: #2e2e2e;
+  --secondary-foreground: #ededed;
+  --muted: #2e2e2e;
+  --muted-foreground: #a3a3a3;
+  --accent: #2e2e2e;
+  --accent-foreground: #ededed;
+  --destructive: #ff8a7a;
+  --border: #353535;
+  --input: #353535;
+  --ring: #fffa00;
+  --chart-1: #ededed;
+  --chart-2: #a3a3a3;
+  --chart-3: #353535;
+  --chart-4: #fffa00;
+  --chart-5: #ff8a7a;
+  --sidebar: #191919;
+  --sidebar-foreground: #ededed;
+  --sidebar-primary: #ededed;
+  --sidebar-primary-foreground: #191919;
+  --sidebar-accent: #2e2e2e;
+  --sidebar-accent-foreground: #ededed;
+  --sidebar-border: #353535;
+  --sidebar-ring: #fffa00;
+  --ef-signal: #fffa00;
+  --ef-on-signal: #161616;
+  --ef-trace: #fffa00;
+  --ef-paper: #191919;
+  --ef-panel: #222222;
+  --ef-ink: #ededed;
+  --ef-ink-2: #a3a3a3;
+  --ef-rule: #353535;
+  --ef-chip: #2e2e2e;
+  --ef-danger: #ff8a7a;
+  --ef-grid: color-mix(in srgb, var(--ef-ink) 5%, transparent);
+  color-scheme: dark;
+}
+
+/* 页面底纹：淡工程网格 + 右上角一丝强调色余光 */
+.theme-endfield body {
+  background-color: var(--ef-paper);
+  background-image:
+    radial-gradient(60rem 40rem at 100% -5%, color-mix(in srgb, var(--ef-signal) 7%, transparent), transparent 60%),
+    linear-gradient(var(--ef-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ef-grid) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
+/* 顶部三色条（品红 / 强调黄 / 薄荷绿）：只出现在文档最顶端，
+   absolute 定位随页面滚走，不悬浮遮挡内容 */
+.theme-endfield body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 80;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #ff00f0 0 33.333%,
+    var(--ef-signal) 33.333% 66.666%,
+    #00ffa2 66.666% 100%
+  );
+}
+
+/* 直角全覆盖：常规圆角类与胶囊全部归零（头像除外，保持圆形） */
+.theme-endfield :is(.rounded-sm, .rounded, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl),
+.theme-endfield .rounded-full:not([data-slot="avatar"]):not([data-slot="avatar-fallback"]):not([data-slot="avatar-image"]):not(img),
+.theme-endfield [data-slot="checkbox"] {
+  border-radius: 0;
+}
+
+/* 可点击 = 切角：按钮（复选框除外）右下角切掉 7px */
+.theme-endfield button:not([class*="size-4"]) {
+  -webkit-mask: linear-gradient(-45deg, transparent 7px, #000 7.5px);
+  mask: linear-gradient(-45deg, transparent 7px, #000 7.5px);
+}
+
+/* 当前位置 / 可点击强调：导航与工具 tab 激活态用唯一强调黄 */
+.theme-endfield a.router-link-active {
+  background-color: var(--ef-signal);
+  color: var(--ef-on-signal);
+}
+
+/* 选中文字：黄色荧光笔 */
+.theme-endfield ::selection {
+  background: var(--ef-signal);
+  color: var(--ef-on-signal);
+}
+
+/* 正文链接：浅色墨字压黄块；深色细黄线（黄块会吞掉浅色字） */
+.theme-endfield .prose a {
+  color: var(--ef-ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--ef-signal), var(--ef-signal));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.4em;
+  font-weight: 600;
+}
+.theme-endfield.dark .prose a {
+  background-image: none;
+  text-decoration: underline;
+  text-decoration-color: var(--ef-trace);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+/* 悬停：黄块变厚盖住整字（深色里细线加粗） */
+.theme-endfield .prose a:hover {
+  background-size: 100% 100%;
+}
+.theme-endfield.dark .prose a:hover {
+  text-decoration-thickness: 3px;
+}
+
+/* 键盘焦点：切角后焦点框向内缩，避免被 mask 裁掉 */
+.theme-endfield button:focus-visible {
+  outline: 2px solid var(--ef-trace);
+  outline-offset: -4px;
+}
+
 /* ===== 劳动节彩蛋主题（html.egg-labor-day）=====
    由 src/lib/festival.ts 与 index.html 内联脚本触发：
    日期命中 5.1-5.5，或 URL 携带 ?egg=cn_labor_day。

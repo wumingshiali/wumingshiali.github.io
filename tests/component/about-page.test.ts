@@ -169,3 +169,57 @@ describe("/about 页面：构建 git 提交 ID", () => {
   });
 });
 });
+
+describe("/about 页面：主题预设切换", () => {
+  afterEach(() => {
+    // 复位为默认预设，避免影响其它用例
+    localStorage.removeItem("theme-preset");
+    document.documentElement.classList.remove("theme-endfield");
+  });
+
+  it("渲染 Rice / Endfield 两个主题选项", async () => {
+    const wrapper = await mountAt("/about");
+    await nextTick();
+
+    const radios = wrapper.findAll('[role="radio"]');
+    expect(radios.length).toBe(2);
+    const names = radios.map((r) => r.text());
+    expect(names.some((n) => n.includes("Rice"))).toBe(true);
+    expect(names.some((n) => n.includes("Endfield"))).toBe(true);
+  });
+
+  it("默认选中 Rice，点击 Endfield 后切换主题并持久化", async () => {
+    const wrapper = await mountAt("/about");
+    await nextTick();
+
+    const radios = wrapper.findAll('[role="radio"]');
+    // 默认 Rice 选中
+    expect(radios[0].attributes("aria-checked")).toBe("true");
+    expect(radios[1].attributes("aria-checked")).toBe("false");
+    expect(document.documentElement.classList.contains("theme-endfield")).toBe(false);
+
+    // 点击 Endfield
+    await radios[1].trigger("click");
+    await nextTick();
+
+    expect(radios[0].attributes("aria-checked")).toBe("false");
+    expect(radios[1].attributes("aria-checked")).toBe("true");
+    expect(document.documentElement.classList.contains("theme-endfield")).toBe(true);
+    expect(localStorage.getItem("theme-preset")).toBe("endfield");
+  });
+
+  it("点击 Rice 切回默认主题", async () => {
+    localStorage.setItem("theme-preset", "endfield");
+    document.documentElement.classList.add("theme-endfield");
+
+    const wrapper = await mountAt("/about");
+    await nextTick();
+
+    const radios = wrapper.findAll('[role="radio"]');
+    await radios[0].trigger("click");
+    await nextTick();
+
+    expect(document.documentElement.classList.contains("theme-endfield")).toBe(false);
+    expect(localStorage.getItem("theme-preset")).toBe("rice");
+  });
+});

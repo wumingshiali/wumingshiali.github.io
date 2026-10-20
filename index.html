@@ -89,6 +89,17 @@
       })();
     </script>
     <script>
+      // 首屏前同步设置主题预设（rice / endfield），避免刷新闪烁。
+      // 逻辑与 src/composables/useThemePreset.ts 保持一致。
+      (function () {
+        try {
+          if (localStorage.getItem("theme-preset") === "endfield") {
+            document.documentElement.classList.add("theme-endfield");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script>
       // 首屏前同步设置劳动节彩蛋（日期命中或 ?egg=cn_labor_day），避免刷新闪烁。
       // 日期命中或 ?egg=cn_labor_day 参数命中时启用劳动节主题。
       // 用 toggle 而非 add：日期变化时主动移除，保证与访问日期一致。

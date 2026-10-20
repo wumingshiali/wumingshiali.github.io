@@ -52,3 +52,26 @@ test("暗色模式实查", async ({ page }) => {
   console.log("RESULT:", JSON.stringify(info, null, 2));
   await page.screenshot({ path: "theme-dark.png", fullPage: true });
 });
+
+test("Endfield 主题切换：html 带 class，变量为终末地色板", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("theme", "light");
+    localStorage.setItem("theme-preset", "endfield");
+  });
+  await page.goto(BASE + "/about");
+  await page.waitForTimeout(800);
+  const info = await page.evaluate(() => {
+    const html = document.documentElement;
+    const cs = getComputedStyle(html);
+    return {
+      htmlClass: html.className,
+      background: cs.getPropertyValue("--background").trim(),
+      radius: cs.getPropertyValue("--radius").trim(),
+    };
+  });
+  console.log("ENDFIELD RESULT:", JSON.stringify(info, null, 2));
+  expect(info.htmlClass).toContain("theme-endfield");
+  expect(info.background).toBe("#f4f4f2");
+  expect(info.radius).toBe("0");
+  await page.screenshot({ path: "theme-endfield.png", fullPage: true });
+});
