@@ -9,6 +9,7 @@ import {
   Globe,
   Image,
   KeyRound,
+  ListOrdered,
   LockKeyhole,
   MapPin,
   Network,
@@ -128,6 +129,12 @@ const otherTools: ToolInfo[] = [
     label: "随机转盘",
     description: "自定义列表按占比随机抽取，720–2160 力度转动大转盘",
     icon: Disc3,
+  },
+  {
+    to: "/tools/other/ranking",
+    label: "排名生成",
+    description: "可视化编辑排名数据，TOML 导入导出，生成后发布到排名页",
+    icon: ListOrdered,
   },
 ];
 

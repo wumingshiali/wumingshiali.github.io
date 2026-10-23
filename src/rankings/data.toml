@@ -1,0 +1,140 @@
+# ============================================================
+# 排名数据（单一数据源）
+# ------------------------------------------------------------
+# 一个文件包含所有分类；每个 [[categories]] 是一个分类，
+# 其下的 [[categories.items]] 是该分类里的排名条目。
+#
+# 字段说明：
+# - id              : 分类唯一标识（URL 用，必填，仅小写字母/数字/连字符）
+# - name            : 分类显示名（必填）
+# - description     : 分类一句话描述（可选）
+# - items[].name    : 条目名称（必填）
+# - items[].brief   : 简洁描述（可选）
+# - items[].comment : 评价（可选）
+# - items[].score   : 分数 0-100（必填，决定等级展示：90 人上人 / 80 顶级 / 70 夯 / 60 NPC / 以下 拉完了）
+#
+# 想改排名？直接编辑本文件提交即可，无需本地构建。
+# 也可以用 /tools/other/ranking 工具可视化编辑并生成 TOML。
+# ============================================================
+
+[[categories]]
+id = "food"
+name = "美食"
+description = "浮浮酱吃过的美食，按评分排列喵～"
+
+  [[categories.items]]
+  name = "火锅"
+  brief = "麻辣鲜香，冬天暖胃"
+  comment = "聚会首选，一周能吃三次"
+  score = 95
+
+  [[categories.items]]
+  name = "烧烤"
+  brief = "烟火气十足，肉串滋滋冒油"
+  comment = "夏天的夜晚就该配烧烤和冰啤酒"
+  score = 88
+
+  [[categories.items]]
+  name = "兰州拉面"
+  brief = "汤清面劲，便宜管饱"
+  comment = "加班后的深夜食堂，性价比之神"
+  score = 82
+
+  [[categories.items]]
+  name = "螺蛳粉"
+  brief = "闻着臭吃着香"
+  comment = "爱的人爱死，恨的人躲着走，两极分化严重"
+  score = 72
+
+  [[categories.items]]
+  name = "沙拉"
+  brief = "清爽低卡"
+  comment = "吃多了真的会饿，减肥期勉强接受"
+  score = 58
+
+[[categories]]
+id = "anime"
+name = "动漫"
+description = "这些年看过的番，主观评分喵～"
+
+  [[categories.items]]
+  name = "进击的巨人"
+  brief = "自由之翼，格局宏大"
+  comment = "神作级别的叙事与作画，结局见仁见智"
+  score = 93
+
+  [[categories.items]]
+  name = "命运石之门"
+  brief = "时间线跳跃的悬疑科幻"
+  comment = "慢热到封神，真有理，我选择救你"
+  score = 90
+
+  [[categories.items]]
+  name = "紫罗兰永恒花园"
+  brief = "画面精美，情感细腻"
+  comment = "每一帧都是壁纸，看一集哭一集"
+  score = 86
+
+  [[categories.items]]
+  name = "日常"
+  brief = "无厘头搞笑日常"
+  comment = "脑洞清奇，适合吃饭时下饭"
+  score = 75
+
+  [[categories.items]]
+  name = "异世界厕纸"
+  brief = "穿越开挂龙傲天"
+  comment = "套路化流水线作品，看了等于没看"
+  score = 45
+
+[[categories]]
+id = "games"
+name = "游戏"
+description = "玩过的游戏主观排名，仅供参考喵～"
+
+  [[categories.items]]
+  name = "塞尔达传说：旷野之息"
+  brief = "开放世界天花板"
+  comment = "爬山看风景就能玩一百小时，时间杀手"
+  score = 97
+
+  [[categories.items]]
+  name = "艾尔登法环"
+  brief = "受苦与自由的完美结合"
+  comment = "大地图魂系，初见惊艳，褪色者集合！"
+  score = 91
+
+  [[categories.items]]
+  name = "星露谷物语"
+  brief = "种田养老模拟器"
+  comment = "不知不觉天亮了，再来一回合就睡"
+  score = 84
+
+  [[categories.items]]
+  name = "某二次元抽卡手游"
+  brief = "每天上线清体力"
+  comment = "抽卡一时爽，钱包火葬场，微氪玩家含泪推荐"
+  score = 63
+
+[[categories]]
+id = "software"
+name = "软件"
+description = "日常使用的软件体验评分喵～"
+
+  [[categories.items]]
+  name = "VS Code"
+  brief = "宇宙第一编辑器"
+  comment = "插件生态无敌，写代码就靠它了"
+  score = 92
+
+  [[categories.items]]
+  name = "Obsidian"
+  brief = "本地优先的笔记软件"
+  comment = "双向链接 + 插件，知识库神器"
+  score = 85
+
+  [[categories.items]]
+  name = "某全家桶"
+  brief = "开机自启全家桶"
+  comment = "一个就够烦了，还非要装全家，体验极差"
+  score = 30

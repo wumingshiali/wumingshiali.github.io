@@ -9,6 +9,7 @@ import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import type { Plugin, ResolvedConfig } from "vite";
+import { loadRankingsData } from "./vite-plugin-rankings.ts";
 
 /** 站点基础 URL（生产环境） */
 const SITE_URL = "https://meali.top";
@@ -20,6 +21,7 @@ const STATIC_ROUTES: { path: string; priority: number; changefreq: string }[] = 
   { path: "/contact", priority: 0.5, changefreq: "monthly" },
   { path: "/posts", priority: 0.8, changefreq: "daily" },
   { path: "/links", priority: 0.5, changefreq: "monthly" },
+  { path: "/rankings", priority: 0.6, changefreq: "weekly" },
   { path: "/tools", priority: 0.6, changefreq: "monthly" },
   { path: "/tools/hash", priority: 0.5, changefreq: "monthly" },
   { path: "/tools/symmetric", priority: 0.5, changefreq: "monthly" },
@@ -162,7 +164,19 @@ export function generateSitemap(): Plugin {
         );
       }
 
-      // 3. 组装完整 XML
+      // 3. 排名分类路由：来自 src/rankings/data.toml（单一数据源）
+      for (const category of loadRankingsData()) {
+        urls.push(
+          urlNode(
+            `${SITE_URL}/rankings/${category.id}`,
+            buildDate,
+            0.5,
+            "weekly",
+          ),
+        );
+      }
+
+      // 4. 组装完整 XML
       const xml = [
         `<?xml version="1.0" encoding="UTF-8"?>`,
         `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">`,

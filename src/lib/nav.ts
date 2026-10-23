@@ -1,5 +1,5 @@
 import type { Component } from "vue";
-import { FileText, Home, Info, Link2, Mail, Wrench } from "@lucide/vue";
+import { FileText, Home, Info, Link2, Mail, Trophy, Wrench } from "@lucide/vue";
 import { toolGroups, type ToolGroup } from "@/lib/tools";
 
 /** 主导航项：桌面端底部胶囊导航与移动端悬浮菜单共用，保证两处入口始终一致。 */
@@ -16,6 +16,7 @@ export const navItems: NavItem[] = [
   { to: "/contact", label: "联系", icon: Mail },
   { to: "/posts", label: "博客", icon: FileText },
   { to: "/links", label: "友链", icon: Link2 },
+  { to: "/rankings", label: "排名", icon: Trophy },
   { to: "/tools", label: "工具", icon: Wrench, groups: toolGroups },
   { to: "/about", label: "关于", icon: Info },
 ];

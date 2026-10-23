@@ -73,6 +73,20 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/rankings/': RouteRecordInfo<
+      '/rankings/',
+      '/rankings',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/rankings/[id]': RouteRecordInfo<
+      '/rankings/[id]',
+      '/rankings/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
     '/tools/': RouteRecordInfo<
       '/tools/',
       '/tools',
@@ -199,6 +213,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/tools/other/ranking': RouteRecordInfo<
+      '/tools/other/ranking',
+      '/tools/other/ranking',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/tools/other/wheel': RouteRecordInfo<
       '/tools/other/wheel',
       '/tools/other/wheel',
@@ -269,6 +290,22 @@ declare module 'vue-router/auto-routes' {
     'src/pages/posts/[id].vue': {
       routes:
         | '/posts/[id]'
+      views:
+        | never
+      pathParamNames:
+        | 'id'
+    }
+    'src/pages/rankings/index.vue': {
+      routes:
+        | '/rankings/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/rankings/[id].vue': {
+      routes:
+        | '/rankings/[id]'
       views:
         | never
       pathParamNames:
@@ -413,6 +450,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/tools/other/index.vue': {
       routes:
         | '/tools/other/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/tools/other/ranking.vue': {
+      routes:
+        | '/tools/other/ranking'
       views:
         | never
       pathParamNames:

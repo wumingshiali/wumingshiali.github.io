@@ -99,7 +99,7 @@ describe("移动端悬浮导航（MobileNav）", () => {
     const labels = Array.from(dialog!.querySelectorAll("a")).map(
       (a) => a.textContent?.trim() ?? "",
     );
-    expect(labels).toEqual(["主页", "联系", "博客", "友链", "工具", "关于"]);
+    expect(labels).toEqual(["主页", "联系", "博客", "友链", "排名", "工具", "关于"]);
   });
 
   it("点击菜单项：链接指向对应路由并收起菜单", async () => {
