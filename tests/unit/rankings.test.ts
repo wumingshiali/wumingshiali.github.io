@@ -240,13 +240,13 @@ describe("slugifyId（工具页自动生成 id）", () => {
 });
 
 describe("tierOf（分数 → 等级）", () => {
-  it("边界值映射正确：90 人上人 / 80 顶级 / 70 夯 / 60 NPC / 59 拉完了", () => {
-    expect(tierOf(100).label).toBe("人上人");
-    expect(tierOf(90).label).toBe("人上人");
+  it("边界值映射正确：90 夯 / 80 顶级 / 70 人上人 / 60 NPC / 59 拉完了", () => {
+    expect(tierOf(100).label).toBe("夯");
+    expect(tierOf(90).label).toBe("夯");
     expect(tierOf(89).label).toBe("顶级");
     expect(tierOf(80).label).toBe("顶级");
-    expect(tierOf(79).label).toBe("夯");
-    expect(tierOf(70).label).toBe("夯");
+    expect(tierOf(79).label).toBe("人上人");
+    expect(tierOf(70).label).toBe("人上人");
     expect(tierOf(69).label).toBe("NPC");
     expect(tierOf(60).label).toBe("NPC");
     expect(tierOf(59).label).toBe("拉完了");

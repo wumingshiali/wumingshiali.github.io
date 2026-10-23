@@ -44,7 +44,7 @@ test("排名详情页：行列表按分数降序，可切换分数 / 等级", as
 
   // 切到等级：95 → 人上人
   await page.getByRole("tab", { name: /等级/ }).click();
-  await expect(page.locator('[role="listitem"]').first()).toContainText("人上人");
+  await expect(page.locator('[role="listitem"]').first()).toContainText("夯");
   // 最后一行是拉完了（沙拉 55 < 60）
   await expect(page.locator('[role="listitem"]').last()).toContainText("拉完了");
 

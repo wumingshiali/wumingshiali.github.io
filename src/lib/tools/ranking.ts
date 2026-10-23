@@ -11,7 +11,7 @@ export type { RankingCategory, RankingItem };
 export { parseRankingsToml, serializeRankingsToml } from "@/lib/rankings/toml";
 
 /**
- * 新建空条目：分数给个中位默认值 70（夯），方便预览等级。
+ * 新建空条目：分数给个中位默认值 70（人上人），方便预览等级。
  * 可选字段（brief/comment）在编辑器里用空串表示「无」，导出时序列化器自动跳过。
  */
 export function createEmptyItem(): RankingItem {

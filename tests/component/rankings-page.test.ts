@@ -78,8 +78,8 @@ describe("/rankings/[id] 详情页", () => {
     await tierTab.trigger("click");
     await settle();
 
-    // 95 → 人上人（≥90）；不再出现原始分数
-    expect(wrapper.text()).toContain("人上人");
+    // 95 → 夯（≥90）；不再出现原始分数
+    expect(wrapper.text()).toContain("夯");
     expect(wrapper.text()).not.toContain("95");
     expect(wrapper.text()).toContain("拉完了"); // 55 < 60
   });

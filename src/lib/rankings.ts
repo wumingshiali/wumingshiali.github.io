@@ -10,7 +10,7 @@ import type { RankingCategory, RankingItem } from "./rankings/types";
 export type { RankingCategory, RankingItem } from "./rankings/types";
 
 /** 等级（由分数推导）：从高到低 */
-export type Tier = "elite" | "top" | "solid" | "npc" | "done";
+export type Tier = "solid" | "top" | "elite" | "npc" | "done";
 
 /** 等级定义：分数区间下限（含） + 展示文案 + 徽章样式 */
 export interface TierInfo {
@@ -25,12 +25,12 @@ export interface TierInfo {
 
 /**
  * 等级表（按分数从高到低）：
- * 人上人 ≥90 / 顶级 ≥80 / 夯 ≥70 / NPC ≥60 / 拉完了 <60
+ * 夯 ≥90 / 顶级 ≥80 / 人上人 ≥70 / NPC ≥60 / 拉完了 <60
  */
 export const TIERS: readonly TierInfo[] = [
   {
-    id: "elite",
-    label: "人上人",
+    id: "solid",
+    label: "夯",
     badgeClass:
       "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
     min: 90,
@@ -43,8 +43,8 @@ export const TIERS: readonly TierInfo[] = [
     min: 80,
   },
   {
-    id: "solid",
-    label: "夯",
+    id: "elite",
+    label: "人上人",
     badgeClass:
       "border-sky-500/40 bg-sky-500/10 text-sky-600 dark:text-sky-400",
     min: 70,
