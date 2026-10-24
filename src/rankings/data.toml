@@ -51,3 +51,296 @@ description = "给各大文本编辑器排名"
   brief = "Hyperextensible Vim-based text editor"
   comment = "比Vim简单一点点"
   score = 60
+
+[[categories]]
+id = "classmates"
+name = "同学们"
+description = "给我们班的同学排名"
+
+  [[categories.items]]
+  name = "萧家x"
+  brief = "傻子"
+  comment = "绿袍尊者的来"
+  score = 20
+
+  [[categories.items]]
+  name = "陈婧x"
+  brief = "人"
+  comment = "私人原因"
+  score = 90
+
+  [[categories.items]]
+  name = "陈铭x"
+  brief = "人"
+  comment = "和xxx互干，豪哥"
+  score = 60
+
+  [[categories.items]]
+  name = "肖xx"
+  brief = "胖子"
+  comment = "“肚腩”"
+  score = 80
+
+  [[categories.items]]
+  name = "龙x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "李沐x"
+  brief = "群聚性动物"
+  comment = "朋友一大堆，实际超空虚"
+  score = 30
+
+  [[categories.items]]
+  name = "吕xx"
+  brief = "人"
+  comment = "菜"
+  score = 60
+
+  [[categories.items]]
+  name = "付xx"
+  brief = "拉"
+  comment = "私人原因"
+  score = 0
+
+  [[categories.items]]
+  name = "张艺x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "萧苡x"
+  brief = "人"
+  comment = "宇宙无敌洁癖哥"
+  score = 30
+
+  [[categories.items]]
+  name = "张梓x"
+  brief = "人"
+  comment = "看我超级口水"
+  score = 45
+
+  [[categories.items]]
+  name = "李利x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "麦x铭"
+  brief = "人"
+  comment = "bro有点难分"
+  score = 60
+
+  [[categories.items]]
+  name = "梁xx"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "蔡铤x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "麦x锐"
+  brief = "人"
+  comment = "bro有点难分"
+  score = 60
+
+  [[categories.items]]
+  name = "x果"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "李思x"
+  brief = "人"
+  comment = "看我超级铅笔"
+  score = 80
+
+  [[categories.items]]
+  name = "罗芷x"
+  brief = "人"
+  comment = "关电脑只关显示器之人"
+  score = 30
+
+  [[categories.items]]
+  name = "林慕x"
+  brief = "人"
+  comment = "她说：“昨晚我ok镜忘戴了”"
+  score = 70
+
+  [[categories.items]]
+  name = "林熙x"
+  brief = "人"
+  comment = "无敌罚抄之人"
+  score = 40
+
+  [[categories.items]]
+  name = "蔡佩x"
+  brief = "人"
+  comment = "抄作业之神"
+  score = 70
+
+  [[categories.items]]
+  name = "符郡x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "田纯x"
+  brief = "人"
+  comment = "洁癖姐"
+  score = 50
+
+  [[categories.items]]
+  name = "蔡可x"
+  brief = "人"
+  comment = "宇宙无敌洁癖姐"
+  score = 30
+
+  [[categories.items]]
+  name = "薛筱x"
+  brief = "人"
+  comment = "难评"
+  score = 80
+
+  [[categories.items]]
+  name = "文骏x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "杨舒x"
+  brief = "猪蹄"
+  comment = "“杨猪蹄”"
+  score = 40
+
+  [[categories.items]]
+  name = "李一x"
+  brief = "人"
+  comment = "难评"
+  score = 85
+
+  [[categories.items]]
+  name = "丁薏x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "丘佳x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "凌泽x"
+  brief = "给"
+  comment = "凌付99"
+  score = 60
+
+  [[categories.items]]
+  name = "刘锦x"
+  brief = "人"
+  comment = "你说你有点高"
+  score = 60
+
+  [[categories.items]]
+  name = "萧靖x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "李奕x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "廖子x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "陈培x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "邹湘x"
+  brief = "人"
+  comment = "私人原因"
+  score = 20
+
+  [[categories.items]]
+  name = "王欣x"
+  brief = "人"
+  comment = "（背诵检查），1s后：你过关"
+  score = 90
+
+  [[categories.items]]
+  name = "刘昱x"
+  brief = "椰皇"
+  comment = "看我椰汁大炮"
+  score = 40
+
+  [[categories.items]]
+  name = "曾卓x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "曾炜x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "李皓x"
+  brief = "羊"
+  comment = "羊来"
+  score = 80
+
+  [[categories.items]]
+  name = "刘家x"
+  brief = "公猪"
+  comment = "公猪病，不来学校之人"
+  score = 40
+
+  [[categories.items]]
+  name = "赖姣x"
+  brief = "人"
+  comment = "宇宙无敌雷霆霸王洁癖姐"
+  score = 0
+
+  [[categories.items]]
+  name = "方品x"
+  brief = "人"
+  comment = "谁？"
+  score = 70
+
+  [[categories.items]]
+  name = "谢镐x"
+  brief = "人"
+  comment = "（PCL）启动MC中"
+  score = 90
+
+  [[categories.items]]
+  name = "雷骏x"
+  brief = "人"
+  comment = "谁？"
+  score = 60
