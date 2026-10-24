@@ -21,7 +21,7 @@ overrides:
   source-map-js@>=1.0.0 <1.2.2: 1.2.2
   proxy-addr@>=1.1.0 <2.0.8: 2.0.8
   postcss-selector-parser@<7.1.6: 7.1.6
-  '@modelcontextprotocol/sdk@>=1.12.0 <1.32.0': 1.32.0
+  '@modelcontextprotocol/sdk@>=1.12.0 <1.32.0': 1.32.2
   body-parser@>=2.0.0 <2.4.0: 2.4.0
 
 importers:
@@ -808,8 +808,8 @@ packages:
     peerDependencies:
       vue: '>=3.0.1'
 
-  '@modelcontextprotocol/sdk@1.32.0':
-    resolution: {integrity: sha512-8BviX/hK4Gd2eL1KdTwm0gfl4d3wdoErW0Jd00h6nomUAtk6IJk5vwQJc6kfWtJTzN5OEV/lgIiJKI8fiDGAlA==}
+  '@modelcontextprotocol/sdk@1.32.2':
+    resolution: {integrity: sha512-SWsVtH/0vULSQStoZ6xxH2K09Li8fXYTMC64ZeogCdpZ3XSi1eCPOByV1OpuJxuI3OcmHhosDWYyii07tpPsLw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -4279,7 +4279,7 @@ snapshots:
     dependencies:
       vue: 3.5.44(typescript@5.9.3)
 
-  '@modelcontextprotocol/sdk@1.32.0(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.32.2(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 2.1.5(hono@4.13.13)
       ajv: 8.20.0
@@ -6611,7 +6611,7 @@ snapshots:
   shadcn-vue@2.8.2(eslint@10.4.1(jiti@2.7.0))(vue@3.5.44(typescript@5.9.3)):
     dependencies:
       '@dotenvx/dotenvx': 2.21.0
-      '@modelcontextprotocol/sdk': 1.32.0(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.32.2(zod@3.25.76)
       '@unovue/detypes': 0.8.5
       '@vue/compiler-sfc': 3.5.41
       c12: 3.3.4
