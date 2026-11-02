@@ -12,7 +12,7 @@ overrides:
   postcss@<=8.5.22: 8.5.32
   sharp@<0.35.0: 0.35.5
   hono@<4.12.34: 4.13.16
-  '@hono/node-server@<2.0.10': 2.1.5
+  '@hono/node-server@<2.0.10': 2.1.6
   decode-uri-component@<=0.4.2: 0.5.1
   qs@>=6.14.2 <=6.15.3: 6.17.1
   undici@>=8.0.0 <8.12.2: 8.12.3
@@ -484,8 +484,8 @@ packages:
     peerDependencies:
       vue: '>=3.2.0'
 
-  '@hono/node-server@2.1.5':
-    resolution: {integrity: sha512-MgP/I06GdvsilDspMk/qmRzpk8LOUStP6jFAbSRi40W09DhoyUn+Mj7eyKICPqeYKybOjVFLVIAQzvu1bfIa7Q==}
+  '@hono/node-server@2.1.6':
+    resolution: {integrity: sha512-p/KH9MnfNcsm3sR6x4lNgm5j+QN4Et8srKredl9DZfXiyZ1UQ3aQ2YVpFLbqktYN5JI+DB+VZFKM2PqE5hLKjQ==}
     engines: {node: '>=20'}
     peerDependencies:
       hono: 4.13.16
@@ -3933,7 +3933,7 @@ snapshots:
       giscus: 1.6.0
       vue: 3.5.44(typescript@5.9.3)
 
-  '@hono/node-server@2.1.5(hono@4.13.16)':
+  '@hono/node-server@2.1.6(hono@4.13.16)':
     dependencies:
       hono: 4.13.16
 
@@ -4110,7 +4110,7 @@ snapshots:
 
   '@modelcontextprotocol/sdk@1.32.2(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 2.1.5(hono@4.13.16)
+      '@hono/node-server': 2.1.6(hono@4.13.16)
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       content-type: 1.0.5
